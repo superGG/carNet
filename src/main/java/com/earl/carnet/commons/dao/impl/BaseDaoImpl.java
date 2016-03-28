@@ -21,8 +21,7 @@ import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.domain.AbstractEntity;
 import com.earl.carnet.commons.domain.DateQuery;
 import com.earl.carnet.commons.util.Assert;
-
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{

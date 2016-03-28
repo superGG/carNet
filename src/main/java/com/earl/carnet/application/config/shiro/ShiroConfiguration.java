@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.Filter;
 
 import org.apache.shiro.mgt.SecurityManager;
@@ -33,23 +34,26 @@ import com.earl.carnet.security.shiro.ShiroAuthorizingRealm;
 
 @Configuration
 @EnableTransactionManagement
-@AutoConfigureAfter({SecurityManager.class})
+@AutoConfigureAfter({PrivilegeDao.class})
 public class ShiroConfiguration {
     private static Logger logger = LoggerFactory.getLogger(ShiroConfiguration.class);
 
     public static final String PREMISSION_FORMAT = "perms[\"{0}\"]";
 
-//    @Inject
+//    @Resource
 //    public PrivilegeDao privilegeDao;
 
-    @Bean
-    public PrivilegeDao privilegeDao() {
-        return new PrivilegeDaoImpl();
-    }
+//    @Resource
+//    private ShiroAuthorizingRealm realm;
+   
+//    @Bean
+//    public PrivilegeDao privilegeDao() {
+//        return new PrivilegeDaoImpl();
+//    }
 
     @Bean
     @DependsOn("privilegeDao")
-    public ShiroFilterFactoryBean shiroFilter() {
+    public ShiroFilterFactoryBean shiroFilter(PrivilegeDao privilegeDao) {
 
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setLoginUrl("/login.html");
@@ -57,7 +61,7 @@ public class ShiroConfiguration {
         shiroFilter.setUnauthorizedUrl("/forbidden");
         Map<String, String> filterChainDefinitionMapping = new HashMap<String, String>();
 
-        List<Privilege> privilegeList = privilegeDao().findAll();
+        List<Privilege> privilegeList = privilegeDao.findAll();
 
         filterChainDefinitionMapping.put("/api/doLogin", "anon");
         filterChainDefinitionMapping.put("/", "anon");
@@ -101,12 +105,7 @@ public class ShiroConfiguration {
         return shiroFilter;
     }
 
-    @Bean(name = "securityManager")
-    public SecurityManager securityManager() {
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(realm());
-        return securityManager;
-    }
+    
 
     @Bean(name = "realm")
     @DependsOn("lifecycleBeanPostProcessor")
@@ -114,6 +113,14 @@ public class ShiroConfiguration {
         ShiroAuthorizingRealm propertiesRealm = new ShiroAuthorizingRealm();
         propertiesRealm.init();
         return propertiesRealm;
+    }
+    
+    @Bean(name = "securityManager")
+    @DependsOn("realm")
+    public SecurityManager securityManager() {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(realm());
+        return securityManager;
     }
 
     @Bean

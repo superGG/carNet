@@ -27,6 +27,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@EnableTransactionManagement
 @ConditionalOnClass({ EnableTransactionManagement.class, EntityManager.class })
 @AutoConfigureAfter({BeetlSqlBaseConfiguration.class})
 // 在DataBaseConfiguration配置好后，才执行
@@ -37,23 +38,8 @@ public class BeetlSqlConfiguration implements EnvironmentAware {
 	@SuppressWarnings("unused")
 	private RelaxedPropertyResolver propertyResolver;
 
-	@Resource
-	private DataSource dataSource;
-
-	@Resource
-	private MySqlStyle dbStyle;
-
-	@Resource
-	private DefaultNameConversion nc;
-	
 //	@Inject
 //	private ConnectionSource ds; //在非spring整合中才用到
-	
-	@Resource
-	private SpringConnectionSource cs;
-	
-	@Resource
-	private ClasspathLoader sqlLoader;
 	
 	Environment env;
 
@@ -65,7 +51,7 @@ public class BeetlSqlConfiguration implements EnvironmentAware {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public SQLManager sqlManager() {
+	public SQLManager sqlManager(MySqlStyle dbStyle,ClasspathLoader sqlLoader,SpringConnectionSource cs,DefaultNameConversion nc,DataSource dataSource) {
 		logger.info("building SQLManager");
 		Interceptor[] inters={new DebugInterceptor()};
 		
@@ -87,7 +73,7 @@ public class BeetlSqlConfiguration implements EnvironmentAware {
 	// Boot的自动配置机制依靠@ConditionalOnMissingBean注解判断是否执行初始化代码，即如果用户已经创建了bean，则相关的初始化代码不再执行。
 	@Bean
 	@ConditionalOnMissingBean
-	public DataSourceTransactionManager transactionManager() {
+	public DataSourceTransactionManager transactionManager(DataSource dataSource) {
 				DataSourceTransactionManager tm = new DataSourceTransactionManager(dataSource);
 				return tm;
 	}

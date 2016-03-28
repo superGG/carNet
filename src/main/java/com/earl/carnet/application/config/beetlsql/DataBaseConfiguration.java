@@ -71,5 +71,4 @@ public class DataBaseConfiguration implements EnvironmentAware {//这里继承�
 		}
 		return new HikariDataSource(config);
 	}
-
 }

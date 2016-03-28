@@ -34,9 +34,6 @@ public class BeetlSqlBaseConfiguration implements EnvironmentAware {//这里继�
 
 	@SuppressWarnings("unused")
 	private Environment env;
-
-	@Resource
-	private DataSource dataSource;
 	
 	@Override
 	public void setEnvironment(Environment env) {
@@ -59,7 +56,7 @@ public class BeetlSqlBaseConfiguration implements EnvironmentAware {//这里继�
 
 	@Bean
 	@ConditionalOnMissingBean
-	public ConnectionSource ds() {
+	public ConnectionSource ds(DataSource dataSource) {
 		return ConnectionSourceHelper.getSingle(dataSource);
 	}
 	

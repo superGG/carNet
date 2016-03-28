@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,12 +21,14 @@ import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.domain.sercurity.user.UserQuery;
 import com.earl.carnet.service.UserService;
 
+import javax.annotation.Resource;
+
 @Service("userService")
 @Transactional
 public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
 		implements UserService {
 
-	@Autowired
+	@Resource
 	private UserDao userDao;
 
 	@Override
