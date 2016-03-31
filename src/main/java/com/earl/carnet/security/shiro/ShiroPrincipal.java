@@ -93,4 +93,9 @@ public class ShiroPrincipal implements Serializable {
 ////	    return this.user.getEmployeeName();
 //		return null;
 //	}
+	@Override
+	public String toString() {
+		return "ShiroPrincipal [user=" + user + ", authorities=" + authorities + ", roles=" + roles + ", isAuthorized="
+				+ isAuthorized + "]";
+	}
 }
