@@ -154,13 +154,13 @@ public class UserController extends BaseController{
 
 	@ApiOperation(value = "得到用户信息", notes = "user info",httpMethod="GET",response=String.class)
 	@RequestMapping(value = "/users/info",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> loginInfo(){
+	public ResponseEntity<ShiroPrincipal> loginInfo(){
 		Subject subject = SecurityUtils.getSubject();
 
 		//可以通过下面这个对象，动态修改用户权限信息
 		ShiroPrincipal principal = (ShiroPrincipal) subject.getPrincipal();
 		System.out.println(principal.toString());
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<ShiroPrincipal>(principal,HttpStatus.OK);
 	}
 	
 }
