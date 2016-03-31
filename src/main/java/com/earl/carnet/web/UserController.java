@@ -28,9 +28,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.security.shiro.ShiroPrincipal;
 import com.earl.carnet.service.UserService;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = "/api")
+//@Api(value="Person Rest Service") //修改生成的son路径
 public class UserController extends BaseController{
 
 	private final Logger log = LoggerFactory.getLogger(UserController.class);
@@ -42,6 +45,7 @@ public class UserController extends BaseController{
 	 * GET /users -> get all the users
 	 */
 	@RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "得到所有用户", notes = "find All User",httpMethod="GET",response=String.class)
 	public ResponseEntity<List<User>> getAll() {
 		log.debug("REST request to get all Users");
 		return new ResponseEntity<List<User>>(userService.findAll(), HttpStatus.OK);
@@ -50,6 +54,7 @@ public class UserController extends BaseController{
 	/**
 	 * GET /users/:username -> get the "username" user
 	 */
+	@ApiOperation(value = "得到指定用户", notes = "GET POINT USER",httpMethod="GET",response=String.class)
 	@RequestMapping(value = "/users/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public User getUser(@PathVariable String username,
 			HttpServletResponse response) {
@@ -65,6 +70,7 @@ public class UserController extends BaseController{
 	 * POST /users -> create a new user
 	 * @RequestBody 专门处理非from表单数据，就是json,xml类型数据
 	 */
+	@ApiOperation(value = "添加一个用户", notes = "ADD ONE USER",httpMethod="POST",response=String.class)
 	@RequestMapping(value = "/users",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> create(User userDto,
 			HttpServletRequest request) {
@@ -82,6 +88,7 @@ public class UserController extends BaseController{
 	 * POST /users -> create a new user
 	 * @RequestBody 专门处理非from表单数据，就是json,xml类型数据
 	 */
+	@ApiOperation(value = "更新指定用户", notes = "UPDATE ONE USER",httpMethod="PUT",response=String.class)
 	@RequestMapping(value = "/users",method = RequestMethod.PUT,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody User userDto,
 			HttpServletRequest request) {
@@ -93,6 +100,7 @@ public class UserController extends BaseController{
 	 * POST /users -> create a new user
 	 * @RequestBody 专门处理非from表单数据，就是json,xml类型数据
 	 */
+	@ApiOperation(value = "删除一个用户", notes = "DELETE ONE USER",httpMethod="DELETE",response=String.class)
 	@RequestMapping(value = "/users",method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> delete(Long id,
 			HttpServletRequest request) {
@@ -103,6 +111,7 @@ public class UserController extends BaseController{
 	/**
 	 * POST /users/change_password -> changes the current user's password
 	 */
+	@ApiOperation(value = "更改用户密码", notes = "CHANGE USER PASSWORD",httpMethod="POST",response=String.class)
 	@RequestMapping(value = "/users/change/password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> changePassword(@RequestBody String password,String Id) {
 		if (password.isEmpty() || password.length() < 5
@@ -112,21 +121,17 @@ public class UserController extends BaseController{
 		userService.changePassword(Id, password);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	/**
-	 * POST /users/change_password -> changes the current user's password
-	 */
-	@RequestMapping(value = "/users/uploadfile", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> uploadfile(MultipartFile userfile,String username) {
-		userService.uploadFile(userfile);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/doLogin", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Valid
-//    @Workflow
-	public ResponseEntity<Map<String,Object>> doLogin(@NotEmpty(message = "设备类型不能为空") @RequestParam(name="username",required = false)String username
-											,@RequestParam(name="password",required = false) String password){
+
+	@Valid
+	@RequestMapping(value = "/doLogin", produces = MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.POST)
+	@ApiOperation(value = "登录系统", notes = "loginSystem",httpMethod="POST",response=String.class)
+	public ResponseEntity<Map<String,Object>> doLogin(
+			@ApiParam(required = true, name = "username", value = "用户信息json数据")
+			@NotEmpty(message = "设备类型不能为空")
+			@RequestParam(name="username",required = false)String username
+			,
+			@ApiParam(required = true, value = "用户密码json数据")
+			@RequestParam(name="password",required = false) String password){
 		userService.doLogin(username,password);
 		ShiroPrincipal principal = (ShiroPrincipal) SecurityUtils.getSubject().getPrincipal();
 		User user = principal.getUser();
@@ -137,13 +142,24 @@ public class UserController extends BaseController{
 		return new ResponseEntity<Map<String,Object>>(loginInfo,HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/users/info",produces = MediaType.APPLICATION_JSON_VALUE)
+	/**
+	 * POST /users/change_password -> changes the current user's password
+	 */
+	@ApiOperation(value = "上传图片", notes = "loginSystem",httpMethod="POST",response=String.class)
+	@RequestMapping(value = "/users/uploadfile",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> uploadfile(MultipartFile userfile,String username) {
+		userService.uploadFile(userfile);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "得到用户信息", notes = "user info",httpMethod="GET",response=String.class)
+	@RequestMapping(value = "/users/info",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> loginInfo(){
 		Subject subject = SecurityUtils.getSubject();
 
 		//可以通过下面这个对象，动态修改用户权限信息
 		ShiroPrincipal principal = (ShiroPrincipal) subject.getPrincipal();
-		
+		System.out.println(principal.toString());
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	

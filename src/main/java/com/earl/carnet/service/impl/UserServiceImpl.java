@@ -40,7 +40,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
 	@Override
 	public User findOneByUsername(String username) {
 		// TODO 未测试.
-		return null;
+		User user = userDao.findOneByUsername(username);
+		return user;
 	}
 
 	@Override
