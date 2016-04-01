@@ -6,7 +6,7 @@ import com.earl.carnet.domain.sercurity.privilege.Privilege;
 /**
  * @author 黄祥谦.
  * @date:2016-1-14 上午9:34:51
- * @version :
+ * @version :*****
  */
 public interface PrivilegeDao extends BaseDao<Privilege>{
 
