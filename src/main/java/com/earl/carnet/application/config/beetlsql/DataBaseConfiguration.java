@@ -34,7 +34,7 @@ public class DataBaseConfiguration implements EnvironmentAware {//这里继承�
 
 	@Bean(destroyMethod = "shutdown")//指定bean的销毁方法，shutdown
 	public DataSource dataSource() {
-		log.debug("Configruing DataSource");
+		log.debug("build DataSource");
 		if (propertyResolver.getProperty("url") == null
 				&& propertyResolver.getProperty("databaseName") == null) {
 			log.error("Your database conncetion pool configuration is incorrct ! The application "

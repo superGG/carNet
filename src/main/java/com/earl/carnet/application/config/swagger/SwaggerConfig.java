@@ -1,12 +1,16 @@
 package com.earl.carnet.application.config.swagger;
 
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
-import com.mangofactory.swagger.models.dto.ApiInfo;
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
-import com.mangofactory.swagger.plugin.EnableSwagger;
+import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
+import com.mangofactory.swagger.models.dto.ApiInfo;
+import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
+import com.mangofactory.swagger.paths.SwaggerPathProvider;
+import com.mangofactory.swagger.plugin.EnableSwagger;
+import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
 
 @Configuration
 @EnableSwagger
@@ -33,9 +37,10 @@ public class SwaggerConfig
     @Bean
     public SwaggerSpringMvcPlugin customImplementation()
     {
-        return new SwaggerSpringMvcPlugin(this.springSwaggerConfig).apiInfo(apiInfo()).includePatterns(".*");
+        return new SwaggerSpringMvcPlugin(this.springSwaggerConfig).apiInfo(apiInfo()).includePatterns("/.*");
     }
- 
+
+
     private ApiInfo apiInfo()
     {
         ApiInfo apiInfo = new ApiInfo(

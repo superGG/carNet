@@ -23,10 +23,12 @@ import com.earl.carnet.commons.domain.DateQuery;
 import com.earl.carnet.commons.util.Assert;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+
 
 public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 
-	@Autowired
+	@Resource(name = "sqlManager")
 	protected SQLManager sqlManager;
 
 	@SuppressWarnings("rawtypes")

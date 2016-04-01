@@ -1,8 +1,8 @@
 # Server settings
 server:
-    port:8080
+    port:8000
     address:localhost
-
+    contextPath:/carnet
 # DATASOURCE
 jdbc:
     dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource

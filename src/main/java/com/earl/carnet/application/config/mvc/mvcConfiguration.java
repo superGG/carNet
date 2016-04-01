@@ -19,7 +19,7 @@ import java.util.List;
 
 @Configuration
 @ComponentScan
-@AutoConfigureAfter({BeetlSqlConfiguration.class})
+//@AutoConfigureAfter({BeetlSqlConfiguration.class})
 public class mvcConfiguration extends WebMvcConfigurerAdapter {
     private static Logger logger = LoggerFactory.getLogger(mvcConfiguration.class);
 

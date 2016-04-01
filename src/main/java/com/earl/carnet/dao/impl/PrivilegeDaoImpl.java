@@ -10,6 +10,6 @@ import com.earl.carnet.domain.sercurity.privilege.Privilege;
 public class PrivilegeDaoImpl extends BaseDaoImpl<Privilege> implements PrivilegeDao{
 
     public PrivilegeDaoImpl(){
-        System.out.println("xixi");
+        System.out.println("privilegedao -- >xixi");
     }
 }

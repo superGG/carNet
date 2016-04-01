@@ -1,13 +1,13 @@
 package com.earl.carnet.application.config.beetlsql;
 
-import javax.annotation.Resource;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.beetl.sql.core.ClasspathLoader;
+import org.beetl.sql.core.ConnectionSource;
+import org.beetl.sql.core.ConnectionSourceHelper;
 import org.beetl.sql.core.DefaultNameConversion;
 import org.beetl.sql.core.Interceptor;
 import org.beetl.sql.core.SQLManager;
@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @ConditionalOnClass({ EnableTransactionManagement.class, EntityManager.class })
-@AutoConfigureAfter({BeetlSqlBaseConfiguration.class})
+//@AutoConfigureAfter({DataBaseConfiguration.class})
 // 在DataBaseConfiguration配置好后，才执行
 public class BeetlSqlConfiguration implements EnvironmentAware {
 
@@ -47,6 +47,40 @@ public class BeetlSqlConfiguration implements EnvironmentAware {
 	public void setEnvironment(Environment environment) {
 		this.propertyResolver = new RelaxedPropertyResolver(environment,
 				"mybatis.");
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
+	public MySqlStyle dbStyle() {
+		logger.info("building dbStyle");
+		return new MySqlStyle();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
+	public DefaultNameConversion nc() {
+		return new DefaultNameConversion();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
+	public ConnectionSource ds(DataSource dataSource) {
+		return ConnectionSourceHelper.getSingle(dataSource);
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
+	public ClasspathLoader sqlLoader() {
+		ClasspathLoader classpathLoader = new ClasspathLoader();
+		classpathLoader.setSqlRoot("/sql");
+		return classpathLoader;
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
+	public SpringConnectionSource cs() {
+		SpringConnectionSource springConnectionSource = new SpringConnectionSource();
+		return springConnectionSource;
 	}
 
 	@Bean
