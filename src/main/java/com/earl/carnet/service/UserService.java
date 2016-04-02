@@ -1,5 +1,6 @@
 package com.earl.carnet.service;
 
+import java.security.MessageDigest;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -55,5 +56,7 @@ public interface UserService extends BaseService<User, UserQuery> {
 	 * @return
 	 */
 	List<String> findPrivilegeCode(long l);
-	
+
+	void saveUser(User user);
+
 }

@@ -1,15 +1,15 @@
 package com.example.dao;
 
 import com.earl.carnet.Application;
-import com.earl.carnet.dao.UserDao;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.service.UserService;
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -18,37 +18,43 @@ import javax.annotation.Resource;
 @WebAppConfiguration
 public class UserDaoTest {
 
-	@Resource
-	UserService userService;
+    private static Logger logger = Logger.getLogger(UserDaoTest.class);
 
-	@Test
-	public void contextLoads() {
+    @Resource
+    UserService userService;
+
+    @Test
+    public void contextLoads() {
 //		userService.countAll();
-	}
+    }
 
-	@Test
-	public void xx(){
+    @Test
+    public void saveUser() {
 
-			User user = new User();
-			user.setPassword("thismeme2");
-			user.setUsername("thisnamememe2");
-			user.setUserimg("thisimgmeme2");
+        User user = new User();
+        user.setPassword("123456");
+        user.setRealname("testName");
+        user.setPhone("testPhone");
+        user.setUsername("testUser");
+        user.setLoginid("testLogin");
+        user.setUserimg(".../user/testUser.jpg");
 
-			userService.save(user);
-	}
+        userService.saveUser(user);
+    }
 
-	@Test
-	public void xxx(){
-		long sysDate = System.currentTimeMillis();
-		userService.findAll().forEach(user -> System.out.println(user.toString()));
-		long sysDate2 = System.currentTimeMillis();
-		System.out.println(sysDate2-sysDate);
-	}
+    @Test
+    public void testFinlAllUser() {
+        long sysDate = System.currentTimeMillis();
+        userService.findAll().forEach(user -> System.out.println(user.toString()));
+        long sysDate2 = System.currentTimeMillis();
+        logger.info(sysDate2 - sysDate);
+//        System.out.println(sysDate2 - sysDate);
+    }
 
-	@Test
-	public void xxxxx(){
-		for(int i=11506;i<11907;i++)
-		userService.delete(i);
-	}
+    @Test
+    public void testDeleUser() {
+//        for (int i = 11506; i < 11907; i++)
+//            userService.delete(11912);
+    }
 
 }

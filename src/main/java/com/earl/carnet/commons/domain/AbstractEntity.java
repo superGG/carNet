@@ -1,19 +1,18 @@
 package com.earl.carnet.commons.domain;
 
-import java.io.Serializable;
+import org.beetl.sql.core.TailBean;
+import org.springframework.hateoas.Identifiable;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-
-import org.beetl.sql.core.TailBean;
-import org.springframework.hateoas.Identifiable;
+import java.io.Serializable;
 
 @MappedSuperclass
 public abstract class AbstractEntity<T extends Serializable> extends TailBean implements Identifiable<T>, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue
 

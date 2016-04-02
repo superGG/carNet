@@ -32,11 +32,13 @@ import com.earl.carnet.dao.impl.PrivilegeDaoImpl;
 import com.earl.carnet.domain.sercurity.privilege.Privilege;
 import com.earl.carnet.security.shiro.ShiroAuthorizingRealm;
 
+import static org.slf4j.LoggerFactory.*;
+
 @Configuration
 @EnableTransactionManagement
 @AutoConfigureAfter({PrivilegeDao.class})
 public class ShiroConfiguration {
-    private static Logger logger = LoggerFactory.getLogger(ShiroConfiguration.class);
+    private static Logger logger = getLogger(ShiroConfiguration.class);
 
     public static final String PREMISSION_FORMAT = "perms[\"{0}\"]";
 

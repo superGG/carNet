@@ -2,18 +2,23 @@ package com.earl.carnet.domain.sercurity.user;
 
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.beetl.sql.core.annotatoin.AutoID;
 import org.beetl.sql.core.annotatoin.Table;
 
 import java.io.Serializable;
- 
-@JsonInclude(Include.NON_NULL) //jackson 控制，放回字段为null,将被过滤
+
+@JsonInclude(JsonInclude.Include.NON_NULL) //jackson 控制，放回字段为null,将被过滤
 @Table(name = "user")
 public class User extends AbstractAuditingEntity<Long> implements Serializable {
-	
-//    private Long id;
+
+    //    private Long id;
     private String username;
+
+    private String realname;
+
+    private String phone;
+
+    private String loginid;
 
     private String password;
 
@@ -25,9 +30,9 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     public Long getId() {
         return super.getId();
     }
-    
+
     public void setId(Long id) {
-    	super.setId(id);
+        super.setId(id);
 //        this.id = id;
     }
 
@@ -53,6 +58,30 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     public void setUserimg(String userimg) {
         this.userimg = userimg;
+    }
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getLoginid() {
+        return loginid;
+    }
+
+    public void setLoginid(String loginid) {
+        this.loginid = loginid;
     }
 
     @Override
