@@ -27,8 +27,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.earl.carnet.application.config.beetlsql.BeetlSqlConfiguration;
 import com.earl.carnet.dao.PrivilegeDao;
-import com.earl.carnet.dao.impl.PrivilegeDaoImpl;
 import com.earl.carnet.domain.sercurity.privilege.Privilege;
 import com.earl.carnet.security.shiro.ShiroAuthorizingRealm;
 
@@ -36,7 +36,7 @@ import static org.slf4j.LoggerFactory.*;
 
 @Configuration
 @EnableTransactionManagement
-@AutoConfigureAfter({PrivilegeDao.class})
+//@AutoConfigureAfter({BeetlSqlConfiguration.class})
 public class ShiroConfiguration {
     private static Logger logger = getLogger(ShiroConfiguration.class);
 
@@ -54,7 +54,7 @@ public class ShiroConfiguration {
 //    }
 
     @Bean
-    @DependsOn("privilegeDao")
+    @Resource
     public ShiroFilterFactoryBean shiroFilter(PrivilegeDao privilegeDao) {
 
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
