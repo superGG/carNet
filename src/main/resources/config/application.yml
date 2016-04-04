@@ -24,12 +24,6 @@ spring:
         encoding.enable: true
         encoding.force: true
 
-# MyBatis
-mybatis:
-    typeAliasesPackage: com.eric.demo.**.domain
-    mapperLocations: classpath:/com/eric/demo/api/**/dao/*.xml
-    configLocation: classpath:/mybatis-config.xml
-
 # LOGGING
 logging:
     level:

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-//@ComponentScan
+@ComponentScan
 public class Application {
 
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

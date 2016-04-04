@@ -1,17 +1,16 @@
 package com.example.dao;
 
-import com.earl.carnet.Application;
-import com.earl.carnet.dao.UserDao;
-import com.earl.carnet.domain.sercurity.user.User;
-import com.earl.carnet.service.UserService;
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
+import com.earl.carnet.Application;
+import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)

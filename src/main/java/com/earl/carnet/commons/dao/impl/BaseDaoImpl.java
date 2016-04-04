@@ -28,8 +28,14 @@ import javax.annotation.Resource;
 
 public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 
-	@Resource(name = "sqlManager")
+//	@Resource(name = "sqlManager")
 	protected SQLManager sqlManager;
+
+	@Resource
+	public void sqlManager(SQLManager sqlManager){
+
+		this.sqlManager = sqlManager;
+	}
 
 	@SuppressWarnings("rawtypes")
 	private Class entityClazz;

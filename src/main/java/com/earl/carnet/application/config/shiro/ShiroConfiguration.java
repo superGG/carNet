@@ -21,19 +21,16 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.earl.carnet.application.config.beetlsql.BeetlSqlConfiguration;
 import com.earl.carnet.dao.PrivilegeDao;
 import com.earl.carnet.domain.sercurity.privilege.Privilege;
 import com.earl.carnet.security.shiro.ShiroAuthorizingRealm;
 
 @Configuration
-@EnableTransactionManagement
+//@EnableTransactionManagement
 //@AutoConfigureAfter({BeetlSqlConfiguration.class})
 public class ShiroConfiguration {
     private static Logger logger = LoggerFactory.getLogger(ShiroConfiguration.class);

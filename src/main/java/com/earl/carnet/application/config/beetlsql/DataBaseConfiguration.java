@@ -1,7 +1,9 @@
 package com.earl.carnet.application.config.beetlsql;
 
 import java.util.Arrays;
+
 import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
@@ -10,13 +12,12 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@EnableTransactionManagement
+//@EnableTransactionManagement
 public class DataBaseConfiguration implements EnvironmentAware {//这里继承了EnvironmentAware,自动注入env对象
 
 	private RelaxedPropertyResolver propertyResolver;
