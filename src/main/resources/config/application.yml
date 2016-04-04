@@ -6,8 +6,8 @@ server:
 # DATASOURCE
 jdbc:
     dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-    url: jdbc:mysql://localhost:3306/test?useUnicode=true&amp;charaterEncoding=utf-8
-    databaseName: test
+    url: jdbc:mysql://localhost:3306/carnet?useUnicode=true&amp;charaterEncoding=utf-8
+    databaseName: carnet
     serverName: 127.0.0.1
     username: root
     password: root
