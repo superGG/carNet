@@ -1,15 +1,9 @@
 package com.example.dao;
 
-<<<<<<< HEAD
+
 import javax.annotation.Resource;
 
-=======
-import com.earl.carnet.Application;
-import com.earl.carnet.domain.sercurity.user.User;
-import com.earl.carnet.service.UserService;
 import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerFactory;
->>>>>>> b71245e006c1de381ded5afc535ee585eb26967c
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
