@@ -57,6 +57,11 @@ public interface UserService extends BaseService<User, UserQuery> {
 	 */
 	List<String> findPrivilegeCode(long l);
 
+	/**
+	 * 添加用户.
+	 * @author song.
+	 * @param user
+     */
 	void saveUser(User user);
 
 }
