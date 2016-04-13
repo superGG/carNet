@@ -4,9 +4,11 @@ package com.example.Server;
 import com.earl.carnet.Application;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.service.UserService;
+import cucumber.api.java.Before;
 import cucumber.api.java.zh_cn.*;
 import junit.framework.Assert;
 import org.apache.log4j.Logger;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.SpringApplicationContextLoader;
@@ -32,6 +34,14 @@ public class RegisterUserTest {
 
     private String loginid;
     private String password;
+
+
+    @Before("@NeedBeforStep")
+    public void clearUserData(){
+        User user = new User();
+        user.setLoginid("18719425973");
+        userService.deleteByQuery(user);
+    }
 
     @当("^填写的登录账号为(.*)")
     public void username(String loginid) {
