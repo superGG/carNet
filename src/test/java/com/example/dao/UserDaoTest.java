@@ -3,10 +3,14 @@ package com.example.dao;
 
 import javax.annotation.Resource;
 
+import cucumber.api.java.zh_cn.假如;
+import cucumber.api.junit.Cucumber;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.SpringApplicationContextLoader;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -14,9 +18,14 @@ import com.earl.carnet.Application;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.service.UserService;
 
+//Cucumber
+
+//@RunWith(Cucumber.class)
+//@ContextConfiguration(classes = Application.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
 @WebAppConfiguration
+@SpringApplicationConfiguration(classes = Application.class)
 public class UserDaoTest {
 
     private static Logger logger = Logger.getLogger(UserDaoTest.class);
@@ -29,9 +38,10 @@ public class UserDaoTest {
 //		userService.countAll();
     }
 
+    @假如("^我们(.*)")
     @Test
-    public void saveUser() {
-
+    public void saveUser(String action) {
+//        System.out.println(action);
         User user = new User();
         user.setPassword("123456");
         user.setRealname("testName");

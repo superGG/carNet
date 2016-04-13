@@ -1,23 +1,20 @@
 package com.example;
 
 import com.earl.carnet.Application;
-import cucumber.api.java.zh_cn.假如;
+import cucumber.api.java.zh_cn.当;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class DemoApplicationTests {
+public class BDDUserTest {
 
-//	@假如("^我们(.*)")
-	@Test
-	public void contextLoads(String action) {
-
-		System.out.println("xxoo");
+	@当("xxoo")
+	public void contextLoads() {
 	}
 
 }

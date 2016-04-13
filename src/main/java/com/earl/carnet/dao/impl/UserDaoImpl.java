@@ -82,5 +82,5 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 		hashMap.put("userId", userId);
 		return sqlManager.select("user.findRoleName", String.class, userId);
 	}
-	
+
 }

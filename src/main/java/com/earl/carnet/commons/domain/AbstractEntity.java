@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 @MappedSuperclass
-public abstract class AbstractEntity<T extends Serializable> extends TailBean implements Identifiable<T>, Serializable {
+public abstract class AbstractEntity<T extends Serializable>  implements Identifiable<T>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 

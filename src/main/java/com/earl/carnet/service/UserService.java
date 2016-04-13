@@ -64,4 +64,5 @@ public interface UserService extends BaseService<User, UserQuery> {
      */
 	void saveUser(User user);
 
+	User findOneByLoginId(String loginid);
 }

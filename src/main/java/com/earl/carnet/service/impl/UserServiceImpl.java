@@ -104,4 +104,16 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         logger.info("退出saveUser方法");
     }
 
+    @Override
+    public User findOneByLoginId(String loginid) {
+        // TODO 未测试.
+        UserQuery userQuery = new UserQuery();
+        userQuery.setLoginid(loginid);
+        List<User> user =  userDao.searchQuery(userQuery);
+        if(user.isEmpty()){
+            return null;
+        }
+        return user.get(0);
+    }
+
 }
