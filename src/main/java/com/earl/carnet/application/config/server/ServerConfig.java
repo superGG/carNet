@@ -21,8 +21,8 @@ public class ServerConfig
     @Bean
     public EmbeddedServletContainerFactory servletContainer() {
         TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
-        factory.setPort(9000);
-        factory.setContextPath("/carnet");
+        factory.setPort(8080);
+//        factory.setContextPath("/carnet");
 //        factory.setSessionTimeout(10, TimeUnit.MINUTES);
         factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/notfound.html"));
         return factory;
