@@ -8,7 +8,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 
 @RunWith(Cucumber.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@CucumberOptions(features = {"src/test/java/com/example/features"},format = { "pretty", "html:target/cucumber-html-report", "json:target/cucumber-json-report.json" })
+@CucumberOptions(features = {"classpath:features"},format = { "pretty", "html:target/cucumber-html-report", "json:target/cucumber-json-report.json" })
 public class RunCukesTest {
 
 }
