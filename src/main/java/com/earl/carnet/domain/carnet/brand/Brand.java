@@ -1,4 +1,4 @@
-package com.earl.carnet.domain.sercurity.brand;
+package com.earl.carnet.domain.carnet.brand;
 
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
