@@ -1,4 +1,4 @@
-package com.example.Server;
+package com.example.server.user;
 
 
 import com.earl.carnet.Application;
@@ -8,7 +8,6 @@ import cucumber.api.java.Before;
 import cucumber.api.java.zh_cn.*;
 import junit.framework.Assert;
 import org.apache.log4j.Logger;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.SpringApplicationContextLoader;
@@ -17,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
-import javax.management.RuntimeErrorException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
@@ -31,10 +29,6 @@ public class RegisterUserTest {
     UserService userService;
 
     private User user = new User();
-
-    private String loginid;
-    private String password;
-
 
     @Before("@NeedBeforStep")
     public void clearUserData(){

@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository("brandDao")
 public class BrandDaoImpl extends BaseDaoImpl<Brand> implements BrandDao {
-   
 
 }

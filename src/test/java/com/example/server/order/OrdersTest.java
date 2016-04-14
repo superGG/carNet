@@ -1,12 +1,14 @@
-package com.example.Server;
+package com.example.server.order;
 
 
 import com.earl.carnet.Application;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.service.UserService;
-import cucumber.api.java.zh_cn.假如;
+import cucumber.api.java.zh_cn.同时;
+import cucumber.api.java.zh_cn.当;
+import cucumber.api.java.zh_cn.那么;
+import junit.framework.Assert;
 import org.apache.log4j.Logger;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.SpringApplicationContextLoader;
@@ -20,25 +22,8 @@ import javax.annotation.Resource;
 @ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
 @WebAppConfiguration
 @SpringApplicationConfiguration(classes = Application.class)
-public class AddUserTest {
+public class OrdersTest {
 
-    private static Logger logger = Logger.getLogger(AddUserTest.class);
-
-    @Resource
-    UserService userService;
-
-    String username;
-
-//    @假如("^用户的姓名叫(.*)")
-//    public void username(String username) {
-//        this.username = username;
-//    }
-//    @假如("^用户的姓名叫(.*)")
-//    public void username(String username) {
-//        this.username = username;
-//    }    @假如("^用户的姓名叫(.*)")
-//    public void username(String username) {
-//        this.username = username;
-//    }
+    private static Logger logger = Logger.getLogger(OrdersTest.class);
 
 }

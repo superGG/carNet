@@ -9,7 +9,4 @@ import com.earl.carnet.domain.sercurity.privilege.Privilege;
 @Repository("privilegeDao")
 public class PrivilegeDaoImpl extends BaseDaoImpl<Privilege> implements PrivilegeDao{
 
-    public PrivilegeDaoImpl(){
-        System.out.println("privilegedao -- >xixi");
-    }
 }
