@@ -1,4 +1,4 @@
-package com.earl.carnet.domain.carnet.oeder;
+package com.earl.carnet.domain.carnet.order;
 
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;

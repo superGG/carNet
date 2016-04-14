@@ -8,6 +8,12 @@ import org.beetl.sql.core.annotatoin.Table;
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.earl.carnet.commons.domain.DateQuery;
 
+
+/**
+ * 专门用来查询的对象，不能作为查询条件的属性不要放进来，提高查询
+ */
+
+
 @Table(name = "user")
 public class UserQuery extends AbstractAuditingEntity<Long> implements Serializable {
 
@@ -19,8 +25,6 @@ public class UserQuery extends AbstractAuditingEntity<Long> implements Serializa
     private String phone;
 
     private String loginid;
-
-    private String password;
 
     private String userimg;
 
@@ -52,14 +56,6 @@ public class UserQuery extends AbstractAuditingEntity<Long> implements Serializa
 
     public void setUsername(String username) {
         this.username = username == null ? null : username.trim();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
     }
 
     public String getLoginid() {
@@ -101,8 +97,8 @@ public class UserQuery extends AbstractAuditingEntity<Long> implements Serializa
                 ", realname='" + realname + '\'' +
                 ", phone='" + phone + '\'' +
                 ", loginid='" + loginid + '\'' +
-                ", password='" + password + '\'' +
                 ", userimg='" + userimg + '\'' +
                 '}';
     }
+
 }

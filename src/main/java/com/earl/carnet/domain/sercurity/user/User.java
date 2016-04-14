@@ -24,6 +24,8 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     private String userimg;
 
+    private String family;
+
     private static final long serialVersionUID = 1L;
 
     @AutoID
@@ -34,6 +36,14 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     public void setId(Long id) {
         super.setId(id);
 //        this.id = id;
+    }
+
+    public void setFamily(String family) {
+        this.family = family;
+    }
+
+    public String getFamily() {
+        return family;
     }
 
     public String getUsername() {

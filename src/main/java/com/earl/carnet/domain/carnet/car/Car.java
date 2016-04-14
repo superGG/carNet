@@ -52,6 +52,16 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
 
     private Double lat;//纬度
 
+    private Boolean currentState;//当前车辆状态
+
+    private Boolean sendonstartup;
+
+    private String carpassword;
+
+    private Boolean currentusercar;
+
+    private Boolean warninguser;
+
     public Long getUserid() {
         return userid;
     }
@@ -204,6 +214,46 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.lat = lat;
     }
 
+    public Boolean getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(Boolean currentState) {
+        this.currentState = currentState;
+    }
+
+    public Boolean getSendonstartup() {
+        return sendonstartup;
+    }
+
+    public void setSendonstartup(Boolean sendonstartup) {
+        this.sendonstartup = sendonstartup;
+    }
+
+    public String getCarpassword() {
+        return carpassword;
+    }
+
+    public void setCarpassword(String carpassword) {
+        this.carpassword = carpassword;
+    }
+
+    public Boolean getCurrentusercar() {
+        return currentusercar;
+    }
+
+    public void setCurrentusercar(Boolean currentusercar) {
+        this.currentusercar = currentusercar;
+    }
+
+    public Boolean getWarninguser() {
+        return warninguser;
+    }
+
+    public void setWarninguser(Boolean warninguser) {
+        this.warninguser = warninguser;
+    }
+
     @Override
     public String toString() {
         return "Car{" +
@@ -226,6 +276,11 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
                 ", carlight=" + carlight +
                 ", lon=" + lon +
                 ", lat=" + lat +
+                ", currentState=" + currentState +
+                ", sendonstartup=" + sendonstartup +
+                ", carpassword='" + carpassword + '\'' +
+                ", currentusercar=" + currentusercar +
+                ", warninguser=" + warninguser +
                 '}';
     }
 }
