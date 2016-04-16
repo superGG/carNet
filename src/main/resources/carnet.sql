@@ -71,19 +71,21 @@ INSERT INTO `roleprivilege` VALUES ('1', '1', '1');
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) DEFAULT NULL,
-  `realname` varchar(255) DEFAULT NULL,
+  `userName` varchar(255) NOT NULL,
+  `realName` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
-  `loginid` varchar(255) NOT NULL,
+  `loginId` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `userimg` varchar(255) DEFAULT NULL,
+  `userImg` varchar(255) DEFAULT NULL,
+  `relatedPhone` varchar(255) DEFAULT NULL,
+  `safePassword` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1','superGG','宋文光','18320489492','q459714770','e10adc3949ba59abbe56e057f20f883e','../user/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.jpg');
+INSERT INTO `user` VALUES ('1','superGG','宋文光','18320489492','q459714770','e10adc3949ba59abbe56e057f20f883e','../user/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.jpg',null,null);
 
 
 
@@ -112,12 +114,12 @@ INSERT INTO `userrole` VALUES ('1', '1', '1');
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `carid` bigint(20) NOT NULL,
-  `userid` bigint(20) NOT NULL,
-  `stationname` varchar(255) NOT NULL,
+  `carId` bigint(20) NOT NULL,
+  `userId` bigint(20) NOT NULL,
+  `stationName` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
-  `brandname` varchar(255) NOT NULL,
-  `agreementtime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `brandName` varchar(255) NOT NULL,
+  `agreementTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `type` VARCHAR(255) NOT NULL,
   `units` bigint(5) NOT NULL DEFAULT '0',
   `price` DOUBLE NOT NULL,
@@ -142,23 +144,27 @@ INSERT INTO `order` VALUES ('11911','1','1','湖光岩东加油站','广东省�
 DROP TABLE IF EXISTS `car`;
 CREATE TABLE `car` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `userid` bigint(20) NOT NULL,
+  `userId` bigint(20) NOT NULL,
   `mark` varchar(255) NOT NULL,
   `brand` varchar(255) NOT NULL,
   `models` varchar(255) NOT NULL,
-  `platenumber` varchar(255) NOT NULL,
+  `plateNumber` varchar(255) NOT NULL,
   `vin` varchar(255) NOT NULL,
-  `enginenumber` varchar(255) NOT NULL,
+  `engineNumber` varchar(255) NOT NULL,
   `rank` VARCHAR(255) NOT NULL,
   `mileage` FLOAT(50) NOT NULL,
-  `oilbox` FLOAT(50) NOT NULL,
-  `speed` FLOAT(50) NOT NULL,
+  `oilBox` FLOAT(50) NOT NULL,
   `tachometer` FLOAT(50) NOT NULL,
   `oil` FLOAT(50) NOT NULL,
-  `temperature` FLOAT(50) NOT NULL,
-  `engineproperty` bit(1) NOT NULL DEFAULT b'0',
+  `engineProperty` bit(1) NOT NULL DEFAULT b'0',
   `transmission` bit(1) NOT NULL DEFAULT b'0' ,
-  `carlight` bit(1) NOT null default b'0' ,
+  `carLight` bit(1) NOT null default b'0' ,
+  `carState` bit(1) NOT null default b'0' ,
+  `carAlarm` bit(1) NOT null default b'0' ,
+  `alarmMessage` bit(1) NOT null default b'1' ,
+  `propertyMessage` bit(1) NOT null default b'1' ,
+  `stateMessage` bit(1) NOT null default b'1' ,
+  `currentCar` bit(1) NOT null default b'0' ,
   `lon` DOUBLE NOT null,
   `lat` DOUBLE NOT null,
   PRIMARY KEY (`id`)
@@ -167,7 +173,7 @@ CREATE TABLE `car` (
 -- ----------------------------
 -- Records of car
 -- ----------------------------
-INSERT INTO `car` VALUES ('1','1','../mark/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.jpg','奥迪','R8','粤L88888','1234567','1234567','2门2座','0.0','50.0','0.0','0.0','49.9','50','\0','\0','\0','123.3','143.5');
+INSERT INTO `car` VALUES ('1','1','../mark/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.jpg','奥迪','R8','粤L88888','1234567','1234567','2门2座','0.0','50.0','49.9','50','','','','','','','','','','123.3','143.5');
 
 
 -- ----------------------------
