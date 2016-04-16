@@ -44,4 +44,5 @@ public interface UserDao extends BaseDao<User>{
 	 */
 	List<String> findRoleName(Long id);
 
+	User findOneByLoginId(String loginid);
 }
