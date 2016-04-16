@@ -1,5 +1,6 @@
 package com.earl.carnet.web;
 
+import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.security.shiro.ShiroPrincipal;
 import com.earl.carnet.service.UserService;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/users")
 //@Api(value="Person Rest Service") //修改生成的son路径
 public class UserController extends BaseController{
 
@@ -48,7 +49,7 @@ public class UserController extends BaseController{
 	 * GET /users/:username -> get the "username" user
 	 */
 	@ApiOperation(value = "得到指定用户", notes = "GET POINT USER",httpMethod="GET",response=String.class)
-	@RequestMapping(value = "/users/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public User getUser(@PathVariable String username,
 			HttpServletResponse response) {
 		log.info("REST request to get User : {}", username);
@@ -118,21 +119,20 @@ public class UserController extends BaseController{
 	@Valid
 	@RequestMapping(value = "/doLogin", produces = MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.POST)
 	@ApiOperation(value = "登录系统", notes = "loginSystem",httpMethod="POST",response=String.class)
-	public ResponseEntity<Map<String,Object>> doLogin(
-			@ApiParam(required = true, name = "username", value = "用户信息json数据")
-			@NotEmpty(message = "设备类型不能为空")
-			@RequestParam(name="username",required = false)String username
-			,
-			@ApiParam(required = true, value = "用户密码json数据")
-			@RequestParam(name="password",required = false) String password){
-		userService.doLogin(username,password);
+	public ResponseEntity<ResultMessage> doLogin(
+			@ApiParam(required = true, name = "loginid", value = "用户账号")
+			@NotEmpty(message = "登录账号不能为空")
+			@RequestParam(name="loginid",required = true)
+			String loginid,
+			@ApiParam(required = true, value = "用户登录密码")
+			@RequestParam(name="password",required = true) String password){
+		userService.doLogin(loginid,password);
 		ShiroPrincipal principal = (ShiroPrincipal) SecurityUtils.getSubject().getPrincipal();
 		User user = principal.getUser();
-		Map<String, Object> loginInfo = new HashMap<String,Object>();
-		loginInfo.put("username",user.getUsername());
-		loginInfo.put("userimg",user.getUserimg());
-		loginInfo.put("loginSuccess",true);
-		return new ResponseEntity<Map<String,Object>>(loginInfo,HttpStatus.OK);
+
+		ResultMessage resultMessage = new ResultMessage();
+		resultMessage.setResultInfo("登录成功");
+		return new ResponseEntity<ResultMessage>(resultMessage,HttpStatus.OK);
 	}
 
 	/**
@@ -155,15 +155,21 @@ public class UserController extends BaseController{
 		System.out.println(principal.toString());
 		return new ResponseEntity<ShiroPrincipal>(principal,HttpStatus.OK);
 	}
+
 	@ApiOperation(value = "用户注册", notes = "user register system account ",httpMethod="POST",response=String.class)
-	@RequestMapping(value = "/users/register",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ShiroPrincipal> regitsterAccount(String username,String password){
-
-		userService.registerAccount();
-
-		return new ResponseEntity<ShiroPrincipal>(HttpStatus.OK);
+	@RequestMapping(value = "/register",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> regitsterAccount(
+			@ApiParam(required = true, name = "loginid", value = "用户登录账号")
+			@NotEmpty(message = "注册账号不能为空")
+			@RequestParam(name="loginid",required = true)
+			String loginid,
+			@ApiParam(required = true, name = "password", value = "用户登录密码")
+			@NotEmpty(message = "登录密码不能为空")
+			@RequestParam(name="password",required = true)
+			String password){
+		userService.registerAccount(loginid,password);
+		ResultMessage resultMessage = new ResultMessage();
+		resultMessage.setResultInfo("注册成功");
+		return new ResponseEntity<ResultMessage>(resultMessage,HttpStatus.OK);
 	}
-
-
-	
 }

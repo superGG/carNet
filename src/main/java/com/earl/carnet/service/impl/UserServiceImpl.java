@@ -116,4 +116,18 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         return user.get(0);
     }
 
+    @Override
+    public void registerAccount(String loginid, String password) {
+        User user = new User();
+        user.setLoginid(loginid);
+
+        User tmpuser = userDao.findOneByLoginId(loginid);
+        if(tmpuser != null){
+            throw new SecurityException("改账号已经被注册");
+        }else{
+
+            user.setPassword(MD5Util.md5(password));
+            userDao.insert(user);
+        }
+    }
 }

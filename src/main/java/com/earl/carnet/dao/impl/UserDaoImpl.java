@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.earl.carnet.domain.sercurity.user.UserQuery;
 import org.springframework.stereotype.Repository;
 
 import com.earl.carnet.commons.dao.impl.BaseDaoImpl;
@@ -30,6 +31,18 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 					return unique.get(0);
 				}
 				return null;
+	}
+
+	@Override
+	public User findOneByLoginId(String loginid) {
+		// TODO 未测试.
+		UserQuery user = new UserQuery();
+		user.setLoginid(loginid);
+		List<User> unique = searchQuery(user);
+		if(!unique.isEmpty()){
+			return unique.get(0);
+		}
+		return null;
 	}
 
 	@Override

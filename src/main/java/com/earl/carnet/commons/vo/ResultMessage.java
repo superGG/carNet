@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.earl.carnet.commons.util.GsonUtil;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 
 /**
@@ -16,6 +17,7 @@ import com.earl.carnet.commons.util.GsonUtil;
  * @author 侯骏雄
  * @since 3.0.0
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResultMessage {
 	public ResultMessage(){
 		this.resultParm = new HashMap<String, Object>();
@@ -26,6 +28,8 @@ public class ResultMessage {
      * 用户令牌判断结果.
      */
     private Boolean userToken;
+
+    private Long messageCode;
 
     /**
      * 服务类执行结果.
@@ -76,6 +80,13 @@ public class ResultMessage {
         this.serviceResult = serviceResult;
     }
 
+    public Long getMessageCode() {
+        return messageCode;
+    }
+
+    public void setMessageCode(Long messageCode) {
+        this.messageCode = messageCode;
+    }
 
     /**
      * @return 获取的resultParm
