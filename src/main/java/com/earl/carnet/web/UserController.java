@@ -155,5 +155,15 @@ public class UserController extends BaseController{
 		System.out.println(principal.toString());
 		return new ResponseEntity<ShiroPrincipal>(principal,HttpStatus.OK);
 	}
+	@ApiOperation(value = "用户注册", notes = "user register system account ",httpMethod="POST",response=String.class)
+	@RequestMapping(value = "/users/register",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ShiroPrincipal> regitsterAccount(String username,String password){
+
+		userService.registerAccount();
+
+		return new ResponseEntity<ShiroPrincipal>(HttpStatus.OK);
+	}
+
+
 	
 }
