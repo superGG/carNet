@@ -12,6 +12,7 @@ import com.earl.carnet.service.UserService;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,7 +99,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     public void saveUser(User user) {
         logger.info("进入saveUser方法");
         String oldPassword = user.getPassword();
-        String newPassword = MD5Util.md5(oldPassword);
+        String newPassword = new SimpleHash("SHA-1",oldPassword).toString();
+//        String newPassword = MD5Util.md5(oldPassword);
         user.setPassword(newPassword);
         userDao.insert(user);
         logger.info("退出saveUser方法");
