@@ -126,7 +126,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
             throw new SecurityException("改账号已经被注册");
         }else{
 
-            user.setPassword(MD5Util.md5(password));
+            user.setPassword(password);
             userDao.insert(user);
         }
     }

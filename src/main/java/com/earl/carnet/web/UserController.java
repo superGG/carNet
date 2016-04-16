@@ -38,8 +38,8 @@ public class UserController extends BaseController{
 	/**
 	 * GET /users -> get all the users
 	 */
-	@RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(value = "得到所有用户", notes = "find All User",httpMethod="GET",response=String.class)
+	@RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "得到所有用户信息", notes = "find All User",httpMethod="GET",response=String.class)
 	public ResponseEntity<List<User>> getAll() {
 		log.debug("REST request to get all Users");
 		return new ResponseEntity<List<User>>(userService.findAll(), HttpStatus.OK);
