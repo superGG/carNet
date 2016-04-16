@@ -1,11 +1,11 @@
 package com.earl.carnet.web;
 
-import com.earl.carnet.commons.vo.ResultMessage;
-import com.earl.carnet.domain.sercurity.user.User;
-import com.earl.carnet.security.shiro.ShiroPrincipal;
-import com.earl.carnet.service.UserService;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -15,15 +15,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.security.shiro.ShiroPrincipal;
+import com.earl.carnet.service.UserService;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -95,7 +100,7 @@ public class UserController extends BaseController{
 	 * @RequestBody 专门处理非from表单数据，就是json,xml类型数据
 	 */
 	@ApiOperation(value = "删除一个用户", notes = "DELETE ONE USER",httpMethod="DELETE",response=String.class)
-	@RequestMapping(value = "/users",method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{}",method = RequestMethod.DELETE,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> delete(Long id,
 			HttpServletRequest request) {
 		userService.delete(id);

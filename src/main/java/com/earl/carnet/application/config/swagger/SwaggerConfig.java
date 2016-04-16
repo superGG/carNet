@@ -41,8 +41,8 @@ public class SwaggerConfig
     private ApiInfo apiInfo()
     {
         ApiInfo apiInfo = new ApiInfo(
-               "earl_api",
-                "api_desc",
+               "伯爵科技车联网工程",
+                "描述车辆玩的api文档",
                 "api_term",
                 "api_email",
                 "api_type",
