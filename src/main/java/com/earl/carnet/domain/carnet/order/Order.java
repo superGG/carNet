@@ -2,6 +2,7 @@ package com.earl.carnet.domain.carnet.order;
 
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.beetl.sql.core.annotatoin.AutoID;
 import org.joda.time.DateTime;
 
 import javax.persistence.Table;
@@ -15,17 +16,17 @@ import java.io.Serializable;
 @Table(name = "odrder")
 public class Order extends AbstractAuditingEntity<Long> implements Serializable{
 
-    private Long carid;
+    private Long carId;
 
-    private Long userid;
+    private Long userId;
 
-    private String stationname;
+    private String stationName;
 
     private String address;
 
-    private String brandname;
+    private String brandName;
 
-    private DateTime agreementtime;
+    private DateTime agreementTime;
 
     private String type;
 
@@ -39,28 +40,54 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
 
     private Integer state;
 
-    public Long getCarid() {
-        return carid;
+    @AutoID
+    public Long getId() {
+        return super.getId();
     }
 
-    public void setCarid(Long carid) {
-        this.carid = carid;
+    public void setId(Long id) {
+        super.setId(id);
+//        this.id = id;
     }
 
-    public Long getUserid() {
-        return userid;
+    public Long getCarId() {
+        return carId;
     }
 
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    public void setCarId(Long carId) {
+        this.carId = carId;
     }
 
-    public String getStationname() {
-        return stationname;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setStationname(String stationname) {
-        this.stationname = stationname;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public DateTime getAgreementTime() {
+        return agreementTime;
+    }
+
+    public void setAgreementTime(DateTime agreementTime) {
+        this.agreementTime = agreementTime;
     }
 
     public String getAddress() {
@@ -71,21 +98,6 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
         this.address = address;
     }
 
-    public String getBrandname() {
-        return brandname;
-    }
-
-    public void setBrandname(String brandname) {
-        this.brandname = brandname;
-    }
-
-    public DateTime getAgreementtime() {
-        return agreementtime;
-    }
-
-    public void setAgreementtime(DateTime agreementtime) {
-        this.agreementtime = agreementtime;
-    }
 
     public String getType() {
         return type;
@@ -138,12 +150,12 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
     @Override
     public String toString() {
         return "Order{" +
-                "carid=" + carid +
-                ", userid=" + userid +
-                ", stationname='" + stationname + '\'' +
+                "carId=" + carId +
+                ", userId=" + userId +
+                ", stationName='" + stationName + '\'' +
                 ", address='" + address + '\'' +
-                ", brandname='" + brandname + '\'' +
-                ", agreementtime=" + agreementtime +
+                ", brandName='" + brandName + '\'' +
+                ", agreementTime=" + agreementTime +
                 ", type='" + type + '\'' +
                 ", units=" + units +
                 ", price=" + price +

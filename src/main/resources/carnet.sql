@@ -71,7 +71,7 @@ INSERT INTO `roleprivilege` VALUES ('1', '1', '1');
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
+  `username` varchar(255) DEFAULT NULL,
   `realName` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
   `loginid` varchar(255) NOT NULL,
@@ -148,13 +148,13 @@ CREATE TABLE `car` (
   `mark` varchar(255) NOT NULL,
   `brand` varchar(255) NOT NULL,
   `models` varchar(255) NOT NULL,
-  `plateNumber` varchar(255) NOT NULL,
+  `plateNumber` varchar(255) DEFAULT NULL,
   `vin` varchar(255) NOT NULL,
   `engineNumber` varchar(255) NOT NULL,
   `rank` VARCHAR(255) NOT NULL,
   `mileage` FLOAT(50) NOT NULL,
   `oilBox` FLOAT(50) NOT NULL,
-  `tachometer` FLOAT(50) NOT NULL,
+  `temperature` FLOAT(50) NOT NULL,
   `oil` FLOAT(50) NOT NULL,
   `engineProperty` bit(1) NOT NULL DEFAULT b'0',
   `transmission` bit(1) NOT NULL DEFAULT b'0' ,
@@ -182,8 +182,8 @@ INSERT INTO `car` VALUES ('1','1','../mark/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.
 DROP TABLE IF EXISTS `models`;
 CREATE TABLE `models` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `brandid` bigint(20) not NULL,
-  `modelsname` varchar(255) DEFAULT NULL,
+  `brandId` bigint(20) not NULL,
+  `modelsName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11912 DEFAULT CHARSET=utf8;
 
@@ -198,7 +198,7 @@ INSERT INTO `models` VALUES ('1','1','R8');
 DROP TABLE IF EXISTS `brand`;
 CREATE TABLE `brand` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `brandname` varchar(255) DEFAULT NULL,
+  `brandName` varchar(255) DEFAULT NULL,
   `mark` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11912 DEFAULT CHARSET=utf8;

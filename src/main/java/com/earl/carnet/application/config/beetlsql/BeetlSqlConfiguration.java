@@ -51,6 +51,7 @@ public class BeetlSqlConfiguration implements EnvironmentAware {
 	@Bean
 	@ConditionalOnMissingBean
 	public MySqlStyle dbStyle() {
+		//数据库类型，目前只支持org.beetl.sql.core.db.MySqlStyle
 		logger.info("building dbStyle");
 		return new MySqlStyle();
 	}
@@ -64,12 +65,14 @@ public class BeetlSqlConfiguration implements EnvironmentAware {
 	@Bean
 	@ConditionalOnMissingBean
 	public ConnectionSource ds(DataSource dataSource) {
+		//加载数据库参数
 		return ConnectionSourceHelper.getSingle(dataSource);
 	}
 
 	@Bean
 	@ConditionalOnMissingBean
 	public ClasspathLoader sqlLoader() {
+		//sql语句加载来源
 		ClasspathLoader classpathLoader = new ClasspathLoader();
 		classpathLoader.setSqlRoot("/sql");
 		return classpathLoader;
@@ -78,6 +81,7 @@ public class BeetlSqlConfiguration implements EnvironmentAware {
 	@Bean
 	@ConditionalOnMissingBean
 	public SpringConnectionSource cs() {
+		//指定ConnectionSource，可以用系统提供的DefaultConnectionSource，支持按照CRUD决定主从。例子里只有一个master库
 		SpringConnectionSource springConnectionSource = new SpringConnectionSource();
 		return springConnectionSource;
 	}
@@ -86,6 +90,7 @@ public class BeetlSqlConfiguration implements EnvironmentAware {
 	@ConditionalOnMissingBean
 	public SQLManager sqlManager(MySqlStyle dbStyle,ClasspathLoader sqlLoader,SpringConnectionSource cs,DefaultNameConversion nc,DataSource dataSource) {
 		logger.info("building SQLManager");
+		//DebugInterceptor 用来打印sql语句、参数和执行时间
 		Interceptor[] inters={new DebugInterceptor()};
 		
 				SpringBeetlSql beetlSqlManager = new SpringBeetlSql();

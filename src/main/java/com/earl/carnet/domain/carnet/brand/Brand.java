@@ -2,6 +2,7 @@ package com.earl.carnet.domain.carnet.brand;
 
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.beetl.sql.core.annotatoin.AutoID;
 
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -14,16 +15,26 @@ import java.io.Serializable;
 @Table(name ="brand")
 public class Brand extends AbstractAuditingEntity<Long> implements Serializable {
 
-    private String brandname;//品牌名称
+    private String brandName;//品牌名称
 
     private String mark;//品牌标志
 
-    public String getBrandname() {
-        return brandname;
+    @AutoID
+    public Long getId() {
+        return super.getId();
     }
 
-    public void setBrandname(String brandname) {
-        this.brandname = brandname;
+    public void setId(Long id) {
+        super.setId(id);
+//        this.id = id;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
     public String getMark() {
@@ -37,7 +48,7 @@ public class Brand extends AbstractAuditingEntity<Long> implements Serializable 
     @Override
     public String toString() {
         return "Brand{" +
-                "brandname='" + brandname + '\'' +
+                "brandName='" + brandName + '\'' +
                 ", mark='" + mark + '\'' +
                 '}';
     }

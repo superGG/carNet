@@ -38,14 +38,16 @@ public class UpdateUserTest {
         this.user.setLoginid(user.getLoginid());
     }
 
+
+
     @同时("^设置用户昵称为(.*)")
     public void username(String username){
         this.user.setUsername(username);
     }
 
     @同时("^设置用户真实姓名为(.*)")
-    public void userrealname(String username){
-        this.user.setRealname(username);
+    public void userrealName(String username){
+        this.user.setRealName(username);
     }
 
     @同时("^设置用户手机为(.*)")
@@ -60,7 +62,7 @@ public class UpdateUserTest {
         User tmpuser = userService.findOneByLoginId(this.user.getLoginid());
         Assert.assertEquals(tmpuser.getPhone(),this.user.getPhone());
         Assert.assertEquals(tmpuser.getUsername(),this.user.getUsername());
-        Assert.assertEquals(tmpuser.getRealname(),this.user.getRealname());
+        Assert.assertEquals(tmpuser.getRealName(),this.user.getRealName());
 
         Assert.assertEquals("更新成功",result);
     }

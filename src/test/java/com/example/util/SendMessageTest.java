@@ -4,8 +4,6 @@ import com.earl.carnet.commons.util.Assert;
 import com.earl.carnet.util.SendMessage;
 import org.junit.Test;
 
-import javax.validation.constraints.AssertTrue;
-
 /**
  * Created by Administrator on 2016/4/15.
  */

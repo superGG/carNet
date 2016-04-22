@@ -20,13 +20,14 @@ public class UserQuery extends AbstractAuditingEntity<Long> implements Serializa
     //    private Long id;
     private String username;
 
-    private String realname;
+    private String realName;
 
     private String phone;
 
     private String loginid;
 
-    private String userimg;
+    private String userImg;
+
 
     private static final long serialVersionUID = 1L;
 
@@ -74,31 +75,31 @@ public class UserQuery extends AbstractAuditingEntity<Long> implements Serializa
         this.phone = phone;
     }
 
-    public String getRealname() {
-        return realname;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setRealname(String realname) {
-        this.realname = realname;
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
-    public String getUserimg() {
-        return userimg;
+    public String getUserImg() {
+        return userImg;
     }
 
-    public void setUserimg(String userimg) {
-        this.userimg = userimg;
+    public void setUserImg(String userImg) {
+        this.userImg = userImg;
     }
+
 
     @Override
     public String toString() {
         return "UserQuery{" +
                 "username='" + username + '\'' +
-                ", realname='" + realname + '\'' +
+                ", realName='" + realName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", loginid='" + loginid + '\'' +
-                ", userimg='" + userimg + '\'' +
+                ", userImg='" + userImg + '\'' +
                 '}';
     }
-
 }

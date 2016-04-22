@@ -14,7 +14,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     //    private Long id;
     private String username;
 
-    private String realname;
+    private String realName;
 
     private String phone;
 
@@ -22,9 +22,11 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     private String password;
 
-    private String userimg;
+    private String userImg;
 
-    private String family;
+    private String relatedPhone;
+
+    private String safePassword;
 
     private static final long serialVersionUID = 1L;
 
@@ -36,14 +38,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     public void setId(Long id) {
         super.setId(id);
 //        this.id = id;
-    }
-
-    public void setFamily(String family) {
-        this.family = family;
-    }
-
-    public String getFamily() {
-        return family;
     }
 
     public String getUsername() {
@@ -62,22 +56,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         this.password = password;
     }
 
-    public String getUserimg() {
-        return userimg;
-    }
-
-    public void setUserimg(String userimg) {
-        this.userimg = userimg;
-    }
-
-    public String getRealname() {
-        return realname;
-    }
-
-    public void setRealname(String realname) {
-        this.realname = realname;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -94,17 +72,49 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         this.loginid = loginid;
     }
 
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getUserImg() {
+        return userImg;
+    }
+
+    public void setUserImg(String userImg) {
+        this.userImg = userImg;
+    }
+
+    public String getRelatedPhone() {
+        return relatedPhone;
+    }
+
+    public void setRelatedPhone(String relatedPhone) {
+        this.relatedPhone = relatedPhone;
+    }
+
+    public String getSafePassword() {
+        return safePassword;
+    }
+
+    public void setSafePassword(String safePassword) {
+        this.safePassword = safePassword;
+    }
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(getId());//id是私有属性，
-        sb.append(", username=").append(username);
-        sb.append(", password=").append(password);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return "User{" +
+                "username='" + username + '\'' +
+                ", realName='" + realName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", loginid='" + loginid + '\'' +
+                ", password='" + password + '\'' +
+                ", userImg='" + userImg + '\'' +
+                ", relatedPhone='" + relatedPhone + '\'' +
+                ", safePassword='" + safePassword + '\'' +
+                '}';
     }
 }

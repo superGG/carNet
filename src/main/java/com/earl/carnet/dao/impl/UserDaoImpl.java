@@ -22,6 +22,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 	private UserRoleDao userRoleDao;
 	
 	@Override
+	//根据用户名查询用户.
 	public User findOneByUsername(String username) {
 		// TODO 未测试.
 		User user = new User();
@@ -34,6 +35,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 	}
 
 	@Override
+	//根据登录id查询用户.
 	public User findOneByLoginId(String loginid) {
 		// TODO 未测试.
 		UserQuery user = new UserQuery();

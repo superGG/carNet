@@ -20,8 +20,8 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 public class HttpBase {
 
 	//	String basePath = "http://www.earltech.cn:8080/fishshop/";
-//	String basePath = "http://localhost:8080/fishshop/";
-	String basePath = "http://localhost:8082/carnettcp/";
+	String basePath = "http://localhost:8080/fishshop/";
+//	String basePath = "http://localhost:8082/carnettcp/";
 
 	public String sendHttpRequest(String targetURl, Part[] parts) {
 		String string = null;

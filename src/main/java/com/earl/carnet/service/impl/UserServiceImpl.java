@@ -3,7 +3,6 @@ package com.earl.carnet.service.impl;
 import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.service.BaseServiceImpl;
 import com.earl.carnet.commons.util.IdGen;
-import com.earl.carnet.commons.util.MD5Util;
 import com.earl.carnet.dao.UserDao;
 import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;

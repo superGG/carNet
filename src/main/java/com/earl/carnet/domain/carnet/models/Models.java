@@ -2,6 +2,7 @@ package com.earl.carnet.domain.carnet.models;
 
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.beetl.sql.core.annotatoin.AutoID;
 
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -14,31 +15,41 @@ import java.io.Serializable;
 @Table(name = "models")
 public class Models extends AbstractAuditingEntity<Long> implements Serializable {
 
-    private Long brandid;
+    private Long brandId;
 
-    private String modelsname;
+    private String modelsName;
 
-    public Long getBrandid() {
-        return brandid;
+    public Long getBrandId() {
+        return brandId;
     }
 
-    public void setBrandid(Long brandid) {
-        this.brandid = brandid;
+    @AutoID
+    public Long getId() {
+        return super.getId();
     }
 
-    public String getModelsname() {
-        return modelsname;
+    public void setId(Long id) {
+        super.setId(id);
+//        this.id = id;
     }
 
-    public void setModelsname(String modelsname) {
-        this.modelsname = modelsname;
+    public void setBrandId(Long brandId) {
+        this.brandId = brandId;
+    }
+
+    public String getModelsName() {
+        return modelsName;
+    }
+
+    public void setModelsName(String modelsName) {
+        this.modelsName = modelsName;
     }
 
     @Override
     public String toString() {
         return "Models{" +
-                "brandid=" + brandid +
-                ", modelsname='" + modelsname + '\'' +
+                "brandId=" + brandId +
+                ", modelsName='" + modelsName + '\'' +
                 '}';
     }
 }

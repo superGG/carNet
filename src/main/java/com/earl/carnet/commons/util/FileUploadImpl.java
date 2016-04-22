@@ -111,7 +111,6 @@ public class FileUploadImpl {
 				try {
 					file.get(i).transferTo(new File(filePath, newName));
 				} catch (IllegalStateException | IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				newNameList.add(dir + newName);

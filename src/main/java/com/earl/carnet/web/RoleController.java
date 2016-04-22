@@ -130,7 +130,7 @@ public class RoleController extends BaseController{
 		User user = principal.getUser();
 		Map<String, Object> loginInfo = new HashMap<String,Object>();
 		loginInfo.put("username",user.getUsername());
-		loginInfo.put("userimg",user.getUserimg());
+		loginInfo.put("userimg",user.getUserImg());
 		loginInfo.put("loginSuccess",true);
 		return new ResponseEntity<Map<String,Object>>(loginInfo,HttpStatus.OK);
 	}

@@ -3,8 +3,6 @@ package com.example.dao;
 
 import javax.annotation.Resource;
 
-import cucumber.api.java.zh_cn.假如;
-import cucumber.api.junit.Cucumber;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +15,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.earl.carnet.Application;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.service.UserService;
+
+import cucumber.api.java.zh_cn.假如;
 
 //Cucumber
 
@@ -44,11 +44,11 @@ public class UserDaoTest {
 //        System.out.println(action);
         User user = new User();
         user.setPassword("123456");
-        user.setRealname("testName");
+        user.setRealName("testName");
         user.setPhone("testPhone");
         user.setUsername("testUser");
         user.setLoginid("testLogin");
-        user.setUserimg(".../user/testUser.jpg");
+        user.setUserImg(".../user/testUser.jpg");
 
         userService.saveUser(user);
     }
@@ -56,7 +56,7 @@ public class UserDaoTest {
     @Test
     public void testFinlAllUser() {
         long sysDate = System.currentTimeMillis();
-        userService.findAll().forEach(user -> System.out.println(user.toString()));
+//        userService.findAll().forEach(user -> System.out.println(user.toString()));
         long sysDate2 = System.currentTimeMillis();
         logger.info(sysDate2 - sysDate);
 //        System.out.println(sysDate2 - sysDate);
