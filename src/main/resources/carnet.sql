@@ -119,7 +119,7 @@ CREATE TABLE `order` (
   `stationName` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `brandName` varchar(255) NOT NULL,
-  `agreementTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `agreementTime` datetime NOT NULL ,
   `type` VARCHAR(255) NOT NULL,
   `units` bigint(5) NOT NULL DEFAULT '0',
   `price` DOUBLE NOT NULL,

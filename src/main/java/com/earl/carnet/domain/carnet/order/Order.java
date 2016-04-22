@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 订单实体类.
@@ -16,29 +17,29 @@ import java.io.Serializable;
 @Table(name = "odrder")
 public class Order extends AbstractAuditingEntity<Long> implements Serializable{
 
-    private Long carId;
+    private Long carId;  //汽车id
 
-    private Long userId;
+    private Long userId; //用户id
 
-    private String stationName;
+    private String stationName;//加油站名称
 
-    private String address;
+    private String address;//加油站地址
 
-    private String brandName;
+    private String brandName;//加油站品牌 （中石油、中石化）
 
-    private DateTime agreementTime;
+    private Date agreementTime;//预约时间
 
-    private String type;
+    private String type;//加油类别 E90  E93 E97
 
-    private Integer units;
+    private Integer units;//加油单位  元/升
 
-    private Double price;
+    private Double price;//每单位价格
 
-    private Double number;
+    private Double number;//加油数量
 
-    private Double amounts;
+    private Double amounts;//总价
 
-    private Integer state;
+    private Integer state;//订单状态
 
     @AutoID
     public Long getId() {
@@ -82,11 +83,11 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
         this.brandName = brandName;
     }
 
-    public DateTime getAgreementTime() {
+    public Date getAgreementTime() {
         return agreementTime;
     }
 
-    public void setAgreementTime(DateTime agreementTime) {
+    public void setAgreementTime(Date agreementTime) {
         this.agreementTime = agreementTime;
     }
 

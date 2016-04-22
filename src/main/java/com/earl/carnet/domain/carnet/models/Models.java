@@ -15,9 +15,9 @@ import java.io.Serializable;
 @Table(name = "models")
 public class Models extends AbstractAuditingEntity<Long> implements Serializable {
 
-    private Long brandId;
+    private Long brandId; //品牌id
 
-    private String modelsName;
+    private String modelsName;//型号名称
 
     public Long getBrandId() {
         return brandId;
