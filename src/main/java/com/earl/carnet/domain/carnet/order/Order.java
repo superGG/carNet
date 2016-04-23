@@ -151,7 +151,8 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
     @Override
     public String toString() {
         return "Order{" +
-                "carId=" + carId +
+                "id=" + super.getId() +
+                ", carId=" + carId +
                 ", userId=" + userId +
                 ", stationName='" + stationName + '\'' +
                 ", address='" + address + '\'' +

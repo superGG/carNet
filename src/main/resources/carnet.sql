@@ -191,6 +191,18 @@ CREATE TABLE `models` (
 -- Records of models
 -- ----------------------------
 INSERT INTO `models` VALUES ('1','1','R8');
+INSERT INTO `models` VALUES ('2','2','SLS级AMG');
+INSERT INTO `models` VALUES ('3','2','SL 63 AMG');
+INSERT INTO `models` VALUES ('4','2','GT');
+INSERT INTO `models` VALUES ('5','3','Boxster GTS');
+INSERT INTO `models` VALUES ('6','3','Turbo Cabriolet');
+INSERT INTO `models` VALUES ('7','3','Style Edition');
+INSERT INTO `models` VALUES ('8','4','Evoluzione');
+INSERT INTO `models` VALUES ('9','5','Z4');
+INSERT INTO `models` VALUES ('10','6','MC12');
+INSERT INTO `models` VALUES ('11','6','Birdcage 75th');
+INSERT INTO `models` VALUES ('12','7','Reventon');
+INSERT INTO `models` VALUES ('13','8','0ne-77');
 
 -- ----------------------------
 -- Table structure for `brand`
@@ -206,7 +218,14 @@ CREATE TABLE `brand` (
 -- ----------------------------
 -- Records of brand
 -- ----------------------------
-INSERT INTO `brand` VALUES ('1','奥迪','../mark/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.jpg');
+INSERT INTO `brand` VALUES ('1','奥迪','../mark/aodi.jpg');
+INSERT INTO `brand` VALUES ('2','奔驰','../mark/benchi.jpg');
+INSERT INTO `brand` VALUES ('3','保时捷','../mark/baoshijie.jpg');
+INSERT INTO `brand` VALUES ('4','法拉利','../mark/falali.jpg');
+INSERT INTO `brand` VALUES ('5','宝马','../mark/baoma.jpg');
+INSERT INTO `brand` VALUES ('6','玛莎拉蒂','../mark/mashaladi.jpg');
+INSERT INTO `brand` VALUES ('7','兰博基尼','../mark/lanbojini.jpg');
+INSERT INTO `brand` VALUES ('8','阿斯顿马丁','../mark/asidunmading.jpg');
 
 
 

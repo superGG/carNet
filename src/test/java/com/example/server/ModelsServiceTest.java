@@ -1,8 +1,8 @@
-package com.example.dao;
+package com.example.server;
 
 
 import com.earl.carnet.Application;
-import com.earl.carnet.service.BrandService;
+import com.earl.carnet.domain.carnet.models.Models;
 import com.earl.carnet.service.ModelsService;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -23,18 +23,18 @@ import javax.annotation.Resource;
 @ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
 @WebAppConfiguration
 @SpringApplicationConfiguration(classes = Application.class)
-public class ModelsDaoTest {
+public class ModelsServiceTest {
 
-    private static Logger logger = Logger.getLogger(ModelsDaoTest.class);
+    private static Logger logger = Logger.getLogger(ModelsServiceTest.class);
 
     @Resource
     ModelsService service;
 
 
     @Test
-    public void testFinlAllModels() {
+    public void testFindModelsByBrand() {
         long sysDate = System.currentTimeMillis();
-        service.findAll().forEach(models -> System.out.println(models.toString()));
+        service.findModelsByBrand(2l).forEach(models1 -> System.out.println(models1.toString()));
         long sysDate2 = System.currentTimeMillis();
         logger.info(sysDate2 - sysDate);
 //        System.out.println(sysDate2 - sysDate);

@@ -257,7 +257,8 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
     @Override
     public String toString() {
         return "Car{" +
-                "userId=" + userId +
+                "id=" + super.getId() +
+                ", userId=" + userId +
                 ", mark='" + mark + '\'' +
                 ", brand='" + brand + '\'' +
                 ", models='" + models + '\'' +

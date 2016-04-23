@@ -19,9 +19,7 @@ public class Models extends AbstractAuditingEntity<Long> implements Serializable
 
     private String modelsName;//型号名称
 
-    public Long getBrandId() {
-        return brandId;
-    }
+
 
     @AutoID
     public Long getId() {
@@ -31,6 +29,10 @@ public class Models extends AbstractAuditingEntity<Long> implements Serializable
     public void setId(Long id) {
         super.setId(id);
 //        this.id = id;
+    }
+
+    public Long getBrandId() {
+        return brandId;
     }
 
     public void setBrandId(Long brandId) {
@@ -48,7 +50,8 @@ public class Models extends AbstractAuditingEntity<Long> implements Serializable
     @Override
     public String toString() {
         return "Models{" +
-                "brandId=" + brandId +
+                "id=" + super.getId() +
+                ", brandId=" + brandId +
                 ", modelsName='" + modelsName + '\'' +
                 '}';
     }

@@ -107,7 +107,8 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
+                "id=" + super.getId() +
+                ", username='" + username + '\'' +
                 ", realName='" + realName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", loginid='" + loginid + '\'' +

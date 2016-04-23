@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("ModelsService")
 @Transactional
@@ -22,10 +23,18 @@ public class ModelsServiceImpl extends BaseServiceImpl<Models,Models>
     private static Logger logger = Logger.getLogger(ModelsServiceImpl.class);
 
     @Resource
-    ModelsDao modelDao;
+    ModelsDao modelsDao;
 
     @Override
     protected BaseDao<Models> getDao() {
-        return modelDao;
+        return modelsDao;
     }
+
+    @Override
+    public List<Models> findModelsByBrand(Long brandId) {
+        Models models = new Models();
+        models.setBrandId(brandId);
+        return modelsDao.searchQuery(models);
+    }
+
 }

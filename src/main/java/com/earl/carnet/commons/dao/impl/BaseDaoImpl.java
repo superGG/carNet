@@ -171,7 +171,7 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 				}
 			
 			}
-		System.out.println(sql);
+		System.out.println("sql语句:"+sql);
 		
 		return sqlManager.execute(sql.toString(), entityClazz,notNullProperties);
 		}

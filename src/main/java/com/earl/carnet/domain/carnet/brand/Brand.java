@@ -48,7 +48,8 @@ public class Brand extends AbstractAuditingEntity<Long> implements Serializable 
     @Override
     public String toString() {
         return "Brand{" +
-                "brandName='" + brandName + '\'' +
+                "id=" + super.getId() +
+                ", brandName='" + brandName + '\'' +
                 ", mark='" + mark + '\'' +
                 '}';
     }
