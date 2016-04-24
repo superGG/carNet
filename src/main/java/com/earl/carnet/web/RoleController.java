@@ -101,19 +101,19 @@ public class RoleController extends BaseController{
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
-	/**
-	 * POST /users/change_password -> changes the current user's password
-	 */
-	@ApiOperation(value = "更改用户密码", notes = "CHANGE USER PASSWORD",httpMethod="POST",response=String.class)
-	@RequestMapping(value = "/users/change/password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> changePassword(@RequestBody String password,String Id) {
-		if (password.isEmpty() || password.length() < 5
-				|| password.length() > 50) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		userService.changePassword(Id, password);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+//	/**
+//	 * POST /users/change_password -> changes the current user's password
+//	 */
+//	@ApiOperation(value = "更改用户密码", notes = "CHANGE USER PASSWORD",httpMethod="POST",response=String.class)
+//	@RequestMapping(value = "/users/change/password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<String> changePassword(@RequestBody String password,String Id) {
+//		if (password.isEmpty() || password.length() < 5
+//				|| password.length() > 50) {
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		}
+//		userService.changePassword(Id, password);
+//		return new ResponseEntity<>(HttpStatus.OK);
+//	}
 
 	@Valid
 	@RequestMapping(value = "/doLogin", produces = MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.POST)

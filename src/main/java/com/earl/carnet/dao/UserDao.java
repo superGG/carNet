@@ -17,7 +17,7 @@ public interface UserDao extends BaseDao<User>{
 	 * @param newPassword
 	 * @param Id TODO
 	 */
-	void changePassword(String newPassword, Object Id);
+	Boolean changePassword(String newPassword, Object Id);
 
 	List<Role> findRole(Long userId);
 

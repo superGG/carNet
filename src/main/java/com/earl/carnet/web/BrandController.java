@@ -35,14 +35,19 @@ public class BrandController extends BaseController{
 	@Autowired
 	private BrandService brandService;
 
+	private ResultMessage result = null;
+
 	/**
 	 * GET /brand -> get all the brand
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "得到所有品牌信息", notes = "find All brand",httpMethod="GET",response=String.class)
-	public ResponseEntity<List<Brand>> getAll() {
+	public ResultMessage getAll() {
 		log.debug("REST request to get all Brand");
-		return new ResponseEntity<List<Brand>>(brandService.findAll(), HttpStatus.OK);
+		result = new ResultMessage();
+		result.getResultParm().put("brand",brandService.findAll());
+		log.info(result.toJson().toString());
+		return result;
 	}
 	
 }

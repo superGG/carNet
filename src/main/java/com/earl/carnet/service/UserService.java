@@ -13,8 +13,15 @@ import com.earl.carnet.domain.sercurity.user.UserQuery;
 public interface UserService extends BaseService<User, UserQuery> {
 	
 	User findOneByUsername(String username);
-	
-	void changePassword(Object Id, String newPassword);
+
+	/**
+	 * 修改用户密码.
+	 * @param Id
+	 * @param oldPassord
+	 * @param newPassword
+     * @return
+     */
+	Boolean changePassword(Object Id,String oldPassord, String newPassword);
 
 	/**
 	 * 查找用户拥有的角色
@@ -62,9 +69,14 @@ public interface UserService extends BaseService<User, UserQuery> {
 	 * @author song.
 	 * @param user
      */
-	void saveUser(User user);
+	Boolean saveUser(User user);
 
 	User findOneByLoginId(String loginid);
 
+	/**
+	 * 注册用户.
+	 * @param loginid
+	 * @param password
+     */
 	void registerAccount(String loginid, String password);
 }

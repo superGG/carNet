@@ -76,17 +76,15 @@ public abstract class BaseServiceImpl<T extends AbstractEntity<?>, E>
 //	}
 	
 	@Override
-	public T updateByPrimaryKeySelective(T entity) {
-		// TODO 未测试.
-		getDao().updateByPrimaryKeySelective(entity);
-		return null;
+	public int updateByPrimaryKeySelective(T entity) {
+		return getDao().updateByPrimaryKeySelective(entity);
 	}
 
-	@Override
-	public List<T> search(E criteria) {
-		// TODO 未测试.
-		return null;
-	}
+//	@Override
+//	public List<T> search(E criteria) {
+//		// TODO 未测试.
+//		return null;
+//	}
 
 	@Override
 	public List<T> searchAccurate(T queryObject){

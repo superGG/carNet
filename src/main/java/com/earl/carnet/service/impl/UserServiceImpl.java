@@ -45,9 +45,21 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     }
 
     @Override
-    public void changePassword(Object Id, String newPassword) {
+    public Boolean changePassword(Object Id, String oldPassword, String newPassword) {
         // TODO 未测试.
-        userDao.changePassword(newPassword, Id);
+        Boolean result = false;
+        User user = new User();
+        user.setId((Long) Id);
+        String oldPassword_Md5 = new SimpleHash("SHA-1",oldPassword).toString();
+        if(userDao.searchQuery(user).get(0).getPassword().equals(oldPassword_Md5)){
+            throw new IllegalStateException("旧密码错误");
+        } else {
+            String newPassword_Md5 = new SimpleHash("SHA-1",newPassword).toString();
+            user.setPassword(newPassword_Md5);
+            userDao.updateByPrimaryKeySelective(user);
+            result = true;
+        }
+        return result;
     }
 
     @Override
@@ -95,14 +107,17 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         return userDao.findPrivilegeCode(l);
     }
 
-    public void saveUser(User user) {
+    public Boolean saveUser(User user) {
         logger.info("进入saveUser方法");
+        Boolean result = false;
         String oldPassword = user.getPassword();
         String newPassword = new SimpleHash("SHA-1",oldPassword).toString();
 //        String newPassword = MD5Util.md5(oldPassword);
         user.setPassword(newPassword);
-        userDao.insert(user);
+        int save = userDao.insert(user);
+        if(save!=0) result = true;
         logger.info("退出saveUser方法");
+        return result;
     }
 
     @Override
@@ -126,8 +141,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         if(tmpuser != null){
             throw new SecurityException("改账号已经被注册");
         }else{
-
-            user.setPassword(password);
+            String password_Md5 = new SimpleHash("SHA-1",password).toString();
+            user.setPassword(password_Md5);
+            user.setUserImg("/img/userImg.jpg");
             userDao.insert(user);
         }
     }

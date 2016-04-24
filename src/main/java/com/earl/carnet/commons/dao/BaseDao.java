@@ -36,13 +36,13 @@ public interface BaseDao<T extends Serializable > {
 	 */
 	int updateByPrimaryKeySelective(T record);
 	
-	/**
-	 * 通过主键更新
-	 * @author 黄祥谦.
-	 * @param record
-	 * @return
-	 */
-	int updateByPrimaryKey(T record);
+//	/**
+//	 * 通过主键更新
+//	 * @author 黄祥谦.
+//	 * @param record
+//	 * @return
+//	 */
+//	int updateByPrimaryKey(T record);
 	
 	/**
 	 * 查询所有

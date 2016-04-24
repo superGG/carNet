@@ -29,6 +29,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -58,8 +59,8 @@ public class ShiroAuthorizingRealm extends AuthorizingRealm {
 	public ShiroAuthorizingRealm() {
 		super();
 		setAuthenticationTokenClass(UsernamePasswordToken.class);
-//		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");//加密方式
-//		matcher.setHashIterations(1024);//加密次数
+		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");//加密方式
+		matcher.setHashIterations(1);//加密次数
 //		setCredentialsMatcher(matcher);
 //		setCredentialsMatcher(credentialsMatcher);
 	}

@@ -1,5 +1,6 @@
 package com.earl.carnet.web;
 
+import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.carnet.brand.Brand;
 import com.earl.carnet.domain.carnet.models.Models;
 import com.earl.carnet.service.BrandService;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -29,15 +27,34 @@ public class ModelsController extends BaseController{
 	@Autowired
 	private ModelsService modelsService;
 
+	private ResultMessage result = null;
+
 	/**
-	 * GET /models -> get all the models
+	 * GET /users -> get all the models
 	 */
-	@RequestMapping(value = "/{brandId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(value = "得到某品牌的所有型号", notes = "find All mdoels by brand",httpMethod="GET",response=String.class)
-	public ResponseEntity<List<Models>> getAll(@PathVariable Long brandId,
-											   HttpServletResponse response) {
-		log.debug("REST request to get all models");
-		return new ResponseEntity<List<Models>>(modelsService.findModelsByBrand(brandId), HttpStatus.OK);
+	@RequestMapping(value = "/getAll", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "得到所有用户信息", notes = "find All Models", httpMethod = "GET", response = String.class)
+	public ResultMessage getAll() {
+		log.debug("REST request to get all Models");
+		result = new ResultMessage();
+		result.getResultParm().put("models", modelsService.findAll());
+		log.info(result.toJson().toString());
+		return result;
 	}
+
+
+	/**
+	 * GET /models -> get all the models by the brandId
+	 */
+	@RequestMapping(value = "/brandId={brandId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "得到某品牌的所有型号", notes = "find All mdoels by brand",httpMethod="GET",response=String.class)
+	public ResultMessage getModelsByBrandId(@PathVariable Long brandId) {
+		result = new ResultMessage();
+		result.getResultParm().put("models",modelsService.findModelsByBrand(brandId));
+		log.info(result.toJson().toString());
+		return result;
+	}
+
+
 	
 }

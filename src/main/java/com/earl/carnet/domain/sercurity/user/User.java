@@ -24,8 +24,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     private String userImg;
 
-    private String relatedPhone;
-
     private String safePassword;
 
     private static final long serialVersionUID = 1L;
@@ -88,14 +86,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         this.userImg = userImg;
     }
 
-    public String getRelatedPhone() {
-        return relatedPhone;
-    }
-
-    public void setRelatedPhone(String relatedPhone) {
-        this.relatedPhone = relatedPhone;
-    }
-
     public String getSafePassword() {
         return safePassword;
     }
@@ -114,7 +104,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
                 ", loginid='" + loginid + '\'' +
                 ", password='" + password + '\'' +
                 ", userImg='" + userImg + '\'' +
-                ", relatedPhone='" + relatedPhone + '\'' +
                 ", safePassword='" + safePassword + '\'' +
                 '}';
     }

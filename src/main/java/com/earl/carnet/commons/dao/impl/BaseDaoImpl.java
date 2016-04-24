@@ -101,11 +101,11 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 
 
 
-	@Override
-	public int updateByPrimaryKey(T record) {
-		// TODO 未测试.
-		return 0;
-	}
+//	@Override
+//	public int updateByPrimaryKey(T record) {
+//		// TODO 未测试.
+//		return 0;
+//	}
 
 	@SuppressWarnings("unchecked")
 	@Override
