@@ -156,15 +156,15 @@ CREATE TABLE `car` (
   `oilBox` FLOAT(50) NOT NULL,
   `temperature` FLOAT(50) NOT NULL,
   `oil` FLOAT(50) NOT NULL,
-  `engineProperty` bit(1) NOT NULL DEFAULT b'0',
-  `transmission` bit(1) NOT NULL DEFAULT b'0' ,
-  `carLight` bit(1) NOT null default b'0' ,
-  `carState` bit(1) NOT null default b'0' ,
-  `carAlarm` bit(1) NOT null default b'0' ,
+  `engineProperty` bit(1) NOT NULL DEFAULT b'1',
+  `transmission` bit(1) NOT NULL DEFAULT b'1' ,
+  `carLight` bit(1) NOT null default b'1' ,
+  `carState` bit(1) NOT null default b'1' ,
+  `carAlarm` bit(1) NOT null default b'1' ,
   `alarmMessage` bit(1) NOT null default b'1' ,
   `propertyMessage` bit(1) NOT null default b'1' ,
   `stateMessage` bit(1) NOT null default b'1' ,
-  `currentCar` bit(1) NOT null default b'0' ,
+  `currentCar` bit(1) NOT null default b'1' ,
   `lon` DOUBLE NOT null,
   `lat` DOUBLE NOT null,
   PRIMARY KEY (`id`)
@@ -173,7 +173,7 @@ CREATE TABLE `car` (
 -- ----------------------------
 -- Records of car
 -- ----------------------------
-INSERT INTO `car` VALUES ('1','1','../mark/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.jpg','奥迪','R8','粤L88888','1234567','1234567','2门2座','0.0','50.0','49.9','50','','','','','','','','','','123.3','143.5');
+INSERT INTO `car` VALUES ('1','1','../mark/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.jpg','奥迪','R8','粤L88888','1234567','1234567','2门2座','0.0','50.0','49.9','50',b'1',b'1',b'1',b'1',b'1',b'1',b'1',b'1',b'1','123.3','143.5');
 
 
 -- ----------------------------

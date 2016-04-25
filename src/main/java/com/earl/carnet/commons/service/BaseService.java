@@ -15,7 +15,9 @@ public interface BaseService<T extends AbstractEntity<?>, E> {
 
 	List<T> update(List<T> entities);
 
-	T save(T entity);
+	int save(T entity);
+
+	int  insertBackId(T entity);
 
 	List<T> save(List<T> entities);
 

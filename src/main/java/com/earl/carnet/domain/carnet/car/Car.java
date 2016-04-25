@@ -39,17 +39,22 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
 
     private Double temperature;//温度
 
-    private Byte enginePropetry;//发动机性能
+    private Byte engineProperty;//发动机性能
 
     private Byte transmission;//变速器性能
 
     private Byte carLight;//车灯性能
 
     private Byte carState;//车状态
+    
     private Byte carAlarm;//车警报
+    
     private Byte alarmMessage;//是否发送警报信息
+    
     private Byte propertyMessage;//是否发送行性能信息
+    
     private Byte stateMessage;//是否发送车状态信息
+    
     private Byte currentCar;//是否当前车辆
 
     private Double lon;//经度
@@ -173,12 +178,12 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.engineNumber = engineNumber;
     }
 
-    public Byte getEnginePropetry() {
-        return enginePropetry;
+    public Byte getEngineProperty() {
+        return engineProperty;
     }
 
-    public void setEnginePropetry(Byte enginePropetry) {
-        this.enginePropetry = enginePropetry;
+    public void setEngineProperty(Byte engineProperty) {
+        this.engineProperty = engineProperty;
     }
 
     public Byte getCarLight() {
@@ -270,7 +275,7 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
                 ", oilbox=" + oilBox +
                 ", oil=" + oil +
                 ", temperature=" + temperature +
-                ", enginePropetry=" + enginePropetry +
+                ", engineProperty=" + engineProperty +
                 ", transmission=" + transmission +
                 ", carLight=" + carLight +
                 ", carState=" + carState +

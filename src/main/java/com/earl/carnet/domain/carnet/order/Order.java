@@ -1,13 +1,13 @@
 package com.earl.carnet.domain.carnet.order;
 
-import com.earl.carnet.commons.domain.AbstractAuditingEntity;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.beetl.sql.core.annotatoin.AutoID;
-import org.joda.time.DateTime;
+import java.io.Serializable;
 
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
+
+import org.beetl.sql.core.annotatoin.AutoID;
+
+import com.earl.carnet.commons.domain.AbstractAuditingEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * 订单实体类.
@@ -27,7 +27,7 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
 
     private String brandName;//加油站品牌 （中石油、中石化）
 
-    private Date agreementTime;//预约时间
+    private String agreementTime;//预约时间
 
     private String type;//加油类别 E90  E93 E97
 
@@ -83,11 +83,11 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
         this.brandName = brandName;
     }
 
-    public Date getAgreementTime() {
+    public String getAgreementTime() {
         return agreementTime;
     }
 
-    public void setAgreementTime(Date agreementTime) {
+    public void setAgreementTime(String agreementTime) {
         this.agreementTime = agreementTime;
     }
 

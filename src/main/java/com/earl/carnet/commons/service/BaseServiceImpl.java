@@ -32,23 +32,27 @@ public abstract class BaseServiceImpl<T extends AbstractEntity<?>, E>
 
 	
 	@Override
-	public T save(T entity) {
+	public int save(T entity) {
 		// TODO 未测试.
-		getDao().insert(entity);
-		return null;
+		return getDao().insert(entity);
 	}
-	
-	
-	
+
 	@Override
-	public List<T> save(List<T> entities) {
-		Assert.notEmpty(entities);
-		List<T> list = new ArrayList<T>();
-		for (T t : entities) {
-			list.add(save(t));
-		}
-		return list;
+	public int insertBackId(T entity){
+		return getDao().insertBackId(entity);
 	}
+	
+	
+	
+//	@Override
+//	public List<T> save(List<T> entities) {
+//		Assert.notEmpty(entities);
+//		List<T> list = new ArrayList<T>();
+//		for (T t : entities) {
+//			list.add(save(t));
+//		}
+//		return list;
+//	}
 
 	@Override
 	public List<T> update(List<T> entities) {
