@@ -94,7 +94,7 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 更新制定用户.
+     * 更新指定用户.
      * @param user
      * @return
      */
@@ -125,19 +125,27 @@ public class UserController extends BaseController {
     }
 
     /**
-     * POST /users/change_password -> changes the current user's password
+     * POST /change -> changes the current user's password
      */
     @ApiOperation(value = "更改用户密码", notes = "CHANGE USER PASSWORD", httpMethod = "POST", response = String.class)
-    @RequestMapping(value = "/users/change", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> changePassword(String oldPassword, String Id, String newPassword) {
+    @RequestMapping(value = "/changePassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResultMessage> changePassword(String oldPassword, String Id, String newPassword) {
         if (newPassword.isEmpty() || newPassword.length() < 5
                 || newPassword.length() > 50) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         userService.changePassword(Id, oldPassword,newPassword);
-        return new ResponseEntity<>(HttpStatus.OK);
+        result = new ResultMessage();
+        result.setResultInfo("修改密码成功");
+        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
     }
 
+    /**
+     * 用户登录
+     * @param loginid
+     * @param password
+     * @return
+     */
     @Valid
     @RequestMapping(value = "/doLogin", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
     @ApiOperation(value = "登录系统", notes = "loginSystem", httpMethod = "POST", response = String.class)
@@ -158,13 +166,21 @@ public class UserController extends BaseController {
     }
 
     /**
-     * POST /users/change_password -> changes the current user's password
+     * 上传图片
      */
-    @ApiOperation(value = "上传图片", notes = "loginSystem", httpMethod = "POST", response = String.class)
-    @RequestMapping(value = "/users/uploadfile", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> uploadfile(MultipartFile userfile, String username) {
-        userService.uploadFile(userfile);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @ApiOperation(value = "更新用户头像", notes = "loginSystem", httpMethod = "POST", response = String.class)
+    @RequestMapping(value = "/updateImg", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResultMessage updateImg(MultipartFile userfile, Long id) {
+
+        result = new ResultMessage();
+        if (userService.updateImg(userfile, id)){
+            result.setResultInfo("更新用户头像成功");
+            result.setServiceResult(true);
+        } else {
+            result.setResultInfo("更新用户头像失败");
+            result.setServiceResult(false);
+        }
+        return  result;
     }
 
     @ApiOperation(value = "得到用户信息", notes = "user info", httpMethod = "GET", response = String.class)

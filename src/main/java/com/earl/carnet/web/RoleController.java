@@ -135,15 +135,7 @@ public class RoleController extends BaseController{
 		return new ResponseEntity<Map<String,Object>>(loginInfo,HttpStatus.OK);
 	}
 
-	/**
-	 * POST /users/change_password -> changes the current user's password
-	 */
-	@ApiOperation(value = "上传图片", notes = "loginSystem",httpMethod="POST",response=String.class)
-	@RequestMapping(value = "/users/uploadfile",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> uploadfile(MultipartFile userfile,String username) {
-		userService.uploadFile(userfile);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+	
 
 	@ApiOperation(value = "得到用户信息", notes = "user info",httpMethod="GET",response=String.class)
 	@RequestMapping(value = "/users/info",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)

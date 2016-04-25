@@ -21,7 +21,7 @@ public class IpInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest arg0,
 			HttpServletResponse arg1, Object arg2, Exception arg3)
 			throws Exception {
-		logger.info("aftercompletion ip---拦截器");
+//		logger.info("aftercompletion ip---拦截器");
 	}
 
 	@Override

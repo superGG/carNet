@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import com.earl.carnet.domain.sercurity.user.UserQuery;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.stereotype.Repository;
 
 import com.earl.carnet.commons.dao.impl.BaseDaoImpl;
@@ -48,12 +49,14 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 	}
 
 	@Override
-	public void changePassword(String newPassword, Object id) {
+	public Boolean changePassword(String newPassword, Object id) {
 		// TODO 未测试.
+		Boolean result = false;
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		hashMap.put("passwd", newPassword);
 		hashMap.put("id", id);
-		sqlManager.update("user.updatePasswd", hashMap);
+		if (sqlManager.update("user.updatePasswd", hashMap) !=0) result = true;
+		return result;
 	}
 	
 	/**

@@ -34,12 +34,7 @@ public class Ip2Interceptor implements HandlerInterceptor {
 		for (Entry<String, String[]> entry : parameterMap.entrySet()) {
 			logger.info(entry.getKey() + " : " + entry.getValue()[0]);
 		}
-
-
-
-
-		logger.info("aftercompletion ip2---拦截器");
-
+//		logger.info("aftercompletion ip2---拦截器");
 	}
 
 	@Override

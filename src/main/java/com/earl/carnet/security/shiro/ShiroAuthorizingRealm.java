@@ -59,8 +59,8 @@ public class ShiroAuthorizingRealm extends AuthorizingRealm {
 	public ShiroAuthorizingRealm() {
 		super();
 		setAuthenticationTokenClass(UsernamePasswordToken.class);
-		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");//加密方式
-		matcher.setHashIterations(1);//加密次数
+//		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");//加密方式
+//		matcher.setHashIterations(1);//加密次数
 //		setCredentialsMatcher(matcher);
 //		setCredentialsMatcher(credentialsMatcher);
 	}

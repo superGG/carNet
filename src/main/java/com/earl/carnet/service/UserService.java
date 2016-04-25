@@ -34,11 +34,11 @@ public interface UserService extends BaseService<User, UserQuery> {
 	void deleteCascade(Long userId);
 
 	/**
-	 * shangc
-	 * @author 黄祥谦.
+	 * 更新头像
+	 * @author 宋.
 	 * @param userfile
 	 */
-	void uploadFile(MultipartFile userfile);
+	Boolean updateImg(MultipartFile userfile, Long Id);
 
 	/**
 	 * 登录系统
