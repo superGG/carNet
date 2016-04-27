@@ -1,11 +1,11 @@
 package com.earl.carnet.domain.sercurity.user;
 
-import com.earl.carnet.commons.domain.AbstractCriteria;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import com.earl.carnet.commons.domain.AbstractCriteria;
 
 public class UserCriteria extends AbstractCriteria {
     private static final long serialVersionUID = 1L;

@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.earl.carnet.domain.sercurity.user.UserQuery;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.stereotype.Repository;
 
 import com.earl.carnet.commons.dao.impl.BaseDaoImpl;
@@ -14,6 +12,7 @@ import com.earl.carnet.dao.UserDao;
 import com.earl.carnet.dao.UserRoleDao;
 import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.domain.sercurity.user.UserQuery;
 import com.earl.carnet.domain.sercurity.userrole.UserRole;
 
 @Repository("userDao")

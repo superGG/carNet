@@ -1,18 +1,7 @@
 package com.earl.carnet.commons.dao.impl;
 
-import com.earl.carnet.commons.dao.BaseDao;
-import com.earl.carnet.commons.domain.AbstractEntity;
-import com.earl.carnet.commons.domain.DateQuery;
-import com.earl.carnet.commons.util.Assert;
-import org.apache.commons.beanutils.BeanMap;
-import org.beetl.sql.core.SQLManager;
-import org.beetl.sql.core.SQLScript;
-import org.beetl.sql.core.db.AbstractDBStyle;
-import org.beetl.sql.core.db.KeyHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.beetl.sql.core.kit.Constants.SELECT_BY_TEMPLATE;
 
-import javax.annotation.Resource;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -21,7 +10,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.beetl.sql.core.kit.Constants.SELECT_BY_TEMPLATE;
+import javax.annotation.Resource;
+
+import org.apache.commons.beanutils.BeanMap;
+import org.beetl.sql.core.SQLManager;
+import org.beetl.sql.core.SQLScript;
+import org.beetl.sql.core.db.AbstractDBStyle;
+import org.beetl.sql.core.db.KeyHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.earl.carnet.commons.dao.BaseDao;
+import com.earl.carnet.commons.domain.AbstractEntity;
+import com.earl.carnet.commons.domain.DateQuery;
+import com.earl.carnet.commons.util.Assert;
 
 
 public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
@@ -50,7 +52,10 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 	@Override
 	//添加一条记录
 	public int insert(T record) {
-		return sqlManager.insert(record);
+		Map<String, Object> notNullProperties = getNotNullProperties(record);
+		KeyHolder keyHolder = new KeyHolder();
+		sqlManager.insert(entityClazz,notNullProperties,keyHolder);
+		return keyHolder.getInt();
 	}
 
 	@Override
@@ -62,8 +67,9 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 	@Override
 	//添加一条新纪录，返回该记录的id
 	public int insertBackId(T record){
+		Map<String, Object> notNullProperties = getNotNullProperties(record);
 		KeyHolder keyHolder = new KeyHolder();
-		sqlManager.insert(entityClazz, record, keyHolder);
+		sqlManager.insert(entityClazz, notNullProperties, keyHolder);
 		return keyHolder.getInt();
 	}
 

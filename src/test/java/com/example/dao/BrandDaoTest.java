@@ -1,12 +1,8 @@
 package com.example.dao;
 
 
-import com.earl.carnet.Application;
-import com.earl.carnet.domain.carnet.brand.Brand;
-import com.earl.carnet.domain.sercurity.user.User;
-import com.earl.carnet.service.BrandService;
-import com.earl.carnet.service.UserService;
-import cucumber.api.java.zh_cn.假如;
+import javax.annotation.Resource;
+
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.annotation.Resource;
+import com.earl.carnet.Application;
+import com.earl.carnet.service.BrandService;
 
 //Cucumber
 

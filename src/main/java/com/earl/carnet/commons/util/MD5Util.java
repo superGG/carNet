@@ -1,10 +1,10 @@
 package com.earl.carnet.commons.util;
 
-import org.apache.log4j.Logger;
-
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import org.apache.log4j.Logger;
 
 /**
  * MD5加密工具类

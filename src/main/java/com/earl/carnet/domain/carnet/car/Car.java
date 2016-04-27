@@ -1,11 +1,13 @@
 package com.earl.carnet.domain.carnet.car;
 
-import com.earl.carnet.commons.domain.AbstractAuditingEntity;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.beetl.sql.core.annotatoin.AutoID;
+import java.io.Serializable;
 
 import javax.persistence.Table;
-import java.io.Serializable;
+
+import org.beetl.sql.core.annotatoin.AutoID;
+
+import com.earl.carnet.commons.domain.AbstractAuditingEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * 汽车信息尸体类.
@@ -39,7 +41,7 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
 
     private Double temperature;//温度
 
-    private Byte engineProperty;//发动机性能
+    private Byte engineProperty ;//发动机性能
 
     private Byte transmission;//变速器性能
 
@@ -49,13 +51,13 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
     
     private Byte carAlarm;//车警报
     
-    private Byte alarmMessage;//是否发送警报信息
+    private Boolean alarmMessage ;//是否发送警报信息
     
-    private Byte propertyMessage;//是否发送行性能信息
+    private Boolean propertyMessage ;//是否发送行性能信息
     
-    private Byte stateMessage;//是否发送车状态信息
+    private Boolean stateMessage ;//是否发送车状态信息
     
-    private Byte currentCar;//是否当前车辆
+    private Boolean currentCar;//是否当前车辆
 
     private Double lon;//经度
 
@@ -227,35 +229,35 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.carAlarm = carAlarm;
     }
 
-    public Byte getAlarmMessage() {
+    public Boolean getAlarmMessage() {
         return alarmMessage;
     }
 
-    public void setAlarmMessage(Byte alarmMessage) {
+    public void setAlarmMessage(Boolean alarmMessage) {
         this.alarmMessage = alarmMessage;
     }
 
-    public Byte getPropertyMessage() {
+    public Boolean getPropertyMessage() {
         return propertyMessage;
     }
 
-    public void setPropertyMessage(Byte propertyMessage) {
+    public void setPropertyMessage(Boolean propertyMessage) {
         this.propertyMessage = propertyMessage;
     }
 
-    public Byte getStateMessage() {
+    public Boolean getStateMessage() {
         return stateMessage;
     }
 
-    public void setStateMessage(Byte stateMessage) {
+    public void setStateMessage(Boolean stateMessage) {
         this.stateMessage = stateMessage;
     }
 
-    public Byte getCurrentCar() {
+    public Boolean getCurrentCar() {
         return currentCar;
     }
 
-    public void setCurrentCar(Byte currentCar) {
+    public void setCurrentCar(Boolean currentCar) {
         this.currentCar = currentCar;
     }
 

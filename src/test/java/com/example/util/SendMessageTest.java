@@ -1,8 +1,9 @@
 package com.example.util;
 
+import org.junit.Test;
+
 import com.earl.carnet.commons.util.Assert;
 import com.earl.carnet.util.SendMessage;
-import org.junit.Test;
 
 /**
  * Created by Administrator on 2016/4/15.

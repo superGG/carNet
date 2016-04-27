@@ -19,7 +19,7 @@ public interface BaseService<T extends AbstractEntity<?>, E> {
 
 	int  insertBackId(T entity);
 
-	List<T> save(List<T> entities);
+//	List<T> save(List<T> entities);
 
 	T findOne(Object id);
 

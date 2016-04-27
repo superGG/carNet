@@ -1,11 +1,12 @@
 package com.earl.carnet.domain.sercurity.user;
 
-import com.earl.carnet.commons.domain.AbstractAuditingEntity;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import java.io.Serializable;
+
 import org.beetl.sql.core.annotatoin.AutoID;
 import org.beetl.sql.core.annotatoin.Table;
 
-import java.io.Serializable;
+import com.earl.carnet.commons.domain.AbstractAuditingEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL) //jackson 控制，放回字段为null,将被过滤
 @Table(name = "user")

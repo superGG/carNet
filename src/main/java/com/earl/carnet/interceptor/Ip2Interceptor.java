@@ -1,20 +1,15 @@
 package com.earl.carnet.interceptor;
 
-import javax.servlet.ServletResponse;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.earl.carnet.commons.vo.ResultMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * @author 黄祥谦.

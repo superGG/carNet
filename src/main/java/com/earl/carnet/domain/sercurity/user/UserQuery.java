@@ -6,7 +6,6 @@ import org.beetl.sql.core.annotatoin.AutoID;
 import org.beetl.sql.core.annotatoin.Table;
 
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
-import com.earl.carnet.commons.domain.DateQuery;
 
 
 /**

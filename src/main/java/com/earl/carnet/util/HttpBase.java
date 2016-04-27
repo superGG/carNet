@@ -3,8 +3,8 @@ package com.earl.carnet.util;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Map;
-import org.apache.commons.httpclient.HttpClient;
 
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;

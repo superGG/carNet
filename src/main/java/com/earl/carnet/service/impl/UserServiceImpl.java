@@ -1,14 +1,9 @@
 package com.earl.carnet.service.impl;
 
-import com.earl.carnet.commons.dao.BaseDao;
-import com.earl.carnet.commons.service.BaseServiceImpl;
-import com.earl.carnet.commons.util.FileUploadImpl;
-import com.earl.carnet.commons.util.IdGen;
-import com.earl.carnet.dao.UserDao;
-import com.earl.carnet.domain.sercurity.role.Role;
-import com.earl.carnet.domain.sercurity.user.User;
-import com.earl.carnet.domain.sercurity.user.UserQuery;
-import com.earl.carnet.service.UserService;
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -17,10 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import com.earl.carnet.commons.dao.BaseDao;
+import com.earl.carnet.commons.service.BaseServiceImpl;
+import com.earl.carnet.commons.util.FileUploadImpl;
+import com.earl.carnet.dao.UserDao;
+import com.earl.carnet.domain.sercurity.role.Role;
+import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.domain.sercurity.user.UserQuery;
+import com.earl.carnet.service.UserService;
 
 @Service("userService")
 @Transactional

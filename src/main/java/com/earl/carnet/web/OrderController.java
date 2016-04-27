@@ -1,6 +1,5 @@
 package com.earl.carnet.web;
 
-import com.earl.carnet.domain.carnet.order.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.domain.carnet.order.Order;
 import com.earl.carnet.service.OrderService;
 import com.wordnik.swagger.annotations.ApiOperation;
 
@@ -92,7 +92,7 @@ public class OrderController extends BaseController{
 		result.setResultInfo("删除订单成功");
 		result.setServiceResult(true);
 		log.info(result.toJson().toString());
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(result,HttpStatus.OK);
 	}
 
 	

@@ -1,11 +1,13 @@
 package com.earl.carnet.domain.carnet.models;
 
-import com.earl.carnet.commons.domain.AbstractAuditingEntity;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.beetl.sql.core.annotatoin.AutoID;
+import java.io.Serializable;
 
 import javax.persistence.Table;
-import java.io.Serializable;
+
+import org.beetl.sql.core.annotatoin.AutoID;
+
+import com.earl.carnet.commons.domain.AbstractAuditingEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * 品牌型号实体类.
