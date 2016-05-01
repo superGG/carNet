@@ -27,6 +27,10 @@ public class IpInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest req, HttpServletResponse resp,
 			Object arg2, ModelAndView arg3) throws Exception {
+		HttpServletResponse resp2 = resp;
+		System.out.println(resp2.toString());
+		HttpServletRequest req2 = req;
+		System.out.println(resp2.toString());
 		logger.info("退出ip---拦截器");
 	}
 

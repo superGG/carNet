@@ -4,11 +4,10 @@
  */
 package com.earl.carnet.commons.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.earl.carnet.commons.util.GsonUtil;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 
 /**
@@ -18,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @since 3.0.0
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResultMessage {
+public class ResultMessage extends JsonEntry{
 	public ResultMessage(){
 		this.resultParm = new HashMap<String, Object>();
 		this.serviceResult = true;
@@ -120,7 +119,5 @@ public class ResultMessage {
 				+ ", resultParm=" + resultParm + "]";
 	}
 	
-	public String toJson(){
-		return GsonUtil.toJson(this);
-	}
+
 }

@@ -47,7 +47,6 @@ public class UserController extends BaseController {
         result = new ResultMessage();
         result.setServiceResult(true);
         result.getResultParm().put("user", userService.findAll());
-        log.info(result.toJson().toString());
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
 
@@ -67,7 +66,7 @@ public class UserController extends BaseController {
             result.setServiceResult(false);
             result.setResultInfo("获取用户失败");
         }
-        log.info(result.toJson().toString());
+        log.info(result.toJson());
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
 
@@ -87,7 +86,6 @@ public class UserController extends BaseController {
                     .body("username already in use");
         }
         result.setServiceResult(userService.saveUser(userDto));
-        log.info(result.toJson().toString());
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
@@ -106,7 +104,6 @@ public class UserController extends BaseController {
             result.setServiceResult(false);
             result.setResultInfo("更新失败");
         }
-        log.info(result.toJson().toString());
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
