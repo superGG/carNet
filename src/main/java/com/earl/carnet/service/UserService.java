@@ -1,6 +1,5 @@
 package com.earl.carnet.service;
 
-import java.security.MessageDigest;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -13,8 +12,15 @@ import com.earl.carnet.domain.sercurity.user.UserQuery;
 public interface UserService extends BaseService<User, UserQuery> {
 	
 	User findOneByUsername(String username);
-	
-	void changePassword(Object Id, String newPassword);
+
+	/**
+	 * 修改用户密码.
+	 * @param Id
+	 * @param oldPassord
+	 * @param newPassword
+     * @return
+     */
+	Boolean changePassword(Object Id,String oldPassord, String newPassword);
 
 	/**
 	 * 查找用户拥有的角色
@@ -27,11 +33,11 @@ public interface UserService extends BaseService<User, UserQuery> {
 	void deleteCascade(Long userId);
 
 	/**
-	 * shangc
-	 * @author 黄祥谦.
+	 * 更新头像
+	 * @author 宋.
 	 * @param userfile
 	 */
-	void uploadFile(MultipartFile userfile);
+	Boolean updateImg(MultipartFile userfile, Long Id);
 
 	/**
 	 * 登录系统
@@ -62,9 +68,14 @@ public interface UserService extends BaseService<User, UserQuery> {
 	 * @author song.
 	 * @param user
      */
-	void saveUser(User user);
+	Boolean saveUser(User user);
 
 	User findOneByLoginId(String loginid);
 
+	/**
+	 * 注册用户.
+	 * @param loginid
+	 * @param password
+     */
 	void registerAccount(String loginid, String password);
 }

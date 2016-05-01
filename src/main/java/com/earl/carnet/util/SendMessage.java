@@ -1,12 +1,9 @@
 package com.earl.carnet.util;
 
-import com.earl.carnet.commons.vo.TcpMessage;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 
-import java.util.HashMap;
+import com.earl.carnet.commons.vo.TcpMessage;
 
 /**
  * Created by Administrator on 2016/4/15.

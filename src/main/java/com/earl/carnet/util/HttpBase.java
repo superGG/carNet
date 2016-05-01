@@ -3,8 +3,8 @@ package com.earl.carnet.util;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Map;
-import org.apache.commons.httpclient.HttpClient;
 
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -20,8 +20,8 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 public class HttpBase {
 
 	//	String basePath = "http://www.earltech.cn:8080/fishshop/";
-//	String basePath = "http://localhost:8080/fishshop/";
-	String basePath = "http://localhost:8082/carnettcp/";
+	String basePath = "http://localhost:8080/fishshop/";
+//	String basePath = "http://localhost:8082/carnettcp/";
 
 	public String sendHttpRequest(String targetURl, Part[] parts) {
 		String string = null;

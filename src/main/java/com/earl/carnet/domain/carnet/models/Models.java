@@ -1,10 +1,13 @@
 package com.earl.carnet.domain.carnet.models;
 
-import com.earl.carnet.commons.domain.AbstractAuditingEntity;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import java.io.Serializable;
 
 import javax.persistence.Table;
-import java.io.Serializable;
+
+import org.beetl.sql.core.annotatoin.AutoID;
+
+import com.earl.carnet.commons.domain.AbstractAuditingEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * 品牌型号实体类.
@@ -14,31 +17,44 @@ import java.io.Serializable;
 @Table(name = "models")
 public class Models extends AbstractAuditingEntity<Long> implements Serializable {
 
-    private Long brandid;
+    private Long brandId; //品牌id
 
-    private String modelsname;
+    private String modelsName;//型号名称
 
-    public Long getBrandid() {
-        return brandid;
+
+
+    @AutoID
+    public Long getId() {
+        return super.getId();
     }
 
-    public void setBrandid(Long brandid) {
-        this.brandid = brandid;
+    public void setId(Long id) {
+        super.setId(id);
+//        this.id = id;
     }
 
-    public String getModelsname() {
-        return modelsname;
+    public Long getBrandId() {
+        return brandId;
     }
 
-    public void setModelsname(String modelsname) {
-        this.modelsname = modelsname;
+    public void setBrandId(Long brandId) {
+        this.brandId = brandId;
+    }
+
+    public String getModelsName() {
+        return modelsName;
+    }
+
+    public void setModelsName(String modelsName) {
+        this.modelsName = modelsName;
     }
 
     @Override
     public String toString() {
         return "Models{" +
-                "brandid=" + brandid +
-                ", modelsname='" + modelsname + '\'' +
+                "id=" + super.getId() +
+                ", brandId=" + brandId +
+                ", modelsName='" + modelsName + '\'' +
                 '}';
     }
 }

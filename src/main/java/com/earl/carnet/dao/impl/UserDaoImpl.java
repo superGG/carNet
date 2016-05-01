@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.earl.carnet.domain.sercurity.user.UserQuery;
 import org.springframework.stereotype.Repository;
 
 import com.earl.carnet.commons.dao.impl.BaseDaoImpl;
@@ -13,6 +12,7 @@ import com.earl.carnet.dao.UserDao;
 import com.earl.carnet.dao.UserRoleDao;
 import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.domain.sercurity.user.UserQuery;
 import com.earl.carnet.domain.sercurity.userrole.UserRole;
 
 @Repository("userDao")
@@ -22,6 +22,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 	private UserRoleDao userRoleDao;
 	
 	@Override
+	//根据用户名查询用户.
 	public User findOneByUsername(String username) {
 		// TODO 未测试.
 		User user = new User();
@@ -34,6 +35,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 	}
 
 	@Override
+	//根据登录id查询用户.
 	public User findOneByLoginId(String loginid) {
 		// TODO 未测试.
 		UserQuery user = new UserQuery();
@@ -46,12 +48,14 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 	}
 
 	@Override
-	public void changePassword(String newPassword, Object id) {
+	public Boolean changePassword(String newPassword, Object id) {
 		// TODO 未测试.
+		Boolean result = false;
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		hashMap.put("passwd", newPassword);
 		hashMap.put("id", id);
-		sqlManager.update("user.updatePasswd", hashMap);
+		if (sqlManager.update("user.updatePasswd", hashMap) !=0) result = true;
+		return result;
 	}
 	
 	/**

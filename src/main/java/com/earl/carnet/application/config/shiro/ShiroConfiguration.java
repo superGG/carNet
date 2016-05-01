@@ -1,5 +1,7 @@
 package com.earl.carnet.application.config.shiro;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +22,6 @@ import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -28,8 +29,6 @@ import org.springframework.context.annotation.DependsOn;
 import com.earl.carnet.dao.PrivilegeDao;
 import com.earl.carnet.domain.sercurity.privilege.Privilege;
 import com.earl.carnet.security.shiro.ShiroAuthorizingRealm;
-
-import static org.slf4j.LoggerFactory.*;
 
 @Configuration
 //@EnableTransactionManagement

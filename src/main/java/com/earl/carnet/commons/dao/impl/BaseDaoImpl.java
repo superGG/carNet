@@ -10,23 +10,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.beanutils.BeanMap;
 import org.beetl.sql.core.SQLManager;
 import org.beetl.sql.core.SQLScript;
 import org.beetl.sql.core.db.AbstractDBStyle;
 import org.beetl.sql.core.db.KeyHolder;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.domain.AbstractEntity;
 import com.earl.carnet.commons.domain.DateQuery;
 import com.earl.carnet.commons.util.Assert;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 
 public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
+
+	private static Logger log = LoggerFactory.getLogger(BaseDaoImpl.class);
 
 //	@Resource(name = "sqlManager")
 	protected SQLManager sqlManager;
@@ -48,18 +50,31 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 	}
 	
 	@Override
+	//添加一条记录
 	public int insert(T record) {
-		return sqlManager.insert(record);
-	}
-	
-	@Override
-	public int insertBackId(T record){
+		Map<String, Object> notNullProperties = getNotNullProperties(record);
 		KeyHolder keyHolder = new KeyHolder();
-		sqlManager.insert(entityClazz, record, keyHolder);
+		sqlManager.insert(entityClazz,notNullProperties,keyHolder);
 		return keyHolder.getInt();
 	}
 
 	@Override
+	//添加一条记录
+	public int insertSelective(T record) {
+		return sqlManager.insert(record);
+	}
+	
+	@Override
+	//添加一条新纪录，返回该记录的id
+	public int insertBackId(T record){
+		Map<String, Object> notNullProperties = getNotNullProperties(record);
+		KeyHolder keyHolder = new KeyHolder();
+		sqlManager.insert(entityClazz, notNullProperties, keyHolder);
+		return keyHolder.getInt();
+	}
+
+	@Override
+	//根据id删除对象
 	public void delete(Object id) {
 		sqlManager.deleteById(entityClazz, id);//咋们暂时不支持联合主键，beetlsql支持联合主键
 	}
@@ -71,46 +86,49 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 
 	@SuppressWarnings("unchecked")
 	@Override
+	//查询所有
 	public List<T> findAll() {
 		return sqlManager.all(entityClazz);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
+	//分页查询
 	public List<T> findAll(int start, int size) {
 		// TODO 未测试.
 		return sqlManager.all(entityClazz, start, size);
 	}
 
 	@Override
+	//返回该对象总数
 	public long countAll() {
 		return sqlManager.allCount(entityClazz);
 	}
 
-	@Override
-	public int insertSelective(T record) {
-		return sqlManager.insert(record);
-	}
 
-	@Override
-	public int updateByPrimaryKey(T record) {
-		// TODO 未测试.
-		return 0;
-	}
+
+//	@Override
+//	public int updateByPrimaryKey(T record) {
+//		// TODO 未测试.
+//		return 0;
+//	}
 
 	@SuppressWarnings("unchecked")
 	@Override
+	//根据id查询
 	public T findOneById(Object Id) {
 		return (T)sqlManager.unique(entityClazz, Id);
 	}
 	
 	@Override
+	//精确查询.
 	public List<T> searchAccurate(T queryObject){
 		return sqlManager.template(queryObject);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	//相似查询
 	public List<T> searchSimilarity(T queryObject){
 		Map<String, Object> notNullProperties = getNotNullProperties(queryObject);
 		
@@ -123,6 +141,7 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	//查询
 	public List<T> searchQuery(Object query){
 		
 		Map<String, Object> notNullProperties = getNotNullProperties(query);
@@ -158,7 +177,7 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 				}
 			
 			}
-		System.out.println(sql);
+		System.out.println("sql语句:"+sql);
 		
 		return sqlManager.execute(sql.toString(), entityClazz,notNullProperties);
 		}
@@ -177,18 +196,21 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 		return (List<T>) pageScript.select(queryObject.getClass(), param,null);
 	}
 	
-
-	@Override
+	//翻页
 	public List<T> pageSearchAccurate(T queryObject, int start, int size) {
 		return sqlManager.template(queryObject, start, size);
 	}
 
-	@Override
+	//符合条件的个数
 	public long countMatch(T queryObject) {
 		return sqlManager.templateCount(queryObject);
 	}
-	
-	
+
+	/**
+	 * 获取非空属性.
+	 * @param object
+	 * @return
+     */
 	private Map<String, Object> getNotNullProperties(Object object) {
 		Map<String, Object> notNullParam = null;
 		BeanMap beanMap = new BeanMap(object);
@@ -212,8 +234,8 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 		SQLScript script = sqlManager.getScript(entityClazz, SELECT_BY_TEMPLATE);
 		String sql = script.getSql();
 		String templatesql = sql.replaceAll("select *", "delete").replace("*", "");
-		System.out.println(script.getSql());
-		
+		log.info("script sql :" + script.getSql());
+
 		sqlManager.executeUpdate(templatesql,notNullProperties);
 	}
 

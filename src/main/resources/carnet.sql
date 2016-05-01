@@ -71,7 +71,7 @@ INSERT INTO `roleprivilege` VALUES ('1', '1', '1');
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
+  `username` varchar(255) DEFAULT NULL,
   `realName` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
   `loginid` varchar(255) NOT NULL,
@@ -119,7 +119,7 @@ CREATE TABLE `order` (
   `stationName` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `brandName` varchar(255) NOT NULL,
-  `agreementTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `agreementTime` datetime NOT NULL ,
   `type` VARCHAR(255) NOT NULL,
   `units` bigint(5) NOT NULL DEFAULT '0',
   `price` DOUBLE NOT NULL,
@@ -148,23 +148,23 @@ CREATE TABLE `car` (
   `mark` varchar(255) NOT NULL,
   `brand` varchar(255) NOT NULL,
   `models` varchar(255) NOT NULL,
-  `plateNumber` varchar(255) NOT NULL,
+  `plateNumber` varchar(255) DEFAULT NULL,
   `vin` varchar(255) NOT NULL,
   `engineNumber` varchar(255) NOT NULL,
   `rank` VARCHAR(255) NOT NULL,
   `mileage` FLOAT(50) NOT NULL,
   `oilBox` FLOAT(50) NOT NULL,
-  `tachometer` FLOAT(50) NOT NULL,
+  `temperature` FLOAT(50) NOT NULL,
   `oil` FLOAT(50) NOT NULL,
-  `engineProperty` bit(1) NOT NULL DEFAULT b'0',
-  `transmission` bit(1) NOT NULL DEFAULT b'0' ,
-  `carLight` bit(1) NOT null default b'0' ,
-  `carState` bit(1) NOT null default b'0' ,
-  `carAlarm` bit(1) NOT null default b'0' ,
+  `engineProperty` bit(1) NOT NULL DEFAULT b'1',
+  `transmission` bit(1) NOT NULL DEFAULT b'1' ,
+  `carLight` bit(1) NOT null default b'1' ,
+  `carState` bit(1) NOT null default b'1' ,
+  `carAlarm` bit(1) NOT null default b'1' ,
   `alarmMessage` bit(1) NOT null default b'1' ,
   `propertyMessage` bit(1) NOT null default b'1' ,
   `stateMessage` bit(1) NOT null default b'1' ,
-  `currentCar` bit(1) NOT null default b'0' ,
+  `currentCar` bit(1) NOT null default b'1' ,
   `lon` DOUBLE NOT null,
   `lat` DOUBLE NOT null,
   PRIMARY KEY (`id`)
@@ -173,7 +173,7 @@ CREATE TABLE `car` (
 -- ----------------------------
 -- Records of car
 -- ----------------------------
-INSERT INTO `car` VALUES ('1','1','../mark/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.jpg','奥迪','R8','粤L88888','1234567','1234567','2门2座','0.0','50.0','49.9','50','','','','','','','','','','123.3','143.5');
+INSERT INTO `car` VALUES ('1','1','../mark/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.jpg','奥迪','R8','粤L88888','1234567','1234567','2门2座','0.0','50.0','49.9','50',b'1',b'1',b'1',b'1',b'1',b'1',b'1',b'1',b'1','123.3','143.5');
 
 
 -- ----------------------------
@@ -182,8 +182,8 @@ INSERT INTO `car` VALUES ('1','1','../mark/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.
 DROP TABLE IF EXISTS `models`;
 CREATE TABLE `models` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `brandid` bigint(20) not NULL,
-  `modelsname` varchar(255) DEFAULT NULL,
+  `brandId` bigint(20) not NULL,
+  `modelsName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11912 DEFAULT CHARSET=utf8;
 
@@ -191,6 +191,18 @@ CREATE TABLE `models` (
 -- Records of models
 -- ----------------------------
 INSERT INTO `models` VALUES ('1','1','R8');
+INSERT INTO `models` VALUES ('2','2','SLS级AMG');
+INSERT INTO `models` VALUES ('3','2','SL 63 AMG');
+INSERT INTO `models` VALUES ('4','2','GT');
+INSERT INTO `models` VALUES ('5','3','Boxster GTS');
+INSERT INTO `models` VALUES ('6','3','Turbo Cabriolet');
+INSERT INTO `models` VALUES ('7','3','Style Edition');
+INSERT INTO `models` VALUES ('8','4','Evoluzione');
+INSERT INTO `models` VALUES ('9','5','Z4');
+INSERT INTO `models` VALUES ('10','6','MC12');
+INSERT INTO `models` VALUES ('11','6','Birdcage 75th');
+INSERT INTO `models` VALUES ('12','7','Reventon');
+INSERT INTO `models` VALUES ('13','8','0ne-77');
 
 -- ----------------------------
 -- Table structure for `brand`
@@ -198,7 +210,7 @@ INSERT INTO `models` VALUES ('1','1','R8');
 DROP TABLE IF EXISTS `brand`;
 CREATE TABLE `brand` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `brandname` varchar(255) DEFAULT NULL,
+  `brandName` varchar(255) DEFAULT NULL,
   `mark` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11912 DEFAULT CHARSET=utf8;
@@ -206,7 +218,14 @@ CREATE TABLE `brand` (
 -- ----------------------------
 -- Records of brand
 -- ----------------------------
-INSERT INTO `brand` VALUES ('1','奥迪','../mark/a9e1ca3e-db0d-493d-9d25-f1e057bbb942.jpg');
+INSERT INTO `brand` VALUES ('1','奥迪','../mark/aodi.jpg');
+INSERT INTO `brand` VALUES ('2','奔驰','../mark/benchi.jpg');
+INSERT INTO `brand` VALUES ('3','保时捷','../mark/baoshijie.jpg');
+INSERT INTO `brand` VALUES ('4','法拉利','../mark/falali.jpg');
+INSERT INTO `brand` VALUES ('5','宝马','../mark/baoma.jpg');
+INSERT INTO `brand` VALUES ('6','玛莎拉蒂','../mark/mashaladi.jpg');
+INSERT INTO `brand` VALUES ('7','兰博基尼','../mark/lanbojini.jpg');
+INSERT INTO `brand` VALUES ('8','阿斯顿马丁','../mark/asidunmading.jpg');
 
 
 

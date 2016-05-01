@@ -11,13 +11,15 @@ import org.springframework.data.domain.Sort;
 */
 public interface BaseService<T extends AbstractEntity<?>, E> {
 	
-	T updateByPrimaryKeySelective(T entity);
+	int updateByPrimaryKeySelective(T entity);
 
 	List<T> update(List<T> entities);
 
-	T save(T entity);
+	int save(T entity);
 
-	List<T> save(List<T> entities);
+	int  insertBackId(T entity);
+
+//	List<T> save(List<T> entities);
 
 	T findOne(Object id);
 
@@ -35,7 +37,7 @@ public interface BaseService<T extends AbstractEntity<?>, E> {
 
 	List<T> findAll();
 	
-	List<T> search(E criteria);
+//	List<T> search(E criteria);
 	
 	List<T> searchQuery(E userQuery);
 /*

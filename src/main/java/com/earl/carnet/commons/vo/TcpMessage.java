@@ -7,15 +7,9 @@ package com.earl.carnet.commons.vo;
 import com.earl.carnet.commons.util.GsonUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 /**
  * 服务返回信息类.
- * 
- * @author 侯骏雄
- * @since 3.0.0
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TcpMessage {

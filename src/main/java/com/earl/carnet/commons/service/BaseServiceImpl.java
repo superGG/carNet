@@ -3,7 +3,6 @@ package com.earl.carnet.commons.service;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -32,23 +31,27 @@ public abstract class BaseServiceImpl<T extends AbstractEntity<?>, E>
 
 	
 	@Override
-	public T save(T entity) {
+	public int save(T entity) {
 		// TODO 未测试.
-		getDao().insert(entity);
-		return null;
+		return getDao().insert(entity);
 	}
-	
-	
-	
+
 	@Override
-	public List<T> save(List<T> entities) {
-		Assert.notEmpty(entities);
-		List<T> list = new ArrayList<T>();
-		for (T t : entities) {
-			list.add(save(t));
-		}
-		return list;
+	public int insertBackId(T entity){
+		return getDao().insertBackId(entity);
 	}
+	
+	
+	
+//	@Override
+//	public List<T> save(List<T> entities) {
+//		Assert.notEmpty(entities);
+//		List<T> list = new ArrayList<T>();
+//		for (T t : entities) {
+//			list.add(save(t));
+//		}
+//		return list;
+//	}
 
 	@Override
 	public List<T> update(List<T> entities) {
@@ -76,17 +79,15 @@ public abstract class BaseServiceImpl<T extends AbstractEntity<?>, E>
 //	}
 	
 	@Override
-	public T updateByPrimaryKeySelective(T entity) {
-		// TODO 未测试.
-		getDao().updateByPrimaryKeySelective(entity);
-		return null;
+	public int updateByPrimaryKeySelective(T entity) {
+		return getDao().updateByPrimaryKeySelective(entity);
 	}
 
-	@Override
-	public List<T> search(E criteria) {
-		// TODO 未测试.
-		return null;
-	}
+//	@Override
+//	public List<T> search(E criteria) {
+//		// TODO 未测试.
+//		return null;
+//	}
 
 	@Override
 	public List<T> searchAccurate(T queryObject){

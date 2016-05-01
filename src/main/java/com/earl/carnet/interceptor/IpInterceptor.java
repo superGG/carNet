@@ -21,21 +21,18 @@ public class IpInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest arg0,
 			HttpServletResponse arg1, Object arg2, Exception arg3)
 			throws Exception {
-		// TODO 未测试.
-		logger.info("aftercompletion ip---拦截器");
+//		logger.info("aftercompletion ip---拦截器");
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest req, HttpServletResponse resp,
 			Object arg2, ModelAndView arg3) throws Exception {
-		// TODO 未测试.
 		logger.info("退出ip---拦截器");
 	}
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse resp,
 			Object handler) throws Exception {
-		// TODO 未测试.
 		logger.info("进入ip---拦截器");
 		// 获取参数
 		String ip = request.getHeader("x-forwarded-for");

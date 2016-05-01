@@ -3,6 +3,8 @@ package com.example.server.user;
 
 import javax.annotation.Resource;
 
+import junit.framework.Assert;
+
 import org.apache.log4j.Logger;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -20,7 +22,6 @@ import cucumber.api.java.zh_cn.并且;
 import cucumber.api.java.zh_cn.当;
 import cucumber.api.java.zh_cn.而且;
 import cucumber.api.java.zh_cn.那么;
-import junit.framework.Assert;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)

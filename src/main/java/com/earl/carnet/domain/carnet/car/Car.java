@@ -1,10 +1,13 @@
 package com.earl.carnet.domain.carnet.car;
 
-import com.earl.carnet.commons.domain.AbstractAuditingEntity;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import java.io.Serializable;
 
 import javax.persistence.Table;
-import java.io.Serializable;
+
+import org.beetl.sql.core.annotatoin.AutoID;
+
+import com.earl.carnet.commons.domain.AbstractAuditingEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * 汽车信息尸体类.
@@ -14,7 +17,7 @@ import java.io.Serializable;
 @Table(name = "car")
 public class Car extends AbstractAuditingEntity<Long> implements Serializable {
 
-    private Long userid;//用户id
+    private Long userId;//用户id
 
     private String mark;//品牌标志
 
@@ -22,52 +25,53 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
 
     private String models;//品牌型号
 
-    private String platenumber;//车牌号码
+    private String plateNumber;//车牌号码
 
     private String vin; //车架号
 
-    private String enginenumber;//发动机号
+    private String engineNumber;//发动机号
 
     private String rank;//车身等级
 
     private Double mileage;//里程数
 
-    private Double oilbox;//油箱容积
-
-    private Double speed;//车速
-
-    private Double tachometer;//转速
+    private Double oilBox;//油箱容积
 
     private Double oil;//当前油量
 
     private Double temperature;//温度
 
-    private Byte enginepropetry;//发动机性能
+    private Byte engineProperty ;//发动机性能
 
     private Byte transmission;//变速器性能
 
-    private Byte carlight;//车灯性能
+    private Byte carLight;//车灯性能
+
+    private Byte carState;//车状态
+    
+    private Byte carAlarm;//车警报
+    
+    private Boolean alarmMessage ;//是否发送警报信息
+    
+    private Boolean propertyMessage ;//是否发送行性能信息
+    
+    private Boolean stateMessage ;//是否发送车状态信息
+    
+    private Boolean currentCar;//是否当前车辆
 
     private Double lon;//经度
 
     private Double lat;//纬度
 
-    private Boolean currentState;//当前车辆状态
 
-    private Boolean sendonstartup;
-
-    private String carpassword;
-
-    private Boolean currentusercar;
-
-    private Boolean warninguser;
-
-    public Long getUserid() {
-        return userid;
+    @AutoID
+    public Long getId() {
+        return super.getId();
     }
 
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    public void setId(Long id) {
+        super.setId(id);
+//        this.id = id;
     }
 
     public String getMark() {
@@ -94,12 +98,20 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.models = models;
     }
 
-    public String getPlatenumber() {
-        return platenumber;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setPlatenumber(String platenumber) {
-        this.platenumber = platenumber;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getPlateNumber() {
+        return plateNumber;
+    }
+
+    public void setPlateNumber(String plateNumber) {
+        this.plateNumber = plateNumber;
     }
 
     public String getVin() {
@@ -110,13 +122,6 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.vin = vin;
     }
 
-    public String getEnginenumber() {
-        return enginenumber;
-    }
-
-    public void setEnginenumber(String enginenumber) {
-        this.enginenumber = enginenumber;
-    }
 
     public String getRank() {
         return rank;
@@ -134,28 +139,12 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.mileage = mileage;
     }
 
-    public Double getOilbox() {
-        return oilbox;
+    public Double getOilBox() {
+        return oilBox;
     }
 
-    public void setOilbox(Double oilbox) {
-        this.oilbox = oilbox;
-    }
-
-    public Double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(Double speed) {
-        this.speed = speed;
-    }
-
-    public Double getTachometer() {
-        return tachometer;
-    }
-
-    public void setTachometer(Double tachometer) {
-        this.tachometer = tachometer;
+    public void setOilBox(Double oilBox) {
+        this.oilBox = oilBox;
     }
 
     public Double getOil() {
@@ -174,13 +163,6 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.temperature = temperature;
     }
 
-    public Byte getEnginepropetry() {
-        return enginepropetry;
-    }
-
-    public void setEnginepropetry(Byte enginepropetry) {
-        this.enginepropetry = enginepropetry;
-    }
 
     public Byte getTransmission() {
         return transmission;
@@ -190,12 +172,28 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.transmission = transmission;
     }
 
-    public Byte getCarlight() {
-        return carlight;
+    public String getEngineNumber() {
+        return engineNumber;
     }
 
-    public void setCarlight(Byte carlight) {
-        this.carlight = carlight;
+    public void setEngineNumber(String engineNumber) {
+        this.engineNumber = engineNumber;
+    }
+
+    public Byte getEngineProperty() {
+        return engineProperty;
+    }
+
+    public void setEngineProperty(Byte engineProperty) {
+        this.engineProperty = engineProperty;
+    }
+
+    public Byte getCarLight() {
+        return carLight;
+    }
+
+    public void setCarLight(Byte carLight) {
+        this.carLight = carLight;
     }
 
     public Double getLon() {
@@ -214,73 +212,82 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.lat = lat;
     }
 
-    public Boolean getCurrentState() {
-        return currentState;
+
+    public Byte getCarState() {
+        return carState;
     }
 
-    public void setCurrentState(Boolean currentState) {
-        this.currentState = currentState;
+    public void setCarState(Byte carState) {
+        this.carState = carState;
     }
 
-    public Boolean getSendonstartup() {
-        return sendonstartup;
+    public Byte getCarAlarm() {
+        return carAlarm;
     }
 
-    public void setSendonstartup(Boolean sendonstartup) {
-        this.sendonstartup = sendonstartup;
+    public void setCarAlarm(Byte carAlarm) {
+        this.carAlarm = carAlarm;
     }
 
-    public String getCarpassword() {
-        return carpassword;
+    public Boolean getAlarmMessage() {
+        return alarmMessage;
     }
 
-    public void setCarpassword(String carpassword) {
-        this.carpassword = carpassword;
+    public void setAlarmMessage(Boolean alarmMessage) {
+        this.alarmMessage = alarmMessage;
     }
 
-    public Boolean getCurrentusercar() {
-        return currentusercar;
+    public Boolean getPropertyMessage() {
+        return propertyMessage;
     }
 
-    public void setCurrentusercar(Boolean currentusercar) {
-        this.currentusercar = currentusercar;
+    public void setPropertyMessage(Boolean propertyMessage) {
+        this.propertyMessage = propertyMessage;
     }
 
-    public Boolean getWarninguser() {
-        return warninguser;
+    public Boolean getStateMessage() {
+        return stateMessage;
     }
 
-    public void setWarninguser(Boolean warninguser) {
-        this.warninguser = warninguser;
+    public void setStateMessage(Boolean stateMessage) {
+        this.stateMessage = stateMessage;
+    }
+
+    public Boolean getCurrentCar() {
+        return currentCar;
+    }
+
+    public void setCurrentCar(Boolean currentCar) {
+        this.currentCar = currentCar;
     }
 
     @Override
     public String toString() {
         return "Car{" +
-                "userid=" + userid +
+                "id=" + super.getId() +
+                ", userId=" + userId +
                 ", mark='" + mark + '\'' +
                 ", brand='" + brand + '\'' +
                 ", models='" + models + '\'' +
-                ", platenumber='" + platenumber + '\'' +
+                ", plateNumber='" + plateNumber + '\'' +
                 ", vin='" + vin + '\'' +
-                ", enginenumber='" + enginenumber + '\'' +
+                ", engineNumber='" + engineNumber + '\'' +
                 ", rank='" + rank + '\'' +
                 ", mileage=" + mileage +
-                ", oilbox=" + oilbox +
-                ", speed=" + speed +
-                ", tachometer=" + tachometer +
+                ", oilbox=" + oilBox +
                 ", oil=" + oil +
                 ", temperature=" + temperature +
-                ", enginepropetry=" + enginepropetry +
+                ", engineProperty=" + engineProperty +
                 ", transmission=" + transmission +
-                ", carlight=" + carlight +
+                ", carLight=" + carLight +
+                ", carState=" + carState +
+                ", carAlarm=" + carAlarm +
+                ", alarmMessage=" + alarmMessage +
+                ", propertyMessage=" + propertyMessage +
+                ", stateMessage=" + stateMessage +
+                ", currentCar=" + currentCar +
                 ", lon=" + lon +
                 ", lat=" + lat +
-                ", currentState=" + currentState +
-                ", sendonstartup=" + sendonstartup +
-                ", carpassword='" + carpassword + '\'' +
-                ", currentusercar=" + currentusercar +
-                ", warninguser=" + warninguser +
                 '}';
     }
 }

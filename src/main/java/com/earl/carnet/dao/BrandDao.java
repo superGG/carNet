@@ -6,4 +6,6 @@ import com.earl.carnet.domain.carnet.brand.Brand;
 
 public interface BrandDao extends BaseDao<Brand> {
 
+
+
 }

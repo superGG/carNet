@@ -1,11 +1,13 @@
 package com.earl.carnet.domain.carnet.order;
 
-import com.earl.carnet.commons.domain.AbstractAuditingEntity;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import org.joda.time.DateTime;
+import java.io.Serializable;
 
 import javax.persistence.Table;
-import java.io.Serializable;
+
+import org.beetl.sql.core.annotatoin.AutoID;
+
+import com.earl.carnet.commons.domain.AbstractAuditingEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * 订单实体类.
@@ -15,52 +17,78 @@ import java.io.Serializable;
 @Table(name = "odrder")
 public class Order extends AbstractAuditingEntity<Long> implements Serializable{
 
-    private Long carid;
+    private Long carId;  //汽车id
 
-    private Long userid;
+    private Long userId; //用户id
 
-    private String stationname;
+    private String stationName;//加油站名称
 
-    private String address;
+    private String address;//加油站地址
 
-    private String brandname;
+    private String brandName;//加油站品牌 （中石油、中石化）
 
-    private DateTime agreementtime;
+    private String agreementTime;//预约时间
 
-    private String type;
+    private String type;//加油类别 E90  E93 E97
 
-    private Integer units;
+    private Integer units;//加油单位  元/升
 
-    private Double price;
+    private Double price;//每单位价格
 
-    private Double number;
+    private Double number;//加油数量
 
-    private Double amounts;
+    private Double amounts;//总价
 
-    private Integer state;
+    private Integer state;//订单状态
 
-    public Long getCarid() {
-        return carid;
+    @AutoID
+    public Long getId() {
+        return super.getId();
     }
 
-    public void setCarid(Long carid) {
-        this.carid = carid;
+    public void setId(Long id) {
+        super.setId(id);
+//        this.id = id;
     }
 
-    public Long getUserid() {
-        return userid;
+    public Long getCarId() {
+        return carId;
     }
 
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    public void setCarId(Long carId) {
+        this.carId = carId;
     }
 
-    public String getStationname() {
-        return stationname;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setStationname(String stationname) {
-        this.stationname = stationname;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getAgreementTime() {
+        return agreementTime;
+    }
+
+    public void setAgreementTime(String agreementTime) {
+        this.agreementTime = agreementTime;
     }
 
     public String getAddress() {
@@ -71,21 +99,6 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
         this.address = address;
     }
 
-    public String getBrandname() {
-        return brandname;
-    }
-
-    public void setBrandname(String brandname) {
-        this.brandname = brandname;
-    }
-
-    public DateTime getAgreementtime() {
-        return agreementtime;
-    }
-
-    public void setAgreementtime(DateTime agreementtime) {
-        this.agreementtime = agreementtime;
-    }
 
     public String getType() {
         return type;
@@ -138,12 +151,13 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
     @Override
     public String toString() {
         return "Order{" +
-                "carid=" + carid +
-                ", userid=" + userid +
-                ", stationname='" + stationname + '\'' +
+                "id=" + super.getId() +
+                ", carId=" + carId +
+                ", userId=" + userId +
+                ", stationName='" + stationName + '\'' +
                 ", address='" + address + '\'' +
-                ", brandname='" + brandname + '\'' +
-                ", agreementtime=" + agreementtime +
+                ", brandName='" + brandName + '\'' +
+                ", agreementTime=" + agreementTime +
                 ", type='" + type + '\'' +
                 ", units=" + units +
                 ", price=" + price +

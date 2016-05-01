@@ -1,10 +1,13 @@
 package com.earl.carnet.web;
 
-import com.earl.carnet.domain.sercurity.user.User;
-import com.earl.carnet.security.shiro.ShiroPrincipal;
-import com.earl.carnet.service.UserService;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -14,15 +17,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.security.shiro.ShiroPrincipal;
+import com.earl.carnet.service.UserService;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = "/api2")
@@ -101,19 +107,19 @@ public class RoleController extends BaseController{
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
-	/**
-	 * POST /users/change_password -> changes the current user's password
-	 */
-	@ApiOperation(value = "更改用户密码", notes = "CHANGE USER PASSWORD",httpMethod="POST",response=String.class)
-	@RequestMapping(value = "/users/change/password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> changePassword(@RequestBody String password,String Id) {
-		if (password.isEmpty() || password.length() < 5
-				|| password.length() > 50) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		userService.changePassword(Id, password);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+//	/**
+//	 * POST /users/change_password -> changes the current user's password
+//	 */
+//	@ApiOperation(value = "更改用户密码", notes = "CHANGE USER PASSWORD",httpMethod="POST",response=String.class)
+//	@RequestMapping(value = "/users/change/password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<String> changePassword(@RequestBody String password,String Id) {
+//		if (password.isEmpty() || password.length() < 5
+//				|| password.length() > 50) {
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		}
+//		userService.changePassword(Id, password);
+//		return new ResponseEntity<>(HttpStatus.OK);
+//	}
 
 	@Valid
 	@RequestMapping(value = "/doLogin", produces = MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.POST)
@@ -130,20 +136,12 @@ public class RoleController extends BaseController{
 		User user = principal.getUser();
 		Map<String, Object> loginInfo = new HashMap<String,Object>();
 		loginInfo.put("username",user.getUsername());
-		loginInfo.put("userimg",user.getUserimg());
+		loginInfo.put("userimg",user.getUserImg());
 		loginInfo.put("loginSuccess",true);
 		return new ResponseEntity<Map<String,Object>>(loginInfo,HttpStatus.OK);
 	}
 
-	/**
-	 * POST /users/change_password -> changes the current user's password
-	 */
-	@ApiOperation(value = "上传图片", notes = "loginSystem",httpMethod="POST",response=String.class)
-	@RequestMapping(value = "/users/uploadfile",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> uploadfile(MultipartFile userfile,String username) {
-		userService.uploadFile(userfile);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+	
 
 	@ApiOperation(value = "得到用户信息", notes = "user info",httpMethod="GET",response=String.class)
 	@RequestMapping(value = "/users/info",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
