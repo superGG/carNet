@@ -134,5 +134,6 @@ public interface BaseDao<T extends Serializable > {
 	 * @param queryObject
 	 */
 	void deleteByQuery(Object queryObject);
-	
+
+
 }

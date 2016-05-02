@@ -104,6 +104,26 @@ public class CarController extends BaseController {
     }
 
     /**
+     * 更新汽车.
+     *
+     * @return
+     */
+    @RequestMapping(value = "/updateCarByVin", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "根据车架号更新车辆信息（用于车载系统更新车辆信息）", notes = "update car message by vin", httpMethod = "POST", response = String.class)
+    public ResponseEntity<?> updateCarByVin(Car car) {
+        result = new ResultMessage();
+        Boolean update = carService.updateCarByVin(car);
+        if (update) {
+            result.setResultInfo("更新成功");
+            result.setServiceResult(true);
+        } else {
+            result.setServiceResult(false);
+            result.setResultInfo("更新失败");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    /**
      * 删除汽车.
      *
      * @return
