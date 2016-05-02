@@ -2,8 +2,6 @@ package com.earl.carnet.web;
 
 import javax.validation.Valid;
 
-import com.wordnik.swagger.annotations.ApiImplicitParam;
-import com.wordnik.swagger.annotations.ApiImplicitParams;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -24,6 +22,8 @@ import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.security.shiro.ShiroPrincipal;
 import com.earl.carnet.service.UserService;
+import com.wordnik.swagger.annotations.ApiImplicitParam;
+import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 

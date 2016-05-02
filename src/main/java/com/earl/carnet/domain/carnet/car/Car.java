@@ -70,6 +70,10 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.stateMessage = stateMessage;
     }
 
+    public Car(){
+
+    }
+
     @AutoID
     public Long getId() {
         return super.getId();

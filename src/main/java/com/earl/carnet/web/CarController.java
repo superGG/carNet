@@ -1,8 +1,5 @@
 package com.earl.carnet.web;
 
-import com.wordnik.swagger.annotations.ApiImplicitParam;
-import com.wordnik.swagger.annotations.ApiImplicitParams;
-import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.carnet.car.Car;
 import com.earl.carnet.service.CarService;
+import com.wordnik.swagger.annotations.ApiImplicitParam;
+import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = "/car")
@@ -165,7 +165,7 @@ public class CarController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "根据id删除汽车", notes = "delete car by id", httpMethod = "POST", response = String.class)
+    @ApiOperation(value = "根据id删除汽车", notes = "delete ca3r by id", httpMethod = "POST", response = String.class)
     public ResponseEntity<?> delete(
             @ApiParam(required = true, name = "id", value = "车辆id")
             Long id) {
