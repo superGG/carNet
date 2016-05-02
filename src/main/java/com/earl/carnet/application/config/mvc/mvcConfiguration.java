@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -17,7 +18,6 @@ import com.earl.carnet.interceptor.SystemExceptionHandler;
 import com.earl.carnet.interceptor.ValidationInterceptor;
 
 @Configuration
-
 //@AutoConfigureAfter({BeetlSqlConfiguration.class})
 public class mvcConfiguration extends WebMvcConfigurerAdapter {
     private static Logger logger = LoggerFactory.getLogger(mvcConfiguration.class);
@@ -32,6 +32,13 @@ public class mvcConfiguration extends WebMvcConfigurerAdapter {
 //	  handlerMapping.setUseTrailingSlashMatch(false);
 //	  return handlerMapping;
 //	 }
+
+    //设置允许跨域节点
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+
+        registry.addMapping("/*/api-docs/*").allowedOrigins("*");
+    }
 
     /**
      * 配置拦截器
