@@ -7,8 +7,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 
 
-@SpringBootApplication
-@ComponentScan
+@SpringBootApplication//等价于@Configuration,@EnableAutoConfiguration,@ComponentScan
 public class Application {
 
 	private static Logger logger = Logger.getLogger(Application.class);

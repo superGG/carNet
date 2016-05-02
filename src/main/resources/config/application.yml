@@ -1,8 +1,10 @@
 # Server settings
 server:
-    port:8000
-    address:localhost
-    contextPath:/carnet
+  port: 8003
+ # address: localhost
+  context-path: /carnet
+  error:
+    path: /error
 # DATASOURCE
 jdbc:
     dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
@@ -15,7 +17,6 @@ jdbc:
     prepStmtsSize: 250
     prepStmtsCacheSqlLimit: 2048
     userServerPrepStmts: true
-
 # SPRING PROFILES
 spring:       
     # HTTP ENCODING
@@ -23,9 +24,11 @@ spring:
         encoding.charset: UTF-8
         encoding.enable: true
         encoding.force: true
-
 # LOGGING
 logging:
+    file: carnet.log
+    path: log
     level:
-       com.ibatis:DEBUG
-       com.eric.demo:DEBUG
+       org.springframework.web: DEBUG
+       com.earl.carnet: DEBUG
+
