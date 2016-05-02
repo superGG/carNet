@@ -1,5 +1,6 @@
 package com.earl.carnet.web;
 
+import com.google.zxing.WriterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.carnet.order.Order;
 import com.earl.carnet.service.OrderService;
 import com.wordnik.swagger.annotations.ApiOperation;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping(value = "/order")
@@ -46,10 +49,14 @@ public class OrderController extends BaseController{
 	 */
 	@RequestMapping(value = "/saveOrder", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "添加一个新订单", notes = "add a new order",httpMethod="POST",response=String.class)
-	public ResultMessage saveOrder(Order order) {
+	public ResultMessage saveOrder(Order order) throws IOException, WriterException {
 		log.info("进入controller层添加订单saveOrder方法");
 		result = new ResultMessage();
-		if (orderService.insertBackId(order)!=0) {
+		int orderId = orderService.saveOrder(order);
+		System.out.println(orderId);
+		if (orderId !=0) {
+			Order new_order = orderService.findOne(orderId);
+			result.getResultParm().put("order",new_order);
 			result.setResultInfo("添加订单成功");
 			result.setServiceResult(true);
 		}else {

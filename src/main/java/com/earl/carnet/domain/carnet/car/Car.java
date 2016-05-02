@@ -64,6 +64,12 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
     private Double lat;//纬度
 
 
+    public Car(Boolean alarmMessage, Boolean propertyMessage,Boolean stateMessage){
+        this.alarmMessage = alarmMessage;
+        this.propertyMessage = propertyMessage;
+        this.stateMessage = stateMessage;
+    }
+
     @AutoID
     public Long getId() {
         return super.getId();
