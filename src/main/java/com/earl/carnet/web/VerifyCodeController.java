@@ -4,10 +4,12 @@ import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.carnet.VerifyCode.VerifyCode;
 import com.earl.carnet.service.VerifyCodeService;
 import com.wordnik.swagger.annotations.ApiOperation;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,9 +31,9 @@ public class VerifyCodeController extends BaseController{
 	/**
 	 * GET /brand -> get all the verifyCode
 	 */
-	@RequestMapping(value = "/getVerifyCode", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/phoneNumber={phoneNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "获取验证码", notes = "get verifyCode ",httpMethod="GET",response=String.class)
-	public ResultMessage getVerifyCode(String phoneNumber) throws UnsupportedEncodingException {
+	public ResultMessage getVerifyCode( @PathVariable String phoneNumber) throws UnsupportedEncodingException {
 		log.debug("REST request to get all Brand");
 		Boolean get = verifyCodeService.getVerifyCode(phoneNumber);
 
