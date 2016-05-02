@@ -54,21 +54,16 @@ public class OrderServiceImpl extends BaseServiceImpl<Order,Order>
         int orderId = orderDao.insertBackId(order);
         String order_json = GsonUtil.toJson(orderDao.findOneById(orderId)).toString();
         String orderId_json = GsonUtil.toJson(orderId).toString();
-//        int width = 200;
-//        int height = 200;
-//        String format = "png";
         try {
-			String path = "D:/test"; //二维码保存路径
+			String path = "src\\main\\webapp\\QRCodeImg"; //二维码保存路径
 			File filePath = new File(path);
 			FileOutputStream out = new FileOutputStream(filePath+"//"+orderId+".png");
-
-            QRCodeUtil.encode(orderId_json,"D:\\我的图片\\shiguang.png",out,true);
+			String rootPath = OrderServiceImpl.class.getClassLoader().getResource("").getPath(); //TODO 迁移到服务器上时使用
+            QRCodeUtil.encode(orderId_json,"D:\\My Documents\\GitHub\\carNet\\src\\main\\webapp\\img\\earl.jpg",out,true);
             out.flush();
             out.close();
 		} catch (Exception e) {
-			logger.info("生成二维码失败");
-			e.printStackTrace();
-			return 0;
+            throw new SecurityException("生成二维码失败",e);
 		}
         return orderId;
     }

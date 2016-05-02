@@ -55,7 +55,8 @@ public class OrderController extends BaseController{
 		int orderId = orderService.saveOrder(order);
 		System.out.println(orderId);
 		if (orderId !=0) {
-			
+			Order new_order = orderService.findOne(orderId);
+			result.getResultParm().put("order",new_order);
 			result.setResultInfo("添加订单成功");
 			result.setServiceResult(true);
 		}else {

@@ -66,7 +66,7 @@ public class UserController extends BaseController {
             result.setServiceResult(false);
             result.setResultInfo("获取用户失败");
         }
-        log.info(result.toJson());
+//        log.info(result.toJson());
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
 
