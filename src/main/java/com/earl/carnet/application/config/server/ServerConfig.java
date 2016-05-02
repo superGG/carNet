@@ -38,27 +38,27 @@ public class ServerConfig implements EnvironmentAware {
         this.propertyResolver = new RelaxedPropertyResolver(env, "server.");
     }
 
-    @Bean
-    public EmbeddedServletContainerFactory servletContainer() {
-
-        TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
-
-        if (propertyResolver.getProperty("port") == null
-                || "".equals(propertyResolver.getProperty("port"))) {
-        }else{
-            factory.setPort(Integer.valueOf(propertyResolver.getProperty("port")));
-        }
-        if (propertyResolver.getProperty("contextPath") == null
-                || "".equals(propertyResolver.getProperty("contextPath"))) {
-        }else{
-            factory.setContextPath(propertyResolver.getProperty("contextPath"));
-
-        }
-
-        factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/notfound.html"));
-//        factory.setSessionTimeout(10, TimeUnit.MINUTES);
-        return factory;
-    }
+//    @Bean
+//    public EmbeddedServletContainerFactory servletContainer() {
+//
+//        TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
+//
+//        if (propertyResolver.getProperty("port") == null
+//                || "".equals(propertyResolver.getProperty("port"))) {
+//        }else{
+//            factory.setPort(Integer.valueOf(propertyResolver.getProperty("port")));
+//        }
+//        if (propertyResolver.getProperty("contextPath") == null
+//                || "".equals(propertyResolver.getProperty("contextPath"))) {
+//        }else{
+//            factory.setContextPath(propertyResolver.getProperty("contextPath"));
+//
+//        }
+//
+//        factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/notfound.html"));
+////        factory.setSessionTimeout(10, TimeUnit.MINUTES);
+//        return factory;
+//    }
 
 
 

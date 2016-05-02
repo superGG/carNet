@@ -18,7 +18,6 @@ import com.earl.carnet.interceptor.SystemExceptionHandler;
 import com.earl.carnet.interceptor.ValidationInterceptor;
 
 @Configuration
-
 //@AutoConfigureAfter({BeetlSqlConfiguration.class})
 public class mvcConfiguration extends WebMvcConfigurerAdapter {
     private static Logger logger = LoggerFactory.getLogger(mvcConfiguration.class);

@@ -1,5 +1,6 @@
 package com.earl.carnet.web;
 
+import com.earl.carnet.domain.carnet.brand.Brand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,11 @@ public class BrandController extends BaseController{
 	 * GET /brand -> get all the brand
 	 */
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(value = "得到所有品牌信息", notes = "find All brand",httpMethod="GET",response=String.class)
+	@ApiOperation(value = "得到所有品牌信息", notes = "find All brand",httpMethod="GET",response=Brand.class,responseContainer = "List")
 	public ResultMessage getAll() {
 		log.debug("REST request to get all Brand");
 		result = new ResultMessage();
 		result.getResultParm().put("brand",brandService.findAll());
-		log.info(result.toJson().toString());
 		return result;
 	}
 	

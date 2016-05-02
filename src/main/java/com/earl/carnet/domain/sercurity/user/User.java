@@ -2,12 +2,15 @@ package com.earl.carnet.domain.sercurity.user;
 
 import java.io.Serializable;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import org.beetl.sql.core.annotatoin.AutoID;
 import org.beetl.sql.core.annotatoin.Table;
 
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+@ApiModel(value="SubModel")
 @JsonInclude(JsonInclude.Include.NON_NULL) //jackson 控制，放回字段为null,将被过滤
 @Table(name = "user")
 public class User extends AbstractAuditingEntity<Long> implements Serializable {
@@ -43,6 +46,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         return username;
     }
 
+//    @ApiModelProperty(value = "pet status in the store", allowableValues = "available,pending,sold")
     public void setUsername(String username) {
         this.username = username;
     }

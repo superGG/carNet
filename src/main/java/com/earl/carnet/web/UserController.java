@@ -2,6 +2,8 @@ package com.earl.carnet.web;
 
 import javax.validation.Valid;
 
+import com.wordnik.swagger.annotations.ApiImplicitParam;
+import com.wordnik.swagger.annotations.ApiImplicitParams;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -41,7 +43,7 @@ public class UserController extends BaseController {
      * GET /users -> get all the users
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "得到所有用户信息", notes = "find All User", httpMethod = "GET", response = String.class)
+    @ApiOperation(value = "得到所有用户信息", notes = "find All User", httpMethod = "GET", response = User.class,responseContainer="List")
     public ResponseEntity<ResultMessage> getAll() {
         log.debug("REST request to get all Users");
         result = new ResultMessage();
@@ -55,7 +57,10 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "得到指定用户", notes = "GET POINT USER", httpMethod = "GET", response = String.class)
     @RequestMapping(value = "/username={username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResultMessage> getUser(@PathVariable String username) {
+    public ResponseEntity<ResultMessage> getUser(
+            @ApiParam(required = true, name = "username", value = "用户昵称")
+            @PathVariable
+            String username) {
         log.info("REST request to get User : {}", username);
         result = new ResultMessage();
         User user = userService.findOneByUsername(username);
@@ -77,7 +82,18 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "添加一个用户", notes = "ADD ONE USER", httpMethod = "POST", response = String.class)
     @RequestMapping(value = "/create", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> create(User userDto) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "User's name", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "realName", value = "User's email", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "phone", value = "User ID", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "loginid", value = "User ID", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "loginid", value = "User ID", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "userImg", value = "User ID", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "safePassword", value = "User ID", required = false, dataType = "long", paramType = "query")
+    })
+    public ResponseEntity<?> create(
+            @ApiParam(required = false, name = "user", value = "这个字段不要理！！！！")
+            User userDto) {
         result = new ResultMessage();
         User user = userService.findOneByUsername(userDto.getUsername());
         if (user != null) {
@@ -95,8 +111,19 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "更新指定用户", notes = "UPDATE ONE USER", httpMethod = "POST", response = String.class)
-    @RequestMapping(value = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> update(User user) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "User's name", required = false, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "realName", value = "User's email", required = false, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "phone", value = "User ID", required = false, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "loginid", value = "User ID", required = false, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "loginid", value = "User ID", required = false, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "userImg", value = "User ID", required = false, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "safePassword", value = "User ID", required = false, dataType = "long", paramType = "query")
+    })
+    @RequestMapping(value = "/update", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> update(
+            @ApiParam(required = false, name = "user", value = "这个字段不要理！！！！")
+            User user) {
         result = new ResultMessage();
         if(userService.updateByPrimaryKeySelective(user) != 0) {
             result.setServiceResult(true);
@@ -114,7 +141,9 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "删除一个用户", notes = "DELETE ONE USER", httpMethod = "DELETE", response = String.class)
     @RequestMapping(value = "/deleteById", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteById(Long id) {
+    public ResponseEntity<?> deleteById(
+            @ApiParam(required = true, name = "id", value = "用户id")
+            Long id) {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -124,12 +153,18 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "更改用户密码", notes = "CHANGE USER PASSWORD", httpMethod = "POST", response = String.class)
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResultMessage> changePassword(String oldPassword, String Id, String newPassword) {
+    public ResponseEntity<ResultMessage> changePassword(
+            @ApiParam(required = true, name = "oldPassword", value = "旧密码")
+            String oldPassword,
+            @ApiParam(required = true, name = "id", value = "用户id")
+            String id,
+            @ApiParam(required = true, name = "newPassword", value = "新密码")
+            String newPassword) {
         if (newPassword.isEmpty() || newPassword.length() < 5
                 || newPassword.length() > 50) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        userService.changePassword(Id, oldPassword,newPassword);
+        userService.changePassword(id, oldPassword,newPassword);
         result = new ResultMessage();
         result.setResultInfo("修改密码成功");
         return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
@@ -165,7 +200,10 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "更新用户头像", notes = "loginSystem", httpMethod = "POST", response = String.class)
     @RequestMapping(value = "/updateImg", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResultMessage updateImg(MultipartFile userfile, Long id) {
+    public ResultMessage updateImg(
+            MultipartFile userfile,
+            @ApiParam(required = true, name = "id", value = "用户id")
+            Long id) {
 
         result = new ResultMessage();
         if (userService.updateImg(userfile, id)){
