@@ -3,9 +3,9 @@ package com.earl.carnet.interceptor;
 import java.beans.PropertyEditorSupport;
 
 public class StringEscapeEditor extends PropertyEditorSupport {
-	private boolean escapeHTML;
-	private boolean escapeJavaScript;
-	private boolean escapeSQL;
+//	private boolean escapeHTML;
+//	private boolean escapeJavaScript;
+//	private boolean escapeSQL;
 
 	public StringEscapeEditor() {
 		super();
@@ -14,9 +14,9 @@ public class StringEscapeEditor extends PropertyEditorSupport {
 	public StringEscapeEditor(boolean escapeHTML, boolean escapeJavaScript,
 			boolean escapeSQL) {
 		super();
-		this.escapeHTML = escapeHTML;
-		this.escapeJavaScript = escapeJavaScript;
-		this.escapeSQL = escapeSQL;
+//		this.escapeHTML = escapeHTML;
+//		this.escapeJavaScript = escapeJavaScript;
+//		this.escapeSQL = escapeSQL;
 	}
 
 	@Override

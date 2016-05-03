@@ -72,7 +72,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
         car_update.setVin(model.getVin());
         model.setId(carDao.searchAccurate(car_update).get(0).getId());
         int update = carDao.updateByPrimaryKeySelective(model);
-        if (update != 0) return result = true;
+        if (update != 0) return true;
         return result;
     }
 }

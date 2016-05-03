@@ -43,6 +43,11 @@ public class MD5Util {
             e.printStackTrace();
         }
         logger.info("退出MD5方法");
-        return buf.toString();
+        if(buf!=null){
+            return buf.toString();
+        }else {
+            return null;
+        }
+
     }
 }
