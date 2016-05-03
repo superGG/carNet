@@ -1,5 +1,7 @@
 package com.earl.carnet.application.config.beetl;
 
+import java.io.IOException;
+
 import org.beetl.core.resource.WebAppResourceLoader;
 import org.beetl.ext.spring.BeetlGroupUtilConfiguration;
 import org.beetl.ext.spring.BeetlSpringViewResolver;
@@ -10,14 +12,14 @@ import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternUtils;
 
-import java.io.IOException;
-
 @Configuration
+@Profile("demo")
 //@EnableTransactionManagement
 public class BeetlConfiguration implements EnvironmentAware {//这里继承了EnvironmentAware,自动注入env对象
 
