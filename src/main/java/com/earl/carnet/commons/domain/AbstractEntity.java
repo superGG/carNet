@@ -15,7 +15,6 @@ public abstract class AbstractEntity<T extends Serializable>  implements Identif
 
 	@Id
 	@GeneratedValue
-
 	private T id;
 
 	public T getId() {

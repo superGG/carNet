@@ -42,7 +42,7 @@ public class SwaggerConfig
     {
         ApiInfo apiInfo = new ApiInfo(
                "伯爵科技车联网工程",
-                "描述车辆玩的api文档",
+                "描述车联网的api文档",
                 "api_term",
                 "api_email",
                 "api_type",

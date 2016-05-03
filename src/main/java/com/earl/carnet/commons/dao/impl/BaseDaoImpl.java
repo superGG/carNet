@@ -24,6 +24,7 @@ import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.domain.AbstractEntity;
 import com.earl.carnet.commons.domain.DateQuery;
 import com.earl.carnet.commons.util.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
@@ -33,7 +34,7 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T>{
 //	@Resource(name = "sqlManager")
 	protected SQLManager sqlManager;
 
-	@Resource
+	@Autowired
 	public void sqlManager(SQLManager sqlManager){
 
 		this.sqlManager = sqlManager;

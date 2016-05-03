@@ -30,6 +30,7 @@
 	</properties>
 
 	<dependencies>
+		<!-- cucumber -->
 		<dependency>
 			<groupId>info.cukes</groupId>
 			<artifactId>cucumber-spring</artifactId>
@@ -47,6 +48,7 @@
 			<scope>test</scope>
 				<version>1.2.4</version>
 		</dependency>
+		<!--Swagger -->
 		<dependency>
 			<groupId>com.mangofactory</groupId>
 			<artifactId>swagger-springmvc</artifactId>
@@ -57,6 +59,7 @@
 			<artifactId>shiro-spring</artifactId>
 			<version>1.2.4</version>
 		</dependency>
+		<!-- Shiro -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-core</artifactId>
@@ -72,14 +75,16 @@
 			<artifactId>shiro-ehcache</artifactId>
 			<version>1.2.4</version>
 		</dependency>
+		<!-- gson -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
+		<!-- beelt orm,beetlSql -->
 		<dependency>
 			<groupId>com.ibeetl</groupId>
 			<artifactId>beetlsql</artifactId>
-			<version>2.1.2</version>
+			<version>2.3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -91,9 +96,9 @@
 			<artifactId>commons-beanutils</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
+			<groupId>com.squareup.okhttp</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>2.7.5</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -131,7 +136,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- myBatis -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -234,5 +238,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
 </project>
