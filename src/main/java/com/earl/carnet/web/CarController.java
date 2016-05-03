@@ -19,6 +19,8 @@ import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/car")
 //@Api(value="Person Rest Service") //修改生成的son路径
@@ -55,6 +57,22 @@ public class CarController extends BaseController {
         log.debug("REST request to get one  Car");
         result = new ResultMessage();
         result.getResultParm().put("car", carService.findOne(id));
+        return result;
+    }
+
+    /**
+     * GET /car -> get  car by userId
+     */
+    @RequestMapping(value = "/userId={userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "获取用户的所有汽车", notes = "get all car by user", httpMethod = "GET", response = String.class)
+    public ResultMessage getAllCarByUser(
+            @ApiParam(required = true, name = "userId", value = "用户id")
+            @PathVariable
+            Long userId) {
+        log.debug("REST request to get one  Car");
+        List<Car> carList = carService.getAllCarByUser(userId);
+        result = new ResultMessage();
+        result.getResultParm().put("cars",carList);
         return result;
     }
 
@@ -158,6 +176,9 @@ public class CarController extends BaseController {
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+
+
 
     /**
      * 更新汽车.

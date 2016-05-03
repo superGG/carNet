@@ -2,6 +2,7 @@ package com.earl.carnet.service.impl;
 
 import javax.annotation.Resource;
 
+import com.earl.carnet.domain.sercurity.user.User;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,8 @@ import com.earl.carnet.commons.service.BaseServiceImpl;
 import com.earl.carnet.dao.CarDao;
 import com.earl.carnet.domain.carnet.car.Car;
 import com.earl.carnet.service.CarService;
+
+import java.util.List;
 
 @Service("CarService")
 @Transactional
@@ -74,5 +77,13 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
         int update = carDao.updateByPrimaryKeySelective(model);
         if (update != 0) return true;
         return result;
+    }
+
+    @Override
+    public List<Car> getAllCarByUser(Long userId) {
+        Car car = new Car();
+        car.setUserId(userId);
+        List<Car> carList = getDao().searchQuery(car);
+        return carList;
     }
 }
