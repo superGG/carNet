@@ -38,17 +38,6 @@ public class ShiroConfiguration {
 
     public static final String PREMISSION_FORMAT = "perms[\"{0}\"]";
 
-//    @Resource
-//    public PrivilegeDao privilegeDao;
-
-//    @Resource
-//    private ShiroAuthorizingRealm realm;
-   
-//    @Bean
-//    public PrivilegeDao privilegeDao() {
-//        return new PrivilegeDaoImpl();
-//    }
-
     @Bean
     @Resource
     public ShiroFilterFactoryBean shiroFilter(PrivilegeDao privilegeDao) {
@@ -90,7 +79,6 @@ public class ShiroConfiguration {
             e.printStackTrace();
         }
 
-
         Map<String, Filter> filters = new HashMap<String, Filter>();
         filters.put("anon", new AnonymousFilter());
         filters.put("authc", new FormAuthenticationFilter());
@@ -102,8 +90,6 @@ public class ShiroConfiguration {
         System.out.println(shiroFilter.getFilters().size());
         return shiroFilter;
     }
-
-    
 
     @Bean(name = "realm")
     @DependsOn("lifecycleBeanPostProcessor")
