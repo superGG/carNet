@@ -11,4 +11,11 @@ public interface CarService extends BaseService<Car, Car> {
      * @return
      */
     int update(Car car);
+
+    /**
+     * 车架号更新车辆信息.
+     * @param vin
+     * @return
+     */
+    Boolean updateCarByVin(Car car);
 }

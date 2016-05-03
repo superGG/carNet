@@ -64,4 +64,15 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
         }
         return update;
     }
+
+    @Override
+    public Boolean updateCarByVin(Car model) {
+        Boolean result = false;
+        Car car_update = new Car();
+        car_update.setVin(model.getVin());
+        model.setId(carDao.searchAccurate(car_update).get(0).getId());
+        int update = carDao.updateByPrimaryKeySelective(model);
+        if (update != 0) return result = true;
+        return result;
+    }
 }
