@@ -1,16 +1,14 @@
 package com.earl.carnet.util;
 
+import javax.servlet.http.Part;
+
+import com.squareup.okhttp.*;
+
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 
 /**
  * @author 黄祥谦.
@@ -23,105 +21,136 @@ public class HttpBase {
 	String basePath = "http://localhost:8080/fishshop/";
 //	String basePath = "http://localhost:8082/carnettcp/";
 
-	public String sendHttpRequest(String targetURl, Part[] parts) {
-		String string = null;
+	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+	public static final MediaType MEDIA_TYPE_MARKDOWN  = MediaType.parse("text/x-markdown; charset=utf-8");
+	private static final String IMGUR_CLIENT_ID = "...";
+	private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+	OkHttpClient client = new OkHttpClient();
 
-		PostMethod filePost = new PostMethod(targetURl);
-		try {
-			HttpMethodParams params = filePost.getParams();
-			params.setContentCharset("utf-8");
-			filePost.setRequestEntity(new MultipartRequestEntity(parts,
-					filePost.getParams()));
-			HttpClient client = new HttpClient();
-			client.getHttpConnectionManager().getParams()
-					.setConnectionTimeout(50000);
-			int status = client.executeMethod(filePost);
-//			if (status == HttpStatus.SC_OK) {
-//
-//
-//			} else {
-//			}
-			InputStream in = filePost.getResponseBodyAsStream();
-			byte[] readStream = readStream(in);
-			string = new String(readStream);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			filePost.releaseConnection();
-		}
-		return string;
+	public static void main(String [] arg){
+		new HttpBase().get("http:localhost:8080/users/getAll",null);
 	}
 
-	public String sendPostRequest(String targetURL, Map<String, String> params){
-
+	public String get(String targetURl, Part[] parts) {
 		String string = null;
+		OkHttpClient client = new OkHttpClient();
+
+		MediaType mediaType = MediaType.parse("multipart/form-data; boundary=---011000010111000001101001");
+//		RequestBody body = RequestBody.create(mediaType, "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"userName\"\r\n\r\nsdfsdf\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"userSex\"\r\n\r\n男\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"userBirthday\"\r\n\r\n1994-11-19\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"userSchool\"\r\n\r\n广东海洋大学\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"userSign\"\r\n\r\nsdfsdfsdf\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"userPassword\"\r\n\r\n 123\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"userAccount\"\r\n\r\n114422\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"keyCore\"\r\n\r\n1234\r\n-----011000010111000001101001--");
+		Request request = new Request.Builder()
+		  .url("http://localhost:8080/users/getAll")
+		  .get()
+		  .addHeader("content-type", "multipart/form-data; boundary=---011000010111000001101001")
+		  .addHeader("cache-control", "no-cache")
+		  .addHeader("postman-token", "00ba3c53-9ddd-538e-e672-47f8fbf69b80")
+		  .build();
 		try {
+			Response response = client.newCall(request).execute();
+			response.body().string();
 
-		PostMethod postMethod = new PostMethod(targetURL);
-			HttpMethodParams head = postMethod.getParams();
-			head.setContentCharset("utf-8");
 
-			NameValuePair[] data = { new NameValuePair("message", "youUserName"),
-					new NameValuePair("passwd", "yourPwd") };
-			postMethod.setRequestBody(data);
-
-		HttpClient client = new HttpClient();
-		client.getHttpConnectionManager().getParams()
-				.setConnectionTimeout(50000);
-
-			int status = client.executeMethod(postMethod);
-
-		InputStream in = postMethod.getResponseBodyAsStream();
-		byte[] readStream = readStream(in);
-		string = new String(readStream);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return string;
-	}
-
-	public String sendGetHttpRequest(String targetURL,Map<String,String> params){
-
-		String string = null;
-		try {
-		GetMethod getMethod = new GetMethod(targetURL);
-
-		for (Map.Entry<String,String> param:
-				params.entrySet()) {
-			getMethod.setParams(new HttpMethodParams());
-		}
-
-
-		HttpClient client = new HttpClient();
-		client.getHttpConnectionManager().getParams()
-				.setConnectionTimeout(50000);
-
-			int status = client.executeMethod(getMethod);
-		InputStream in = getMethod.getResponseBodyAsStream();
-		byte[] readStream = readStream(in);
-		string = new String(readStream);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return string;
+		return null;
 	}
 
 	/**
-	 * 读取流
-	 *
-	 * @param inStream
-	 * @return 字节数组
-	 * @throws Exception
-	 */
-	private byte[] readStream(InputStream inStream) throws Exception {
-		ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
-		byte[] buffer = new byte[1024];
-		int len = -1;
-		while ((len = inStream.read(buffer)) != -1) {
-			outSteam.write(buffer, 0, len);
+	 * post 方式提交json数据
+	 * @param url
+	 * @param json
+	 * @return
+	 * @throws IOException
+     */
+	public String post(String url, String json) throws IOException {
+		RequestBody body = RequestBody.create(JSON, json);
+		Request request = new Request.Builder()
+				.url(url)
+				.post(body)
+				.build();
+		Response response = client.newCall(request).execute();
+		if (response.isSuccessful()) {
+			return response.body().string();
+		} else {
+			throw new IOException("Unexpected code " + response);
 		}
-		outSteam.close();
-		inStream.close();
-		return outSteam.toByteArray();
 	}
+
+
+	/**
+	 * post 方式提交纯字符串数据
+	 * @param url
+	 * @param data
+	 * @return
+	 * @throws IOException
+     */
+	String post(String url, Map<String,String> data) throws IOException {
+
+		RequestBody formBody = new FormEncodingBuilder()
+				.add("platform", "android")
+				.add("name", "bug")
+				.add("subject", "XXXXXXXXXXXXXXX")
+				.build();
+
+		Request request = new Request.Builder()
+				.url(url)
+				.post(formBody)
+				.build();
+
+		Response response = client.newCall(request).execute();
+		if (response.isSuccessful()) {
+			return response.body().string();
+		} else {
+			throw new IOException("Unexpected code " + response);
+		}
+	}
+
+	/**
+	 * post 方式提交单文件
+	 * @throws Exception
+     */
+	public void postSignalFile() throws Exception {
+		File file = new File("README.md");
+
+		Request request = new Request.Builder()
+				.url("https://api.github.com/markdown/raw")
+				.post(RequestBody.create(MEDIA_TYPE_MARKDOWN, file))
+				.build();
+
+		Response response = client.newCall(request).execute();
+		if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+		System.out.println(response.body().string());
+	}
+
+	/**
+	 * 混合表单提交
+	 * @throws Exception
+     */
+	public void mulitPart() throws Exception {
+		// Use the imgur image upload API as documented at https://api.imgur.com/endpoints/image
+		RequestBody requestBody = new MultipartBuilder()
+				.type(MultipartBuilder.FORM)
+				.addPart(
+						Headers.of("Content-Disposition", "form-data; name=\"title\""),
+						RequestBody.create(null, "Square Logo"))
+				.addPart(
+						Headers.of("Content-Disposition", "form-data; name=\"image\""),
+						RequestBody.create(MEDIA_TYPE_PNG, new File("website/static/logo-square.png")))
+				.build();
+
+		Request request = new Request.Builder()
+				.header("Authorization", "Client-ID " + IMGUR_CLIENT_ID)
+				.url("https://api.imgur.com/3/image")
+				.post(requestBody)
+				.build();
+
+		Response response = client.newCall(request).execute();
+		if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+		System.out.println(response.body().string());
+	}
+
+
+
 }
