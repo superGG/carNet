@@ -66,7 +66,7 @@ public class OrderController extends BaseController{
 			@ApiImplicitParam(name = "state", value = "订单状态", required = true, dataType = "Integer", paramType = "query")
 	})
 	public ResultMessage saveOrder(
-			@ApiParam(required = true, name = "order", value = "订单实体,这个字段不要理！！！")
+			@ApiParam(required = false, name = "order", value = "订单实体,这个字段不要理！！！")
 			Order order) throws IOException, WriterException {
 		log.info("进入controller层添加订单saveOrder方法");
 		result = new ResultMessage();

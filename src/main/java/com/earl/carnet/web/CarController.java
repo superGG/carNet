@@ -41,6 +41,7 @@ public class CarController extends BaseController {
     public ResultMessage getAll() {
         log.debug("REST request to get all Car");
         result = new ResultMessage();
+        result.setResultInfo("获取成功");
         result.getResultParm().put("car", carService.findAll());
         return result;
     }
@@ -56,6 +57,7 @@ public class CarController extends BaseController {
             Long id) {
         log.debug("REST request to get one  Car");
         result = new ResultMessage();
+        result.setResultInfo("获取成功");
         result.getResultParm().put("car", carService.findOne(id));
         return result;
     }
@@ -72,6 +74,7 @@ public class CarController extends BaseController {
         log.debug("REST request to get one  Car");
         List<Car> carList = carService.getAllCarByUser(userId);
         result = new ResultMessage();
+        result.setResultInfo("获取成功");
         result.getResultParm().put("cars",carList);
         return result;
     }
@@ -109,7 +112,7 @@ public class CarController extends BaseController {
             @ApiImplicitParam(name = "lat", value = "纬度", required = true, dataType = "double", paramType = "query")
     })
     public ResultMessage saveCar(
-            @ApiParam(required = true, name = "car", value = "车辆信息")
+            @ApiParam(required = false, name = "car", value = "车辆信息")
             Car car) {
         log.info("进入controller层添加汽车saveOrder方法");
         result = new ResultMessage();

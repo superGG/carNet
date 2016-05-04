@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.beetl.sql.core.ClasspathLoader;
+import org.beetl.sql.core.DefaultNameConversion;
 import org.beetl.sql.core.Interceptor;
 import org.beetl.sql.core.UnderlinedNameConversion;
 import org.beetl.sql.core.db.MySqlStyle;
@@ -66,7 +67,7 @@ public class BeetlSqlConfiguration implements EnvironmentAware {
 	    	factory.setCs(source);
 	    	factory.setDbStyle(new MySqlStyle());
 	    	factory.setInterceptors(new Interceptor[]{new DebugInterceptor()});
-	    	factory.setNc(new UnderlinedNameConversion());
+	    	factory.setNc(new DefaultNameConversion());
 	    	factory.setSqlLoader(new ClasspathLoader("/sql"));
 	    	return factory;
 	    }
