@@ -54,10 +54,10 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
 
 
-    @Override
-    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
-        exceptionResolvers.add(new SystemExceptionHandler());
-    }
+//    @Override
+//    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
+//        exceptionResolvers.add(new SystemExceptionHandler());
+//    }
 
 //    /**
 //     * spring boot 定时任务

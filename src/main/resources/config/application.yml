@@ -3,8 +3,8 @@ server:
   port: 8080
  # address: localhost
 #  context-path: /carnet
-  error:
-    path: /error
+#  error:
+#    path: /erro
 # DATASOURCE
 jdbc:
     dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource

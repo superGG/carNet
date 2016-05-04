@@ -20,7 +20,7 @@ import java.util.Map;
 public class ResultMessage extends JsonEntry{
 	public ResultMessage(){
 		this.resultParm = new HashMap<String, Object>();
-		this.serviceResult = true;
+		this.serviceResult = false;
 	}
 	
     /**

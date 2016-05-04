@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,22 +152,25 @@ public class UserController extends BaseController {
     /**
      * POST /change -> changes the current user's password
      */
+    @Valid
     @ApiOperation(value = "更改用户密码", notes = "CHANGE USER PASSWORD", httpMethod = "POST", response = String.class)
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultMessage> changePassword(
             @ApiParam(required = true, name = "oldPassword", value = "旧密码")
             String oldPassword,
             @ApiParam(required = true, name = "id", value = "用户id")
-            String id,
+            Long id,
             @ApiParam(required = true, name = "newPassword", value = "新密码")
+            @Length(min=5, max=30)
             String newPassword) {
-        if (newPassword.isEmpty() || newPassword.length() < 5
-                || newPassword.length() > 50) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        userService.changePassword(id, oldPassword,newPassword);
+//        if (newPassword.isEmpty() || newPassword.length() < 5
+//                || newPassword.length() > 50) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+        userService.changePassword(id, oldPassword, newPassword);
         result = new ResultMessage();
         result.setResultInfo("修改密码成功");
+        result.setServiceResult(true);
         return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
     }
 
@@ -204,7 +208,6 @@ public class UserController extends BaseController {
             MultipartFile userfile,
             @ApiParam(required = true, name = "id", value = "用户id")
             Long id) {
-
         result = new ResultMessage();
         if (userService.updateImg(userfile, id)){
             result.setResultInfo("更新用户头像成功");
