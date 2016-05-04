@@ -93,9 +93,9 @@ public class FileUploadImpl {
 		if(!newfile.exists()){
 			newfile.mkdirs();
 		}
-
+			FileOutputStream out = null;
 		try {
-			FileOutputStream out = new FileOutputStream(filePath+"//"+newName);
+			out = new FileOutputStream(filePath+"//"+newName);
 			out.write(file.getBytes());
 			out.flush();
 			out.close();
