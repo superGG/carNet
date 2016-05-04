@@ -59,10 +59,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         Boolean result = false;
         User user = new User();
         user.setId(Long.parseLong((String) Id));
-        String oldPassword_Md5 = new SimpleHash("SHA-1",oldPassword).toString();
+        String oldPassword_Md5 = new SimpleHash("SHA-1", oldPassword).toString();
         String password = userDao.searchQuery(user).get(0).getPassword();
-        if(password.equals(oldPassword_Md5)){
-            String newPassword_Md5 = new SimpleHash("SHA-1",newPassword).toString();
+        if (password.equals(oldPassword_Md5)) {
+            String newPassword_Md5 = new SimpleHash("SHA-1", newPassword).toString();
             user.setPassword(newPassword_Md5);
             userDao.updateByPrimaryKeySelective(user);
             result = true;
@@ -86,7 +86,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     }
 
     @Override
-    public Boolean updateImg(MultipartFile userfile,  Long id) {
+    public Boolean updateImg(MultipartFile userfile, Long id) {
         try {
             if (userfile == null || userfile.isEmpty()) {
                 throw new IllegalStateException("没有图片上传上来");
@@ -126,8 +126,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     public void doLogin(String username, String password) {
         // TODO 未测试.
         logger.info("进入doLogin方法");
-        String password_Md5 = new SimpleHash("SHA-1",password).toString();
-        logger.info("password_Md5:"+ password_Md5);
+        String password_Md5 = new SimpleHash("SHA-1", password).toString();
+        logger.info("password_Md5:" + password_Md5);
         SecurityUtils.getSubject().login(new UsernamePasswordToken(username, password_Md5));
         logger.info("退出doLogin方法");
     }
@@ -148,11 +148,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         logger.info("进入saveUser方法");
         Boolean result = false;
         String oldPassword = user.getPassword();
-        String newPassword = new SimpleHash("SHA-1",oldPassword).toString();
+        String newPassword = new SimpleHash("SHA-1", oldPassword).toString();
 //        String newPassword = MD5Util.md5(oldPassword);
         user.setPassword(newPassword);
         int save = userDao.insert(user);
-        if(save!=0) result = true;
+        if (save != 0) result = true;
         logger.info("退出saveUser方法");
         return result;
     }
@@ -162,8 +162,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         // TODO 未测试.
         UserQuery userQuery = new UserQuery();
         userQuery.setLoginid(loginid);
-        List<User> user =  userDao.searchQuery(userQuery);
-        if(user.isEmpty()){
+        List<User> user = userDao.searchQuery(userQuery);
+        if (user.isEmpty()) {
             return null;
         }
         return user.get(0);
@@ -176,10 +176,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         user.setLoginid(loginid);
 
         User tmpuser = userDao.findOneByLoginId(loginid);
-        if(tmpuser != null){
+        if (tmpuser != null) {
             throw new SecurityException("改账号已经被注册");
-        }else{
-            String password_Md5 = new SimpleHash("SHA-1",password).toString();
+        } else {
+            String password_Md5 = new SimpleHash("SHA-1", password).toString();
             user.setPassword(password_Md5);
             user.setUserImg("/img/userImg.jpg");
             userDao.insert(user);
@@ -188,12 +188,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     }
 
     @Override
-    public void changeRelatedPhone(String id, String newPhone, String  verifyCode) {
-    	logger.info("进入service层changeRelatedPhone方法");
+    public void changeRelatedPhone(String id, String newPhone, String verifyCode) {
+        logger.info("进入service层changeRelatedPhone方法");
         VerifyCode verifyCode_data_search = new VerifyCode(newPhone);
-        List<VerifyCode> verifyCode_data =       verifyCodeService.searchQuery(verifyCode_data_search);
-        logger.info("长度"+verifyCode_data.size());
-        if (verifyCode_data.size() !=0) {
+        List<VerifyCode> verifyCode_data = verifyCodeService.searchQuery(verifyCode_data_search);
+        if (verifyCode_data.size() != 0) {
             if (verifyCode.equals(verifyCode_data.get(0).getVerifyCode())) {
                 User user = new User();
                 user.setId(Long.parseLong(id));
@@ -209,14 +208,20 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
 
     @Override
     public void addRelatedPhone(String id, String relatedPhone, String verifyCode) {
-        VerifyCode verifyCode_data = verifyCodeService.searchQuery(new VerifyCode(relatedPhone)).get(0);
-        if (verifyCode.equals(verifyCode_data.getVerifyCode())) {
-            User user = new User();
-            user.setId(Long.parseLong(id));
-            user.setRelatedPhone(relatedPhone);
-            getDao().updateByPrimaryKeySelective(user);
+        VerifyCode verifyCode_data_search = new VerifyCode(relatedPhone);
+        List<VerifyCode> verifyCode_data = verifyCodeService.searchQuery(verifyCode_data_search);
+        if (verifyCode_data.size() != 0) {
+            if (verifyCode.equals(verifyCode_data.get(0).getVerifyCode())) {
+                User user = new User();
+                user.setId(Long.parseLong(id));
+                user.setRelatedPhone(relatedPhone);
+                getDao().updateByPrimaryKeySelective(user);
+            } else {
+                throw new SecurityException("验证码错误");
+            }
         } else {
-            throw new SecurityException("验证码错误");
+            throw new SecurityException("请重新获取验证码");
         }
     }
+
 }
