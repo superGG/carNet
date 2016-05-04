@@ -13,6 +13,7 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)//jackson 控制，放回字段为null,将被过滤
 @Table(name = "verifycode")
 public class VerifyCode  extends AbstractAuditingEntity<Long> implements Serializable{
+
     /**
      * 字段描述：Long
      * 字段类型：verifycodeId
@@ -55,6 +56,13 @@ public class VerifyCode  extends AbstractAuditingEntity<Long> implements Seriali
      * 字段类型：version
      */
     private Long version ;
+
+    public VerifyCode(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    public VerifyCode(){
+
+    }
 
     public Long getVerifycodeId() {
         return verifycodeId;

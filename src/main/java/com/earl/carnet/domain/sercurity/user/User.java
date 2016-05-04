@@ -16,19 +16,21 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     //    private Long id;
-    private String username;
+    private String username;//用户昵名
 
-    private String realName;
+    private String realName;//用户真实姓名
 
-    private String phone;
+    private String phone;//用户手机
 
-    private String loginid;
+    private String loginid;//登录账号
 
-    private String password;
+    private String password;//登陆密码
 
-    private String userImg;
+    private String userImg; //用户头像
 
-    private String safePassword;
+    private String safePassword; // 安全密码
+
+    private String relatedPhone;//绑定亲人号码
 
     private static final long serialVersionUID = 1L;
 
@@ -99,17 +101,26 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         this.safePassword = safePassword;
     }
 
+    public String getRelatedPhone() {
+        return relatedPhone;
+    }
+
+    public void setRelatedPhone(String relatedPhone) {
+        this.relatedPhone = relatedPhone;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + super.getId() +
-                ", username='" + username + '\'' +
+                "username='" + username + '\'' +
                 ", realName='" + realName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", loginid='" + loginid + '\'' +
                 ", password='" + password + '\'' +
                 ", userImg='" + userImg + '\'' +
                 ", safePassword='" + safePassword + '\'' +
+                ", relatedPhone='" + relatedPhone + '\'' +
                 '}';
     }
 }

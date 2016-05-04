@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.earl.carnet.exception.DomainSecutityException;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -17,10 +16,13 @@ import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.service.BaseServiceImpl;
 import com.earl.carnet.commons.util.FileUploadImpl;
 import com.earl.carnet.dao.UserDao;
+import com.earl.carnet.domain.carnet.VerifyCode.VerifyCode;
 import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.domain.sercurity.user.UserQuery;
+import com.earl.carnet.exception.DomainSecutityException;
 import com.earl.carnet.service.UserService;
+import com.earl.carnet.service.VerifyCodeService;
 
 @Service("userService")
 @Transactional
@@ -31,6 +33,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
 
     @Resource
     private UserDao userDao;
+
+    @Resource
+    private VerifyCodeService verifyCodeService;
 
     @Resource(name = "fileUpload")
     FileUploadImpl fileUpload;
@@ -57,8 +62,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         user.setId(Id);
         String oldPassword_Md5 = new SimpleHash("SHA-1",oldPassword).toString();
         String password = userDao.searchQuery(user).get(0).getPassword();
-        if(password.equals(oldPassword_Md5)){
-            String newPassword_Md5 = new SimpleHash("SHA-1",newPassword).toString();
+        if (password.equals(oldPassword_Md5)) {
+            String newPassword_Md5 = new SimpleHash("SHA-1", newPassword).toString();
             user.setPassword(newPassword_Md5);
             userDao.updateByPrimaryKeySelective(user);
             result = true;
@@ -82,7 +87,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     }
 
     @Override
-    public Boolean updateImg(MultipartFile userfile,  Long id) {
+    public Boolean updateImg(MultipartFile userfile, Long id) {
         try {
             if (userfile == null || userfile.isEmpty()) {
                 throw new IllegalStateException("没有图片上传上来");
@@ -122,8 +127,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     public void doLogin(String username, String password) {
         // TODO 未测试.
         logger.info("进入doLogin方法");
-        String password_Md5 = new SimpleHash("SHA-1",password).toString();
-        logger.info("password_Md5:"+ password_Md5);
+        String password_Md5 = new SimpleHash("SHA-1", password).toString();
+        logger.info("password_Md5:" + password_Md5);
         SecurityUtils.getSubject().login(new UsernamePasswordToken(username, password_Md5));
         logger.info("退出doLogin方法");
     }
@@ -144,11 +149,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         logger.info("进入saveUser方法");
         Boolean result = false;
         String oldPassword = user.getPassword();
-        String newPassword = new SimpleHash("SHA-1",oldPassword).toString();
+        String newPassword = new SimpleHash("SHA-1", oldPassword).toString();
 //        String newPassword = MD5Util.md5(oldPassword);
         user.setPassword(newPassword);
         int save = userDao.insert(user);
-        if(save!=0) result = true;
+        if (save != 0) result = true;
         logger.info("退出saveUser方法");
         return result;
     }
@@ -158,8 +163,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         // TODO 未测试.
         UserQuery userQuery = new UserQuery();
         userQuery.setLoginid(loginid);
-        List<User> user =  userDao.searchQuery(userQuery);
-        if(user.isEmpty()){
+        List<User> user = userDao.searchQuery(userQuery);
+        if (user.isEmpty()) {
             return null;
         }
         return user.get(0);
@@ -182,4 +187,42 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         }
         logger.info("退出用户注册registerAccount方法");
     }
+
+    @Override
+    public void changeRelatedPhone(String id, String newPhone, String verifyCode) {
+        logger.info("进入service层changeRelatedPhone方法");
+        VerifyCode verifyCode_data_search = new VerifyCode(newPhone);
+        List<VerifyCode> verifyCode_data = verifyCodeService.searchQuery(verifyCode_data_search);
+        if (verifyCode_data.size() != 0) {
+            if (verifyCode.equals(verifyCode_data.get(0).getVerifyCode())) {
+                User user = new User();
+                user.setId(Long.parseLong(id));
+                user.setRelatedPhone(newPhone);
+                getDao().updateByPrimaryKeySelective(user);
+            } else {
+                throw new SecurityException("验证码错误");
+            }
+        } else {
+            throw new SecurityException("请重新获取验证码");
+        }
+    }
+
+    @Override
+    public void addRelatedPhone(String id, String relatedPhone, String verifyCode) {
+        VerifyCode verifyCode_data_search = new VerifyCode(relatedPhone);
+        List<VerifyCode> verifyCode_data = verifyCodeService.searchQuery(verifyCode_data_search);
+        if (verifyCode_data.size() != 0) {
+            if (verifyCode.equals(verifyCode_data.get(0).getVerifyCode())) {
+                User user = new User();
+                user.setId(Long.parseLong(id));
+                user.setRelatedPhone(relatedPhone);
+                getDao().updateByPrimaryKeySelective(user);
+            } else {
+                throw new SecurityException("验证码错误");
+            }
+        } else {
+            throw new SecurityException("请重新获取验证码");
+        }
+    }
+
 }

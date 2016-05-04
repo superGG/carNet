@@ -78,4 +78,20 @@ public interface UserService extends BaseService<User, UserQuery> {
 	 * @param password
      */
 	void registerAccount(String loginid, String password);
+
+	/**
+	 * 修改亲人号码.
+	 * @param s
+	 * @param id
+	 * @param newPhone
+	 */
+	void changeRelatedPhone(String verifyCode, String id, String newPhone);
+
+	/**
+	 * 绑定亲人号码.
+	 * @param id
+	 * @param relatedPhone
+	 * @param verifyCode
+     */
+	void addRelatedPhone(String id, String relatedPhone, String verifyCode);
 }
