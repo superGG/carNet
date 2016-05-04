@@ -52,6 +52,9 @@ public class SmsbaoHelper {
 		if ((line = reader.readLine()) != null) {
 			result = Integer.valueOf(line);
 		}
+
+		urlConnection.getInputStream().close();
+
 		return result;
 	}
 
@@ -113,7 +116,11 @@ public class SmsbaoHelper {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		return buf.toString();
+		if(buf!=null){
+			return buf.toString();
+		}else {
+			return null;
+		}
 	}
 
 }

@@ -93,15 +93,16 @@ public class FileUploadImpl {
 		if(!newfile.exists()){
 			newfile.mkdirs();
 		}
-
+			FileOutputStream out = null;
 		try {
-			FileOutputStream out = new FileOutputStream(filePath+"//"+newName);
+			out = new FileOutputStream(filePath+"//"+newName);
 			out.write(file.getBytes());
 			out.flush();
 			out.close();
 		} catch (IOException e) {
 			logger.info("图片写入文件失败");
 			e.printStackTrace();
+			return null;
 		}
 		logger.info("上传图片地址：" + dir + newName);
 		logger.info("退出图片上传uploadFile方法");

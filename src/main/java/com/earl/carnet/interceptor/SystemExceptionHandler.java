@@ -58,11 +58,11 @@ public class SystemExceptionHandler implements HandlerExceptionResolver {
 		resultMessage.setServiceResult(false);
 		try {
 			out = response.getWriter();
+			out.println(resultMessage.toJson());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		out.println(resultMessage.toJson());
 		//注掉这个，后台不会报out.getWriter is ...异常
 //		out.flush();
 //		out.close();
