@@ -170,6 +170,52 @@ public class UserController extends BaseController {
         return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
     }
 
+
+    /**
+     * POST /change -> changes the current user's relatedPhone
+     */
+    @RequestMapping(value = "/changeRelatedPhone", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResultMessage> changeRelatedPhone(
+            @ApiParam(required = true, name = "id", value = "用户id")
+            String id,
+            @ApiParam(required = true, name = "verifyCode", value = "验证码")
+            String verifyCode,
+            @ApiParam(required = true, name = "newPhone", value = "新号码")
+            String newPhone) {
+        if (newPhone.isEmpty() || newPhone.length() < 5
+                || newPhone.length() > 15) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        userService.changeRelatedPhone(id, newPhone,verifyCode);
+        result = new ResultMessage();
+        result.setResultInfo("修改亲人号码成功");
+        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
+    }
+
+    /**
+     * POST /save -> add the current user's relatedPhone
+     */
+    @RequestMapping(value = "/addRelatedPhone", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResultMessage> addRelatedPhone(
+            @ApiParam(required = true, name = "id", value = "用户id")
+            String id,
+            @ApiParam(required = true, name = "verifyCode", value = "验证码")
+            String verifyCode,
+            @ApiParam(required = true, name = "relatedPhone", value = "亲人号码")
+            String relatedPhone) {
+        if (relatedPhone.isEmpty() || relatedPhone.length() < 5
+                || relatedPhone.length() > 15) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        userService.addRelatedPhone(id, relatedPhone,verifyCode);
+        result = new ResultMessage();
+        result.setResultInfo("添加亲人号码成功");
+        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
+    }
+
+
+
+
     /**
      * 用户登录
      * @param loginid

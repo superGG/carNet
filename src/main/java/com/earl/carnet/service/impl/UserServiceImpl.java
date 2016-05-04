@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.earl.carnet.domain.carnet.VerifyCode.VerifyCode;
+import com.earl.carnet.service.VerifyCodeService;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -30,6 +32,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
 
     @Resource
     private UserDao userDao;
+
+    @Resource
+    private VerifyCodeService verifyCodeService;
 
     @Resource(name = "fileUpload")
     FileUploadImpl fileUpload;
@@ -180,5 +185,38 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
             userDao.insert(user);
         }
         logger.info("退出用户注册registerAccount方法");
+    }
+
+    @Override
+    public void changeRelatedPhone(String id, String newPhone, String  verifyCode) {
+    	logger.info("进入service层changeRelatedPhone方法");
+        VerifyCode verifyCode_data_search = new VerifyCode(newPhone);
+        List<VerifyCode> verifyCode_data =       verifyCodeService.searchQuery(verifyCode_data_search);
+        logger.info("长度"+verifyCode_data.size());
+        if (verifyCode_data.size() !=0) {
+            if (verifyCode.equals(verifyCode_data.get(0).getVerifyCode())) {
+                User user = new User();
+                user.setId(Long.parseLong(id));
+                user.setRelatedPhone(newPhone);
+                getDao().updateByPrimaryKeySelective(user);
+            } else {
+                throw new SecurityException("验证码错误");
+            }
+        } else {
+            throw new SecurityException("请重新获取验证码");
+        }
+    }
+
+    @Override
+    public void addRelatedPhone(String id, String relatedPhone, String verifyCode) {
+        VerifyCode verifyCode_data = verifyCodeService.searchQuery(new VerifyCode(relatedPhone)).get(0);
+        if (verifyCode.equals(verifyCode_data.getVerifyCode())) {
+            User user = new User();
+            user.setId(Long.parseLong(id));
+            user.setRelatedPhone(relatedPhone);
+            getDao().updateByPrimaryKeySelective(user);
+        } else {
+            throw new SecurityException("验证码错误");
+        }
     }
 }
