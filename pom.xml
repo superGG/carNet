@@ -30,6 +30,12 @@
 	</properties>
 
 	<dependencies>
+	<!-- jpush 极光推送 -->
+		<dependency>
+		<groupId>cn.jpush.api</groupId>
+		<artifactId>jpush-client</artifactId>
+		<version>3.2.9</version>
+	</dependency>
 		<!-- cucumber -->
 		<dependency>
 			<groupId>info.cukes</groupId>

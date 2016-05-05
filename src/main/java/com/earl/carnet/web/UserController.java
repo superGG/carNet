@@ -43,7 +43,7 @@ public class UserController extends BaseController {
     /**
      * GET /users -> get all the users
      */
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/getAlls", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "得到所有用户信息", notes = "find All User", httpMethod = "GET", response = User.class,responseContainer="List")
     public ResponseEntity<ResultMessage> getAll() {
         log.debug("REST request to get all Users");

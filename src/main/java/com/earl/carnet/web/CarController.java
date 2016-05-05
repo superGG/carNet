@@ -90,15 +90,15 @@ public class CarController extends BaseController {
             @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "mark", value = "品牌标志", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "brand", value = "品牌", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "models", value = "品牌型号", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "models", value = "品牌型号", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "plateNumber", value = "车牌号码", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "vin", value = "车牌号", required = true, dataType = "long", paramType = "query"),
-            @ApiImplicitParam(name = "engineNumber", value = "发动机型号", required = true, dataType = "long", paramType = "query"),
-            @ApiImplicitParam(name = "rank", value = "车身等级", required = true, dataType = "long", paramType = "query"),
-            @ApiImplicitParam(name = "mileage", value = "里程数", required = true, dataType = "long", paramType = "query"),
-            @ApiImplicitParam(name = "oilBox", value = "油箱容积", required = true, dataType = "long", paramType = "query"),
-            @ApiImplicitParam(name = "oil", value = "当前油量", required = true, dataType = "byte", paramType = "query"),
-            @ApiImplicitParam(name = "temperature", value = "温度", required = true, dataType = "byte", paramType = "query"),
+            @ApiImplicitParam(name = "vin", value = "车架号", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "engineNumber", value = "发动机型号", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "rank", value = "车身等级", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "mileage", value = "里程数", required = true, dataType = "double", paramType = "query"),
+            @ApiImplicitParam(name = "oilBox", value = "油箱容积", required = true, dataType = "double", paramType = "query"),
+            @ApiImplicitParam(name = "oil", value = "当前油量", required = true, dataType = "double", paramType = "query"),
+            @ApiImplicitParam(name = "temperature", value = "温度", required = true, dataType = "double", paramType = "query"),
             @ApiImplicitParam(name = "engineProperty", value = "发动机性能", required = true, dataType = "byte", paramType = "query"),
             @ApiImplicitParam(name = "transmission", value = "变速器性能", required = true, dataType = "byte", paramType = "query"),
             @ApiImplicitParam(name = "carLight", value = "车灯性能", required = true, dataType = "byte", paramType = "query"),
@@ -144,10 +144,10 @@ public class CarController extends BaseController {
             @ApiImplicitParam(name = "userId", value = "用户id", required = false, dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "mark", value = "品牌标志", required = false, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "brand", value = "品牌", required = false, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "models", value = "品牌型号", required = false, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "models", value = "品牌型号", required = false, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "plateNumber", value = "车牌号码", required = false, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "vin", value = "车牌号", required = false, dataType = "long", paramType = "query"),
-            @ApiImplicitParam(name = "engineNumber", value = "发动机型号", required = false, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "vin", value = "车牌号", required = false, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "engineNumber", value = "发动机型号", required = false, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "rank", value = "车身等级", required = false, dataType = "long", paramType = "query"),
             @ApiImplicitParam(name = "mileage", value = "里程数", required = false, dataType = "long", paramType = "query"),
             @ApiImplicitParam(name = "oilBox", value = "油箱容积", required = false, dataType = "long", paramType = "query"),
@@ -166,13 +166,12 @@ public class CarController extends BaseController {
             @ApiImplicitParam(name = "lat", value = "纬度", required = false, dataType = "double", paramType = "query")
     })
     public ResponseEntity<?> update(
-            @ApiParam(required = true, name = "car", value = "车辆实体,不要理这个字段！！！")
+            @ApiParam(required = false, name = "car", value = "车辆实体,不要理这个字段！！！")
             Car car) {
         log.info("进入controller层更新汽车update方法");
         result = new ResultMessage();
         if (carService.update(car) != 0) {
             result.getResultParm().put("car", carService.findOne(car.getId()));
-            result.setServiceResult(true);
         } else {
             result.setServiceResult(false);
             result.setResultInfo("更新失败");
@@ -195,7 +194,6 @@ public class CarController extends BaseController {
         Boolean update = carService.updateCarByVin(car);
         if (update) {
             result.setResultInfo("更新成功");
-            result.setServiceResult(true);
         } else {
             result.setServiceResult(false);
             result.setResultInfo("更新失败");
