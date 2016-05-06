@@ -27,4 +27,11 @@ public interface CarService extends BaseService<Car, Car> {
      * @return
      */
     List<Car> getAllCarByUser(Long userId);
+
+    /**
+     * 添加车辆.
+     * @param car
+     * @return
+     */
+    int saveCar(Car car);
 }

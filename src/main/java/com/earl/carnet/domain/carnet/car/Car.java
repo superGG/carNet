@@ -1,13 +1,11 @@
 package com.earl.carnet.domain.carnet.car;
 
-import java.io.Serializable;
-
-import javax.persistence.Table;
-
-import org.beetl.sql.core.annotatoin.AutoID;
-
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.beetl.sql.core.annotatoin.AutoID;
+
+import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 汽车信息尸体类.
@@ -41,15 +39,15 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
 
     private Double temperature;//温度
 
-    private Byte engineProperty ;//发动机性能
+    private Boolean engineProperty ;//发动机性能
 
-    private Byte transmission;//变速器性能
+    private Boolean transmission;//变速器性能
 
-    private Byte carLight;//车灯性能
+    private Boolean carLight;//车灯性能
 
-    private Byte carState;//车状态
+    private Boolean carState;//车状态
     
-    private Byte carAlarm;//车警报
+    private Boolean carAlarm;//车警报
     
     private Boolean alarmMessage ;//是否发送警报信息
     
@@ -174,11 +172,11 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
     }
 
 
-    public Byte getTransmission() {
+    public Boolean getTransmission() {
         return transmission;
     }
 
-    public void setTransmission(Byte transmission) {
+    public void setTransmission(Boolean transmission) {
         this.transmission = transmission;
     }
 
@@ -190,19 +188,19 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.engineNumber = engineNumber;
     }
 
-    public Byte getEngineProperty() {
+    public Boolean getEngineProperty() {
         return engineProperty;
     }
 
-    public void setEngineProperty(Byte engineProperty) {
+    public void setEngineProperty(Boolean engineProperty) {
         this.engineProperty = engineProperty;
     }
 
-    public Byte getCarLight() {
+    public Boolean getCarLight() {
         return carLight;
     }
 
-    public void setCarLight(Byte carLight) {
+    public void setCarLight(Boolean carLight) {
         this.carLight = carLight;
     }
 
@@ -223,19 +221,19 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
     }
 
 
-    public Byte getCarState() {
+    public Boolean getCarState() {
         return carState;
     }
 
-    public void setCarState(Byte carState) {
+    public void setCarState(Boolean carState) {
         this.carState = carState;
     }
 
-    public Byte getCarAlarm() {
+    public Boolean getCarAlarm() {
         return carAlarm;
     }
 
-    public void setCarAlarm(Byte carAlarm) {
+    public void setCarAlarm(Boolean carAlarm) {
         this.carAlarm = carAlarm;
     }
 
