@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.earl.carnet.domain.carnet.VerifyCode.VerifyCode;
-import com.earl.carnet.service.VerifyCodeService;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -18,10 +16,13 @@ import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.service.BaseServiceImpl;
 import com.earl.carnet.commons.util.FileUploadImpl;
 import com.earl.carnet.dao.UserDao;
+import com.earl.carnet.domain.carnet.VerifyCode.VerifyCode;
 import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.domain.sercurity.user.UserQuery;
+import com.earl.carnet.exception.DomainSecutityException;
 import com.earl.carnet.service.UserService;
+import com.earl.carnet.service.VerifyCodeService;
 
 @Service("userService")
 @Transactional
@@ -53,13 +54,13 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     }
 
     @Override
-    public Boolean changePassword(Object Id, String oldPassword, String newPassword) {
+    public Boolean changePassword(Long Id, String oldPassword, String newPassword) {
         // TODO 未测试.
         logger.info("进入修改密码changePassword方法");
         Boolean result = false;
         User user = new User();
-        user.setId(Long.parseLong((String) Id));
-        String oldPassword_Md5 = new SimpleHash("SHA-1", oldPassword).toString();
+        user.setId(Id);
+        String oldPassword_Md5 = new SimpleHash("SHA-1",oldPassword).toString();
         String password = userDao.searchQuery(user).get(0).getPassword();
         if (password.equals(oldPassword_Md5)) {
             String newPassword_Md5 = new SimpleHash("SHA-1", newPassword).toString();
@@ -67,7 +68,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
             userDao.updateByPrimaryKeySelective(user);
             result = true;
         } else {
-            throw new IllegalStateException("旧密码错误");
+            throw new DomainSecutityException("旧密码错误");
         }
         logger.info("退出修改密码changePassword方法");
         return result;
@@ -176,10 +177,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         user.setLoginid(loginid);
 
         User tmpuser = userDao.findOneByLoginId(loginid);
-        if (tmpuser != null) {
-            throw new SecurityException("改账号已经被注册");
-        } else {
-            String password_Md5 = new SimpleHash("SHA-1", password).toString();
+        if(tmpuser != null){
+            throw new SecurityException("该账号已经被注册");
+        }else{
+            String password_Md5 = new SimpleHash("SHA-1",password).toString();
             user.setPassword(password_Md5);
             user.setUserImg("/img/userImg.jpg");
             userDao.insert(user);

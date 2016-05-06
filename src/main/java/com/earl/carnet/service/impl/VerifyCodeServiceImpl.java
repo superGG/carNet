@@ -107,8 +107,4 @@ public class VerifyCodeServiceImpl extends BaseServiceImpl<VerifyCode,VerifyCode
         }
 
     }
-
-
-
-
 }

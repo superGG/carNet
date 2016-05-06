@@ -84,7 +84,7 @@ public class HttpBase {
 	 * @return
 	 * @throws IOException
      */
-	String post(String url, Map<String,String> data) throws IOException {
+	String post(String url, Map<String,String> data,Map<String,String> header) throws IOException {
 
 		RequestBody formBody = new FormEncodingBuilder()
 				.add("platform", "android")
@@ -94,6 +94,7 @@ public class HttpBase {
 
 		Request request = new Request.Builder()
 				.url(url)
+//				.header()
 				.post(formBody)
 				.build();
 
@@ -150,7 +151,4 @@ public class HttpBase {
 
 		System.out.println(response.body().string());
 	}
-
-
-
 }

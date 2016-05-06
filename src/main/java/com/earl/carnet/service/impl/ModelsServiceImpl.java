@@ -35,5 +35,4 @@ public class ModelsServiceImpl extends BaseServiceImpl<Models,Models>
         models.setBrandId(brandId);
         return modelsDao.searchQuery(models);
     }
-
 }

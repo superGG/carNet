@@ -20,7 +20,7 @@ public interface UserService extends BaseService<User, UserQuery> {
 	 * @param newPassword
      * @return
      */
-	Boolean changePassword(Object Id,String oldPassord, String newPassword);
+	Boolean changePassword(Long Id,String oldPassord, String newPassword);
 
 	/**
 	 * 查找用户拥有的角色
