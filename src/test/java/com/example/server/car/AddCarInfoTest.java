@@ -47,12 +47,12 @@ public class AddCarInfoTest {
         car.setRank("2门");
         car.setMileage(1000d);
         car.setOilBox(1000d);
-        car.setCarState((byte) 1);
+        car.setCarState(true);
         car.setAlarmMessage(true);
         car.setTemperature(1000d);
-        car.setEngineProperty((byte) 1);
-        car.setCarLight((byte) 1);
-        car.setTransmission((byte) 1);
+        car.setEngineProperty(false);
+        car.setCarLight(true);
+        car.setTransmission(false);
     }
 
     @并且("^服务器(不存在)?相同的车辆信息")
