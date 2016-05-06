@@ -1,5 +1,7 @@
 package com.earl.carnet.commons.dao;
 
+import com.earl.carnet.domain.carnet.car.Car;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -136,4 +138,11 @@ public interface BaseDao<T extends Serializable > {
 	void deleteByQuery(Object queryObject);
 
 
+	/**
+	 * 更新与数据库不相同的属性.
+	 * @param model 需要更新的对象.
+	 * @param model_data 相应的数据库对象
+     * @return
+     */
+	int updateByNotSameParam(Object model, Object model_data);
 }

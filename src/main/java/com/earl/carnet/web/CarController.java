@@ -92,18 +92,18 @@ public class CarController extends BaseController {
             @ApiImplicitParam(name = "brand", value = "品牌", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "models", value = "品牌型号", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "plateNumber", value = "车牌号码", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "vin", value = "车架号", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "engineNumber", value = "发动机型号", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "rank", value = "车身等级", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "mileage", value = "里程数", required = true, dataType = "double", paramType = "query"),
-            @ApiImplicitParam(name = "oilBox", value = "油箱容积", required = true, dataType = "double", paramType = "query"),
-            @ApiImplicitParam(name = "oil", value = "当前油量", required = true, dataType = "double", paramType = "query"),
-            @ApiImplicitParam(name = "temperature", value = "温度", required = true, dataType = "double", paramType = "query"),
-            @ApiImplicitParam(name = "engineProperty", value = "发动机性能", required = true, dataType = "byte", paramType = "query"),
-            @ApiImplicitParam(name = "transmission", value = "变速器性能", required = true, dataType = "byte", paramType = "query"),
-            @ApiImplicitParam(name = "carLight", value = "车灯性能", required = true, dataType = "byte", paramType = "query"),
-            @ApiImplicitParam(name = "carState", value = "车状态", required = true, dataType = "byte", paramType = "query"),
-            @ApiImplicitParam(name = "carAlarm", value = "车警报", required = true, dataType = "byte", paramType = "query"),
+            @ApiImplicitParam(name = "vin", value = "车牌号", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "engineNumber", value = "发动机型号", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "rank", value = "车身等级", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "mileage", value = "里程数", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "oilBox", value = "油箱容积", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "oil", value = "当前油量", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "temperature", value = "温度", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "engineProperty", value = "发动机性能", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "transmission", value = "变速器性能", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "carLight", value = "车灯性能", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "carState", value = "车状态", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "carAlarm", value = "车警报", required = true, dataType = "boolean", paramType = "query"),
             @ApiImplicitParam(name = "alarmMessage", value = "是否发送警报信息", required = true, dataType = "boolean", paramType = "query"),
             @ApiImplicitParam(name = "propertyMessage", value = "是否发送行性能信息", required = true, dataType = "boolean", paramType = "query"),
             @ApiImplicitParam(name = "stateMessage", value = "是否发送车状态信息", required = true, dataType = "boolean", paramType = "query"),
@@ -111,16 +111,16 @@ public class CarController extends BaseController {
             @ApiImplicitParam(name = "lon", value = "经度", required = true, dataType = "double", paramType = "query"),
             @ApiImplicitParam(name = "lat", value = "纬度", required = true, dataType = "double", paramType = "query")
     })
-    public ResultMessage saveCar(
-            @ApiParam(required = false, name = "car", value = "车辆信息")
+    public ResponseEntity<ResultMessage> saveCar(
+            @ApiParam(required = true, name = "car", value = "车辆信息")
             Car car) {
+        if( car.getVin() == null || car.getVin().equals("")){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         log.info("进入controller层添加汽车saveOrder方法");
         result = new ResultMessage();
         //设置默认值
-        car.setAlarmMessage(true);
-        car.setStateMessage(true);
-        car.setPropertyMessage(true);
-        int id = carService.insertBackId(car);
+        int id = carService.saveCar(car);
         if (id != 0) {
             Car newCar = carService.findOne(id);
             result.getResultParm().put("car", newCar);
@@ -130,7 +130,7 @@ public class CarController extends BaseController {
             result.setResultInfo("添加汽车失败");
             result.setServiceResult(false);
         }
-        return result;
+        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
     }
 
     /**
@@ -151,13 +151,13 @@ public class CarController extends BaseController {
             @ApiImplicitParam(name = "rank", value = "车身等级", required = false, dataType = "long", paramType = "query"),
             @ApiImplicitParam(name = "mileage", value = "里程数", required = false, dataType = "long", paramType = "query"),
             @ApiImplicitParam(name = "oilBox", value = "油箱容积", required = false, dataType = "long", paramType = "query"),
-            @ApiImplicitParam(name = "oil", value = "当前油量", required = false, dataType = "byte", paramType = "query"),
-            @ApiImplicitParam(name = "temperature", value = "温度", required = false, dataType = "byte", paramType = "query"),
-            @ApiImplicitParam(name = "engineProperty", value = "发动机性能", required = false, dataType = "byte", paramType = "query"),
-            @ApiImplicitParam(name = "transmission", value = "变速器性能", required = false, dataType = "byte", paramType = "query"),
-            @ApiImplicitParam(name = "carLight", value = "车灯性能", required = false, dataType = "byte", paramType = "query"),
-            @ApiImplicitParam(name = "carState", value = "车状态", required = false, dataType = "byte", paramType = "query"),
-            @ApiImplicitParam(name = "carAlarm", value = "车警报", required = false, dataType = "byte", paramType = "query"),
+            @ApiImplicitParam(name = "oil", value = "当前油量", required = false, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "temperature", value = "温度", required = false, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "engineProperty", value = "发动机性能", required = false, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "transmission", value = "变速器性能", required = false, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "carLight", value = "车灯性能", required = false, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "carState", value = "车状态", required = false, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "carAlarm", value = "车警报", required = false, dataType = "boolean", paramType = "query"),
             @ApiImplicitParam(name = "alarmMessage", value = "是否发送警报信息", required = false, dataType = "boolean", paramType = "query"),
             @ApiImplicitParam(name = "propertyMessage", value = "是否发送行性能信息", required = false, dataType = "boolean", paramType = "query"),
             @ApiImplicitParam(name = "stateMessage", value = "是否发送车状态信息", required = false, dataType = "boolean", paramType = "query"),
