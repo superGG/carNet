@@ -127,7 +127,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
             if (!model.getCarLight() && model.getPropertyMessage()){     // 车灯坏了
                 //TODO  发送信息通知车主
                 logger.info("车灯坏了");
-                JPushUtil.sendPush_Alias(model.getUserId().toString(),"车灯坏了");
+                JPushUtil.sendPush_Alias("user1","车灯坏了");
             }
         }
     }
