@@ -55,9 +55,10 @@ public class AddCarInfoTest {
         car.setTransmission(true);
     }
 
-    @并且("^服务器(不存在)?相同的车辆信息")
+    @并且("^服务器(.*)相同的车辆信息")
     public void findnocar(String exits){
 //            throw new ApplicationException("未实现");
+
         System.out.println("sldfj");
     }
 

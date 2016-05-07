@@ -94,6 +94,7 @@ public class UserController extends BaseController {
     })
     public ResponseEntity<?> create(
             @ApiParam(required = false, name = "user", value = "这个字段不要理！！！！")
+            @RequestParam(name = "userDto", required = false)
             User userDto) {
         result = new ResultMessage();
         User user = userService.findOneByUsername(userDto.getUsername());
@@ -124,6 +125,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
             @ApiParam(required = false, name = "user", value = "这个字段不要理！！！！")
+            @RequestParam(name = "user", required = false)
             User user) {
         result = new ResultMessage();
         if(userService.updateByPrimaryKeySelective(user) != 0) {
@@ -144,6 +146,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/deleteById", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteById(
             @ApiParam(required = true, name = "id", value = "用户id")
+            @RequestParam(name = "id", required = true)
             Long id) {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -157,10 +160,13 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultMessage> changePassword(
             @ApiParam(required = true, name = "oldPassword", value = "旧密码")
+            @RequestParam(name = "oldPassword", required = true)
             String oldPassword,
             @ApiParam(required = true, name = "id", value = "用户id")
+            @RequestParam(name = "id", required = true)
             Long id,
             @ApiParam(required = true, name = "newPassword", value = "新密码")
+            @RequestParam(name = "newPassword", required = true)
             @Length(min=5, max=30)
             String newPassword) {
 //        if (newPassword.isEmpty() || newPassword.length() < 5
@@ -178,13 +184,17 @@ public class UserController extends BaseController {
     /**
      * POST /change -> changes the current user's relatedPhone
      */
+    @ApiOperation(value = "更改用户密码", notes = "CHANGE USER PASSWORD", httpMethod = "POST", response = ResultMessage.class)
     @RequestMapping(value = "/changeRelatedPhone", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultMessage> changeRelatedPhone(
             @ApiParam(required = true, name = "id", value = "用户id")
+            @RequestParam(name = "id", required = true)
             String id,
             @ApiParam(required = true, name = "verifyCode", value = "验证码")
+            @RequestParam(name = "verifyCode", required = true)
             String verifyCode,
             @ApiParam(required = true, name = "newPhone", value = "新号码")
+            @RequestParam(name = "newPhone", required = true)
             String newPhone) {
         if (newPhone.isEmpty() || newPhone.length() < 5
                 || newPhone.length() > 15) {
@@ -202,10 +212,13 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/addRelatedPhone", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultMessage> addRelatedPhone(
             @ApiParam(required = true, name = "id", value = "用户id")
+            @RequestParam(name = "id", required = true)
             String id,
             @ApiParam(required = true, name = "verifyCode", value = "验证码")
+            @RequestParam(name = "verifyCode", required = true)
             String verifyCode,
             @ApiParam(required = true, name = "relatedPhone", value = "亲人号码")
+            @RequestParam(name = "relatedPhone", required = true)
             String relatedPhone) {
         if (relatedPhone.isEmpty() || relatedPhone.length() < 5
                 || relatedPhone.length() > 15) {
