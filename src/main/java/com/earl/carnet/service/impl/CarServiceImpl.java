@@ -1,9 +1,9 @@
 package com.earl.carnet.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
-import com.earl.carnet.commons.util.JPushUtil;
-import com.earl.carnet.domain.sercurity.user.User;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +13,8 @@ import com.earl.carnet.commons.service.BaseServiceImpl;
 import com.earl.carnet.dao.CarDao;
 import com.earl.carnet.domain.carnet.car.Car;
 import com.earl.carnet.service.CarService;
-
-import java.util.List;
+import com.earl.carnet.util.JPushForCar;
+import com.earl.carnet.util.JPushForUser;
 
 @Service("CarService")
 @Transactional
@@ -26,6 +26,12 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
     @Resource
     CarDao carDao;
 
+    @Resource
+    JPushForUser jpushForUser;
+    
+    @Resource
+    JPushForCar jpushForCar;
+    
     @Override
     protected BaseDao<Car> getDao() {
         return carDao;
@@ -55,7 +61,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
             monitorTemperature(model,model_data);//温度
             monitorTransmission(model,model_data);//转速器
             int update = carDao.updateByPrimaryKeySelective(model);
-//            int update = carDao.updateByNotSameParam(model,model_data);
+//          int update = carDao.updateByNotSameParam(model,model_data);
             return true;
         }
         return result;
@@ -127,7 +133,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
             if (!model.getCarLight() && model.getPropertyMessage()){     // 车灯坏了
                 //TODO  发送信息通知车主
                 logger.info("车灯坏了");
-                JPushUtil.sendPush_Alias(model.getUserId().toString(),"车灯坏了");
+                jpushForUser.sendPush_Alias(model.getUserId().toString(),"车灯坏了");
             }
         }
     }
