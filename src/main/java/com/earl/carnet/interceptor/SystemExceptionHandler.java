@@ -11,9 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-import com.earl.carnet.exception.ApplicationException;
-import com.earl.carnet.exception.DomainSecutityException;
-import com.sun.org.apache.xpath.internal.SourceTree;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -24,6 +21,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.exception.ApplicationException;
+import com.earl.carnet.exception.DomainSecutityException;
 
 @ControllerAdvice
 public class SystemExceptionHandler implements HandlerExceptionResolver {
@@ -64,11 +63,11 @@ public class SystemExceptionHandler implements HandlerExceptionResolver {
 			resultMessage.setResultInfo(builder.toString());
 		} else if (ex instanceof IncorrectCredentialsException) {
 			resultMessage.setResultInfo("用户名密码不正确");
-			resultMessage.setServiceResult(true);
+			resultMessage.setServiceResult(false);
 			logger.info("resultMessage =>" + resultMessage.toJson());
 		} else if (ex instanceof UnknownAccountException) {
 			resultMessage.setResultInfo("用户名密码不正确");
-			resultMessage.setServiceResult(true);
+			resultMessage.setServiceResult(false);
 			logger.info("resultMessage => " + resultMessage.toJson());
 		} else {
 			resultMessage.setResultInfo("系统出错");

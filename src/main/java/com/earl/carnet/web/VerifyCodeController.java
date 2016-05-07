@@ -1,9 +1,6 @@
 package com.earl.carnet.web;
 
-import com.earl.carnet.commons.vo.ResultMessage;
-import com.earl.carnet.domain.carnet.VerifyCode.VerifyCode;
-import com.earl.carnet.service.VerifyCodeService;
-import com.wordnik.swagger.annotations.ApiOperation;
+import java.io.UnsupportedEncodingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.UnsupportedEncodingException;
+import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.service.VerifyCodeService;
+import com.wordnik.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping(value = "/verifyCode")
