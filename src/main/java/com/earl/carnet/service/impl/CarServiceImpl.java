@@ -2,6 +2,7 @@ package com.earl.carnet.service.impl;
 
 import javax.annotation.Resource;
 
+import com.earl.carnet.commons.util.JPushUtil;
 import com.earl.carnet.domain.sercurity.user.User;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -32,39 +33,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
 
     @Override
     public int update(Car car_update) {
-        //TODO 重点，未测试
         int update = getDao().updateByPrimaryKeySelective(car_update);
-//        if (update != 0){
-//            Car car = getDao().findOneById(car_update.getId());
-//            if ( car.getAlarmMessage() && car.getCarAlarm() == 1){
-//                logger.info("警报响起，向车主发送信息");
-//            } else if (car.getStateMessage() && car.getCarState() == 1){
-//                logger.info("汽车启动，想车主发送信息");
-//            } else if (car.getPropertyMessage() && (car.getEngineProperty() == 0 || car.getCarLight() == 0 || car.getTransmission() == 0|| car.getTemperature() >=100)) {
-//                if(car.getEngineProperty() == 0 ) {
-//                    logger.info("汽车的发动机出现故障，向车主发送信息");
-//                }
-//                if (car.getCarLight() == 0){
-//                    logger.info("汽车的车灯出现故障，向车主发送信息");
-//                    car.setCarLight((byte) 1);
-//                    getDao().updateByPrimaryKeySelective(car);
-//                }
-//                if (car.getTemperature() >=100){
-//                    logger.info("汽车的发动机过热，向车主发送信息");
-//                }
-//                if (car.getTransmission() == 0){
-//                    logger.info("汽车的转速器出现故障，向车主发送信息");
-//                }
-//            } else if(car.getOil() < car.getOilBox()*0.2){
-//                logger.info("汽车当前油量剩余不足20%，向车主发送信息");
-//            } else if (car.getMileage()%120 == 0 ) {
-//                logger.info("汽车每行驶120公里，向车主发送信息");
-//            }
-//            else {
-//            	logger.info("车辆" + car.getId() + "一切正常，无需发送信息");
-//                return update;
-//            }
-//        }
         return update;
     }
 
@@ -78,11 +47,74 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
             Car model_data = carList.get(0);
             model.setId(model_data.getId());
             monitorCarLight(model,model_data);//车灯监听
+            monitorAlarm(model,model_data);//汽车警报
+            monitorEngineProperty(model,model_data);//发动机
+            monitorMileage(model,model_data);//里程数
+            monitorOil(model,model_data);//油量
+            monitorState(model,model_data);//状态
+            monitorTemperature(model,model_data);//温度
+            monitorTransmission(model,model_data);//转速器
             int update = carDao.updateByPrimaryKeySelective(model);
 //            int update = carDao.updateByNotSameParam(model,model_data);
             return true;
         }
         return result;
+    }
+
+    /**
+     * 汽车警报器监听器
+     * @param model
+     * @param model_date
+     */
+    private void monitorAlarm(Car model,Car model_date){
+        if (model.getCarAlarm() != model_date.getCarAlarm()){ //当与数据库不同时
+            if (model.getCarAlarm() && model.getAlarmMessage()){     // 车灯坏了
+                //TODO  发送信息通知车主
+                logger.info("汽车警报器响了");
+            }
+        }
+    }
+
+    /**
+     * 汽车状态监听器
+     * @param model
+     * @param model_date
+     */
+    private void monitorState(Car model,Car model_date){
+        if (model.getCarState() != model_date.getCarState()){ //当与数据库不同时
+            if (model.getCarState() && model.getStateMessage()){     // 车灯坏了
+                //TODO  发送信息通知车主
+                logger.info("汽车启动了");
+            }
+        }
+    }
+
+    /**
+     * 发动机监听器
+     * @param model
+     * @param model_date
+     */
+    private void monitorEngineProperty(Car model,Car model_date){
+        if (model.getEngineProperty() != model_date.getEngineProperty()){ //当与数据库不同时
+            if (!model.getEngineProperty() && model.getPropertyMessage()){     // 车灯坏了
+                //TODO  发送信息通知车主
+                logger.info("发动机坏了");
+            }
+        }
+    }
+
+    /**
+     * 转速器监听器
+     * @param model
+     * @param model_date
+     */
+    private void monitorTransmission(Car model,Car model_date){
+        if (model.getTransmission() != model_date.getTransmission()){ //当与数据库不同时
+            if (!model.getTransmission() && model.getPropertyMessage()){     // 车灯坏了
+                //TODO  发送信息通知车主
+                logger.info("转速器坏了");
+            }
+        }
     }
 
     /**
@@ -92,10 +124,51 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
      */
     private void monitorCarLight(Car model,Car model_date){
         if (model.getCarLight() != model_date.getCarLight()){ //当与数据库不同时
-            if (!model.getCarLight()){     // 车灯坏了
+            if (!model.getCarLight() && model.getPropertyMessage()){     // 车灯坏了
                 //TODO  发送信息通知车主
                 logger.info("车灯坏了");
+                JPushUtil.sendPush_Alias(model.getUserId().toString(),"车灯坏了");
             }
+        }
+    }
+
+    /**
+     * 温度监听器
+     * @param model
+     * @param model_date
+     */
+    private void monitorTemperature(Car model,Car model_date){
+        if (model.getTemperature()>model_date.getTemperature() && model.getTemperature()>=100) { //当汽车当前水温>数据库水温，并且数据库水温>=100度
+            if (model.getTemperature()%5 < model_date.getTemperature()%5) { //避免多次发送信息，每升高5个单位的温度就通知车主一次
+                //TODO  发送信息通知车主
+                logger.info("汽车温度过高，需要降温");
+            }
+        }
+    }
+
+    /**
+     * 油箱监听器
+     * @param model
+     * @param model_date
+     */
+    private void monitorOil(Car model,Car model_date){
+        if (model.getOil()<model_date.getOil() && model_date.getOil()<model_date.getOilBox()*0.2) { //当前油量<数据库油量 并且 数据库油量剩余不足20%
+            if (model.getOil()%5 < model_date.getOil()%5) { //避免多次发送信息，每降低5个单位量的油量就通知车主一次
+                //TODO  发送信息通知车主
+                logger.info("汽车油量不足，请及时加油");
+            }
+        }
+    }
+
+    /**
+     * 里程表监听器
+     * @param model
+     * @param model_date
+     */
+    private void monitorMileage(Car model,Car model_date){
+        if (model.getMileage()%15000 < model_date.getMileage()%15000 ){
+            //TODO 发信息通知车主
+            logger.info("汽车已行驶超过15000公里，请及时对汽车进行检查维修");
         }
     }
 
