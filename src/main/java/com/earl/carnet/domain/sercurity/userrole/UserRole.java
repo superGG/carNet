@@ -25,7 +25,6 @@ public class UserRole extends AbstractAuditingEntity<Long> implements Serializab
     
     public void setId(Long id) {
     	super.setId(id);
-//        this.id = id;
     }
 
 	public Long getUserId() {

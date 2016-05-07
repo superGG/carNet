@@ -22,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.exception.ApplicationException;
-import com.earl.carnet.exception.DomainSecutityException;
+import com.earl.carnet.exception.DomainSecurityException;
 
 @ControllerAdvice
 public class SystemExceptionHandler implements HandlerExceptionResolver {
@@ -40,7 +40,7 @@ public class SystemExceptionHandler implements HandlerExceptionResolver {
 
 		if(ex instanceof ApplicationException){
 			resultMessage.setResultInfo(ex.getMessage());
-		}else if(ex instanceof DomainSecutityException){
+		}else if(ex instanceof DomainSecurityException){
 			resultMessage.setResultInfo(ex.getMessage());
 		}else if (ex instanceof ConstraintViolationException) {
 			StringBuilder builder = new StringBuilder();

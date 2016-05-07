@@ -20,7 +20,7 @@ import com.earl.carnet.domain.carnet.VerifyCode.VerifyCode;
 import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.domain.sercurity.user.UserQuery;
-import com.earl.carnet.exception.DomainSecutityException;
+import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.UserService;
 import com.earl.carnet.service.VerifyCodeService;
 
@@ -68,7 +68,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
             userDao.updateByPrimaryKeySelective(user);
             result = true;
         } else {
-            throw new DomainSecutityException("旧密码错误");
+            throw new DomainSecurityException("旧密码错误");
         }
         logger.info("退出修改密码changePassword方法");
         return result;
@@ -178,7 +178,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
 
         User tmpuser = userDao.findOneByLoginId(loginid);
         if(tmpuser != null){
-            throw new SecurityException("该账号已经被注册");
+            throw new DomainSecurityException("该账号已经被注册");
         }else{
             String password_Md5 = new SimpleHash("SHA-1",password).toString();
             user.setPassword(password_Md5);

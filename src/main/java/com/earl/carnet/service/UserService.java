@@ -81,7 +81,7 @@ public interface UserService extends BaseService<User, UserQuery> {
 
 	/**
 	 * 修改亲人号码.
-	 * @param s
+	 * @param
 	 * @param id
 	 * @param newPhone
 	 */
