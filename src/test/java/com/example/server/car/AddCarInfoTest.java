@@ -16,17 +16,17 @@ import com.earl.carnet.dao.CarDao;
 import com.earl.carnet.domain.carnet.car.Car;
 import com.earl.carnet.service.CarService;
 
+import cucumber.api.java.zh_cn.并且;
 import cucumber.api.java.zh_cn.当;
-import cucumber.api.java.zh_cn.而且;
 import cucumber.api.java.zh_cn.那么;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
 @WebAppConfiguration
 @SpringApplicationConfiguration(classes = Application.class)
-public class AddCarTest {
+public class AddCarInfoTest {
 
-    private static Logger logger = Logger.getLogger(AddCarTest.class);
+    private static Logger logger = Logger.getLogger(AddCarInfoTest.class);
 
     @Resource
     CarService carService;
@@ -34,10 +34,11 @@ public class AddCarTest {
     @Resource
     CarDao carDao;
 
+    Car car;
 
-    @当("用户扫描二维码，得到车辆信息")
-    public void getCarInfo(){
-        Car car = new Car();
+    @当("^用户扫描二维码，(.*)")
+    public void getCarInfo(String carInfo){
+        car = new Car();
         car.setMark("别克");
         car.setBrand("宝马");
         car.setModels("宝马");
@@ -53,15 +54,16 @@ public class AddCarTest {
         car.setCarLight(true);
         car.setTransmission(true);
     }
-    @而且("服务器不存在相同的车辆信息")
-    public void findnocar(){
 
+    @并且("^服务器(不存在)?相同的车辆信息")
+    public void findnocar(String exits){
+//            throw new ApplicationException("未实现");
+        System.out.println("sldfj");
     }
 
-    @那么("添加成功")
-    public void success(){
-
-
-
+    @那么("^添加车辆(.*)")
+    public void success(String result){
+//            throw new ApplicationException("为实现");
+        System.out.println("slkdjf");
     }
 }

@@ -1,26 +1,22 @@
 package com.earl.carnet.application.config.mvc;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.earl.carnet.interceptor.Ip2Interceptor;
 import com.earl.carnet.interceptor.IpInterceptor;
-import com.earl.carnet.interceptor.SystemExceptionHandler;
 import com.earl.carnet.interceptor.ValidationInterceptor;
 
 @Configuration
 //@AutoConfigureAfter({BeetlSqlConfiguration.class})
-public class mvcConfiguration extends WebMvcConfigurerAdapter {
-    private static Logger logger = LoggerFactory.getLogger(mvcConfiguration.class);
+public class MvcConfiguration extends WebMvcConfigurerAdapter {
+    private static Logger logger = LoggerFactory.getLogger(MvcConfiguration.class);
 
     @Resource
     ValidationInterceptor validationInterceptor;
