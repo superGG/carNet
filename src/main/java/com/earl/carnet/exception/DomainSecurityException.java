@@ -10,8 +10,8 @@ package com.earl.carnet.exception;
  *
  *
  */
-public class DomainSecutityException extends RuntimeException{
-    public DomainSecutityException(String message){
+public class DomainSecurityException extends RuntimeException{
+    public DomainSecurityException(String message){
         super(message);
     }
 }

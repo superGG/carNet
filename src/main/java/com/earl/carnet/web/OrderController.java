@@ -1,9 +1,7 @@
 package com.earl.carnet.web;
 
-import com.google.zxing.WriterException;
-import com.wordnik.swagger.annotations.ApiImplicitParam;
-import com.wordnik.swagger.annotations.ApiImplicitParams;
-import com.wordnik.swagger.annotations.ApiParam;
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.carnet.order.Order;
 import com.earl.carnet.service.OrderService;
+import com.google.zxing.WriterException;
+import com.wordnik.swagger.annotations.ApiImplicitParam;
+import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
-
-import java.io.IOException;
+import com.wordnik.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = "/order")

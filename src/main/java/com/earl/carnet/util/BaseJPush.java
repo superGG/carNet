@@ -1,5 +1,7 @@
 package com.earl.carnet.util;
 
+import org.apache.log4j.Logger;
+
 import cn.jpush.api.JPushClient;
 import cn.jpush.api.common.resp.APIConnectionException;
 import cn.jpush.api.common.resp.APIRequestException;
@@ -8,7 +10,6 @@ import cn.jpush.api.push.model.Platform;
 import cn.jpush.api.push.model.PushPayload;
 import cn.jpush.api.push.model.audience.Audience;
 import cn.jpush.api.push.model.notification.Notification;
-import org.apache.log4j.Logger;
 
 /**
  * Created by Administrator on 2016/5/7.
