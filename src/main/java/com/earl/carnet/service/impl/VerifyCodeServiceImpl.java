@@ -10,6 +10,7 @@ import java.util.TimerTask;
 
 import javax.annotation.Resource;
 
+import com.earl.carnet.commons.util.MD5Util;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +40,7 @@ public class VerifyCodeServiceImpl extends BaseServiceImpl<VerifyCode,VerifyCode
 
 
     @Override
-    public Boolean getVerifyCode(String phoneNumber) throws UnsupportedEncodingException {
+    public Boolean getVerifyCode(String phoneNumber) {
         ResultMessage result = send(phoneNumber);
         if (result.getServiceResult()) {
             VerifyCode verifyCode = new VerifyCode();
@@ -55,26 +56,20 @@ public class VerifyCodeServiceImpl extends BaseServiceImpl<VerifyCode,VerifyCode
      * @param phoneNumber
      * @return
      */
-    public ResultMessage send(String phoneNumber) throws UnsupportedEncodingException  {
+    public ResultMessage send(String phoneNumber) {
         ResultMessage result = new ResultMessage();
         result.setServiceResult(false);
-        String username = "q410654146";// 短信宝帐户名
-        String password = SmsbaoHelper.md5("940507");// 短信宝账户密码
 
         // 生成6位数验证码
         Random random = new Random();
         Integer mobileVerifyCode = random.nextInt(899999) + 100000;
-        // 生成指定短信
         String code = Integer.toString(mobileVerifyCode);
         result.setResultInfo(code);
+        // 生成指定短信
         String mf = "【车联网】您的验证码是" + code + ",60秒有效";
         System.out.println(mf);
-        String content = java.net.URLEncoder.encode(mf, "utf-8");// 发送内容
-        SmsbaoHelper send = new SmsbaoHelper("http://www.smsbao.com/sms?u="
-                + username + "&p=" + password + "&m=" + phoneNumber + "&c="
-                + content);
         try {
-            int date = send.send();
+            int date = SmsbaoHelper.send(phoneNumber,mf);
             if (date != 0)
                 throw new SecurityException("短信发送失败");
             result.setServiceResult(true);

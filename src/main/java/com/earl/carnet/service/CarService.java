@@ -19,7 +19,7 @@ public interface CarService extends BaseService<Car, Car> {
      * @param vin
      * @return
      */
-    Boolean updateCarByVin(Car car);
+    Boolean updateCarByVin(Car car) throws Exception;
 
     /**+
      * 获取用户的所有汽车.

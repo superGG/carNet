@@ -32,7 +32,7 @@ public class VerifyCodeController extends BaseController{
 	 */
 	@RequestMapping(value = "/phoneNumber={phoneNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "获取验证码", notes = "get verifyCode ",httpMethod="GET",response=String.class)
-	public ResultMessage getVerifyCode( @PathVariable String phoneNumber) throws UnsupportedEncodingException {
+	public ResultMessage getVerifyCode( @PathVariable String phoneNumber){
 		log.debug("REST request to get all Brand");
 		Boolean get = verifyCodeService.getVerifyCode(phoneNumber);
 

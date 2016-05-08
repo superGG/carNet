@@ -13,5 +13,5 @@ public interface VerifyCodeService extends BaseService<VerifyCode, VerifyCode> {
      * @param verifyCode
      * @return
      */
-     Boolean getVerifyCode(String phoneNumber) throws UnsupportedEncodingException;
+     Boolean getVerifyCode(String phoneNumber);
 }

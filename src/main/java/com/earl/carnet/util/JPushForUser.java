@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class JPushForUser extends BaseJPush{
 
-    private static Logger logger = Logger.getLogger(JPushForUser.class);
+    private static Logger log = Logger.getLogger(JPushForUser.class);
 
     public JPushForUser(){
         super("812cf01c69a3b1da0c68ffb2", "434549c4fd934c2af57ef4e1");
-        logger.info("构造JPush For User实例完成");
+        log.info("构造JPush For User实例完成");
     }
 }
