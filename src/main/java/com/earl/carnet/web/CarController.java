@@ -207,7 +207,7 @@ public class CarController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "根据id删除汽车", notes = "delete ca3r by id", httpMethod = "POST", response = String.class)
+    @ApiOperation(value = "根据id删除汽车", notes = "delete car by id", httpMethod = "POST", response = String.class)
     public ResponseEntity<?> delete(
             @ApiParam(required = true, name = "id", value = "车辆id")
             Long id) {

@@ -3,6 +3,7 @@ package com.example.dao;
 
 import javax.annotation.Resource;
 
+import com.earl.carnet.util.JPushForCar;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,10 +41,13 @@ public class CarDaoTest {
 //        System.out.println(sysDate2 - sysDate);
     }
 
+    
+    
     @Test
     public void testDeleUser() {
-//        for (int i = 11506; i < 11907; i++)
-//            userService.delete(11912);
+        JPushForCar test = new JPushForCar();
+        test.sendPush_Alias("user1","test");
+    
     }
 
 }

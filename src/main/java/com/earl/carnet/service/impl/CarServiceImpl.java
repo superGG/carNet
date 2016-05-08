@@ -117,7 +117,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
      */
     private void monitorTransmission(Car model,Car model_date){
         if (model.getTransmission() != model_date.getTransmission()){ //当与数据库不同时
-            if (!model.getTransmission() && model.getPropertyMessage()){     // 车灯坏了
+            if (!model.getTransmission() && model.getPropertyMessage()){     //转速器坏了
                 //TODO  发送信息通知车主
                 logger.info("转速器坏了");
             }
