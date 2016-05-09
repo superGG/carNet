@@ -34,4 +34,11 @@ public interface CarService extends BaseService<Car, Car> {
      * @return
      */
     int saveCar(Car car);
+
+    /**
+     * 根据车架号获取车辆信息.
+     * @param vin
+     * @return
+     */
+    Car getCarByVin(String vin);
 }
