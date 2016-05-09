@@ -47,9 +47,9 @@ public class AddCarInfoTest {
         car.setRank("2门");
         car.setMileage(1000d);
         car.setOilBox(1000d);
-        car.setCarState(true);
-        car.setAlarmMessage(true);
         car.setTemperature(1000d);
+        car.setCarState(true);
+        car.setCarAlarm(true);
         car.setEngineProperty(true);
         car.setCarLight(true);
         car.setTransmission(true);
@@ -58,7 +58,6 @@ public class AddCarInfoTest {
     @并且("^服务器(.*)相同的车辆信息")
     public void findnocar(String exits){
 //            throw new ApplicationException("未实现");
-
         System.out.println("sldfj");
     }
 

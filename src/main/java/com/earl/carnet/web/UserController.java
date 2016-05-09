@@ -180,7 +180,6 @@ public class UserController extends BaseController {
         return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
     }
 
-
     /**
      * POST /change -> changes the current user's relatedPhone
      */
@@ -230,9 +229,6 @@ public class UserController extends BaseController {
         return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
     }
 
-
-
-
     /**
      * 用户登录
      * @param loginid
@@ -250,11 +246,13 @@ public class UserController extends BaseController {
             @ApiParam(required = true, value = "用户登录密码")
             @RequestParam(name = "password", required = true) String password) {
         userService.doLogin(loginid, password);
-        ShiroPrincipal principal = (ShiroPrincipal) SecurityUtils.getSubject().getPrincipal();
-        User user = principal.getUser();
 
         ResultMessage resultMessage = new ResultMessage();
         resultMessage.setResultInfo("登录成功");
+        ShiroPrincipal principal = (ShiroPrincipal) SecurityUtils.getSubject().getPrincipal();
+        User user = principal.getUser();
+
+        resultMessage.getResultParm().put("user",user);
         return new ResponseEntity<ResultMessage>(resultMessage, HttpStatus.OK);
     }
 
