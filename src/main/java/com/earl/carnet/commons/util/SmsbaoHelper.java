@@ -15,7 +15,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * 生成手机验证码工具类.
  * 
- * @author 宋文光
+ * @author 宋
  * @since 3.0.0
  */
 public class SmsbaoHelper {
@@ -30,18 +30,28 @@ public class SmsbaoHelper {
 		return mobileVerifyCodeHelper;
 	}
 
-	private String urlString;
+	private static String urlString;
 
 	public SmsbaoHelper(String urlString) {
 		this.urlString = urlString;
 	}
 
+	private static String username = "q410654146";// 短信宝帐户名
+	private static String password = MD5Util.md5("940507");// 短信宝账户密码
+
 	/**
 	 * 获取字符段，发送指定信息.
-	 * 
+	 * @param phoneNumber 指定发送手机号码.
+	 * @param content 发送内容.
+	 * @return
 	 * @throws Exception
-	 */
-	public int send() throws Exception {
+     */
+	public static int send(String phoneNumber, String content) throws Exception {
+		content = java.net.URLEncoder.encode(content, "utf-8");// 发送内容
+		urlString =  "http://www.smsbao.com/sms?u="
+				+ username + "&p=" + password + "&m=" + phoneNumber + "&c="
+				+ content;
+
 		URL url = new URL(urlString);
 		HttpURLConnection urlConnection = (HttpURLConnection) url
 				.openConnection();
@@ -64,6 +74,8 @@ public class SmsbaoHelper {
 	 * @throws Exception
 	 */
 	public int check() throws Exception {
+		urlString = "http://www.smsbao.com/query?u="
+				+ username + "&p=" + password;
 		URL url = new URL(urlString);
 		HttpURLConnection urlConnection = (HttpURLConnection) url
 				.openConnection();
@@ -86,41 +98,6 @@ public class SmsbaoHelper {
 		}
 		System.out.println(result);
 		return result;
-	}
-
-	/**
-	 * 登陆密码加密.
-	 * 
-	 * @param plainText
-	 *            登陆smsbao密码.
-	 * @return 加密后密码.
-	 */
-	public static String md5(String plainText) {
-		StringBuilder buf = null;
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(plainText.getBytes(Charset.forName("UTF-8")));// 指定字符串默认编码集，否则会使用系统默认编码，不同系统间移植性不高
-			byte b[] = md.digest();
-			int i;
-			buf = new StringBuilder("");
-			for (int offset = 0; offset < b.length; offset++) {
-				i = b[offset];
-				if (i < 0) {
-					i += 256;
-				}
-				if (i < 16) {
-					buf.append("0");
-				}
-				buf.append(Integer.toHexString(i));
-			}
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		if(buf!=null){
-			return buf.toString();
-		}else {
-			return null;
-		}
 	}
 
 }

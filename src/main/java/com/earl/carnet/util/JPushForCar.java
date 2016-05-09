@@ -19,7 +19,7 @@ public class JPushForCar extends BaseJPush{
 //    private static int timeToLive = 86400;
 
     public JPushForCar(){
-        super("89500c57bff5c3381ce53689","3037ff3cb054cd7b332dd869");
+        super("3037ff3cb054cd7b332dd869","89500c57bff5c3381ce53689");
         logger.info("构造JPush For Car实例完成");
     }
 }
