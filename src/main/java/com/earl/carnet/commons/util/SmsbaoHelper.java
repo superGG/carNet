@@ -6,6 +6,7 @@ package com.earl.carnet.commons.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -47,7 +48,8 @@ public class SmsbaoHelper {
 	 * @throws Exception
      */
 	public static int send(String phoneNumber, String content) throws Exception {
-		content = java.net.URLEncoder.encode(content, "utf-8");// 发送内容
+			content = java.net.URLEncoder.encode(content, "utf-8");// 发送内容
+
 		urlString =  "http://www.smsbao.com/sms?u="
 				+ username + "&p=" + password + "&m=" + phoneNumber + "&c="
 				+ content;
@@ -65,7 +67,7 @@ public class SmsbaoHelper {
 
 		urlConnection.getInputStream().close();
 
-		return result;
+			return result;
 	}
 
 	/**

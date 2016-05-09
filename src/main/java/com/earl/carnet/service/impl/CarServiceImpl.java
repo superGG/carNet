@@ -94,13 +94,13 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
      */
     private void monitorAlarm(Car model,Car model_data){
         if (model.getCarAlarm() != model_data.getCarAlarm()){ //当与数据库不同时
-            if (model.getCarAlarm() && model.getAlarmMessage()){     // 车灯坏了
+            if (model.getCarAlarm() && model_data.getAlarmMessage()){     // 车灯坏了
                 logger.info("汽车警报器响了");
-                User user = userService.findOne(model.getUserId());
-                String content = "尊敬的"+ user.getUsername() +": 您好，您的车牌号为"+ model.getPlateNumber() + " 的车辆警报器响起，请注意查看。";
+                User user = userService.findOne(model_data.getUserId());
+                String content = "尊敬的"+ user.getUsername() +": 您好，您的车牌号为"+ model_data.getPlateNumber() + " 的车辆警报器响起，请注意查看。";
                 Message message = new Message();
                 message.setState(false);
-                message.setUserId(model.getUserId());
+                message.setUserId(model_data.getUserId());
                 message.setContent(content);
                 messageService.insertBackId(message);
                 jpushForUser.sendPush_Alias(model.getUserId().toString(),message.getContent(),TITLE);

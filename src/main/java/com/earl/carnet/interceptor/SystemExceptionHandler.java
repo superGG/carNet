@@ -72,6 +72,7 @@ public class SystemExceptionHandler implements HandlerExceptionResolver {
 		} else {
 			resultMessage.setResultInfo("系统出错");
 			logger.info("resultMessage =>" + resultMessage.toJson());
+			logger.info(ex);
 
 		}
 		try {

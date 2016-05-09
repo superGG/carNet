@@ -81,7 +81,7 @@ public class MessageController extends BaseController{
 	 * GET /message -> get user's all message
 	 */
 	@RequestMapping(value = "/getAll/userId={userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(value = "获取用户所有信息", notes = " get user's all message",httpMethod="GET",response=Brand.class,responseContainer = "List")
+	@ApiOperation(value = "获取用户所有消息", notes = " get user's all message",httpMethod="GET",response=Brand.class,responseContainer = "List")
 	public ResultMessage getUserAll(
 			@ApiParam(required = true, name = "userId", value = "用户id")
 										Long userId) {
