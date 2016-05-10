@@ -1,31 +1,25 @@
-package com.earl.carnet.domain.carnet.car;
-
-import java.io.Serializable;
-
-import javax.persistence.Table;
-
-import org.beetl.sql.core.annotatoin.AutoID;
+package com.earl.carnet.domain.carnet.tem_car;
 
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.beetl.sql.core.annotatoin.AutoID;
+
+import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
- * 汽车信息实体类.
+ * 汽车临时信息实体类.
  * Created by Administrator on 2016/4/4.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(name = "car")
-public class Car extends AbstractAuditingEntity<Long> implements Serializable {
-
-    private Long userId;//用户id
+@Table(name = "tem_car")
+public class Tem_Car extends AbstractAuditingEntity<Long> implements Serializable {
 
     private String mark;//品牌标志
 
     private String brand;//品牌
 
     private String models;//品牌型号
-
-    private String plateNumber;//车牌号码
 
     private String vin; //车架号
 
@@ -48,31 +42,12 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
     private Boolean carLight;//车灯性能
 
     private Boolean carState;//车状态
-    
+
     private Boolean carAlarm;//车警报
-    
-    private Boolean alarmMessage ;//是否发送警报信息
-    
-    private Boolean propertyMessage ;//是否发送行性能信息
-    
-    private Boolean stateMessage ;//是否发送车状态信息
-    
-    private Boolean currentCar;//是否当前车辆
 
     private Double lon;//经度
 
     private Double lat;//纬度
-
-
-    public Car(Boolean alarmMessage, Boolean propertyMessage,Boolean stateMessage){
-        this.alarmMessage = alarmMessage;
-        this.propertyMessage = propertyMessage;
-        this.stateMessage = stateMessage;
-    }
-
-    public Car(){
-
-    }
 
     @AutoID
     public Long getId() {
@@ -106,22 +81,6 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
 
     public void setModels(String models) {
         this.models = models;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getPlateNumber() {
-        return plateNumber;
-    }
-
-    public void setPlateNumber(String plateNumber) {
-        this.plateNumber = plateNumber;
     }
 
     public String getVin() {
@@ -239,47 +198,13 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.carAlarm = carAlarm;
     }
 
-    public Boolean getAlarmMessage() {
-        return alarmMessage;
-    }
-
-    public void setAlarmMessage(Boolean alarmMessage) {
-        this.alarmMessage = alarmMessage;
-    }
-
-    public Boolean getPropertyMessage() {
-        return propertyMessage;
-    }
-
-    public void setPropertyMessage(Boolean propertyMessage) {
-        this.propertyMessage = propertyMessage;
-    }
-
-    public Boolean getStateMessage() {
-        return stateMessage;
-    }
-
-    public void setStateMessage(Boolean stateMessage) {
-        this.stateMessage = stateMessage;
-    }
-
-    public Boolean getCurrentCar() {
-        return currentCar;
-    }
-
-    public void setCurrentCar(Boolean currentCar) {
-        this.currentCar = currentCar;
-    }
-
     @Override
     public String toString() {
         return "Car{" +
                 "id=" + super.getId() +
-                ", userId=" + userId +
                 ", mark='" + mark + '\'' +
                 ", brand='" + brand + '\'' +
                 ", models='" + models + '\'' +
-                ", plateNumber='" + plateNumber + '\'' +
                 ", vin='" + vin + '\'' +
                 ", engineNumber='" + engineNumber + '\'' +
                 ", rank='" + rank + '\'' +
@@ -292,10 +217,6 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
                 ", carLight=" + carLight +
                 ", carState=" + carState +
                 ", carAlarm=" + carAlarm +
-                ", alarmMessage=" + alarmMessage +
-                ", propertyMessage=" + propertyMessage +
-                ", stateMessage=" + stateMessage +
-                ", currentCar=" + currentCar +
                 ", lon=" + lon +
                 ", lat=" + lat +
                 '}';

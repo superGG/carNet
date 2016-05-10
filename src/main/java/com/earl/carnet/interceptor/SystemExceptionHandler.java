@@ -27,65 +27,69 @@ import com.earl.carnet.exception.DomainSecurityException;
 @ControllerAdvice
 public class SystemExceptionHandler implements HandlerExceptionResolver {
 
-	private static Log logger = LogFactory.getLog(SystemExceptionHandler.class);
+    private static Log logger = LogFactory.getLog(SystemExceptionHandler.class);
 
-	@ExceptionHandler(Exception.class)
-	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
-			Exception ex) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("ex", ex);
-		response.setContentType("application/json;charset=UTF-8");
-		PrintWriter out = null;
-		ResultMessage resultMessage = new ResultMessage();
+    @ExceptionHandler(Exception.class)
+    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
+                                         Exception ex) {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("ex", ex);
+        response.setContentType("application/json;charset=UTF-8");
+        PrintWriter out = null;
+        ResultMessage resultMessage = new ResultMessage();
 
-		if(ex instanceof ApplicationException){
-			resultMessage.setResultInfo(ex.getMessage());
-		}else if(ex instanceof DomainSecurityException){
-			resultMessage.setResultInfo(ex.getMessage());
-		}else if (ex instanceof ConstraintViolationException) {
-			StringBuilder builder = new StringBuilder();
+        if (ex instanceof ApplicationException) {
+            resultMessage.setServiceResult(false);
+            resultMessage.setResultInfo(ex.getMessage());
+        } else if (ex instanceof DomainSecurityException) {
+            resultMessage.setServiceResult(false);
+            resultMessage.setResultInfo(ex.getMessage());
+        } else if (ex instanceof ConstraintViolationException) {
+            StringBuilder builder = new StringBuilder();
 //			resultMessage.setResultInfo("数据验证出错");
-			resultMessage.setServiceResult(true);
-			ConstraintViolationException cv = (ConstraintViolationException) ex;
-			Set<ConstraintViolation<?>> constraintViolations = cv.getConstraintViolations();
+            resultMessage.setServiceResult(true);
+            ConstraintViolationException cv = (ConstraintViolationException) ex;
+            Set<ConstraintViolation<?>> constraintViolations = cv.getConstraintViolations();
 
-			constraintViolations.stream().forEach((constraintViolation)-> {
-				logger.debug(constraintViolation.getExecutableReturnValue());
-				logger.debug(constraintViolation.getPropertyPath());// 属性路径，el表达式
-				logger.debug(constraintViolation.getMessage());// 消息
+            constraintViolations.stream().forEach((constraintViolation) -> {
+                logger.debug(constraintViolation.getExecutableReturnValue());
+                logger.debug(constraintViolation.getPropertyPath());// 属性路径，el表达式
+                logger.debug(constraintViolation.getMessage());// 消息
 
-				builder.append(constraintViolation.getPropertyPath()+":"+constraintViolation.getMessage());
+                builder.append(constraintViolation.getPropertyPath() + ":" + constraintViolation.getMessage());
 
-				logger.debug(constraintViolation.getInvalidValue());// 传入参数
-				logger.debug(constraintViolation.getLeafBean()); // 作用的bean对象
-			});
-
-			resultMessage.setResultInfo(builder.toString());
-		} else if (ex instanceof IncorrectCredentialsException) {
-			resultMessage.setResultInfo("用户名密码不正确");
-			resultMessage.setServiceResult(false);
-			logger.info("resultMessage =>" + resultMessage.toJson());
-		} else if (ex instanceof UnknownAccountException) {
-			resultMessage.setResultInfo("用户名密码不正确");
-			resultMessage.setServiceResult(false);
-			logger.info("resultMessage => " + resultMessage.toJson());
-		} else {
-			resultMessage.setResultInfo("系统出错");
-			logger.info("resultMessage =>" + resultMessage.toJson());
-			logger.info(ex);
-
-		}
-		try {
-			out = response.getWriter();
-			out.write(resultMessage.toJson());
+                logger.debug(constraintViolation.getInvalidValue());// 传入参数
+                logger.debug(constraintViolation.getLeafBean()); // 作用的bean对象
+            });
+            resultMessage.setResultInfo(builder.toString());
+        } else if (ex instanceof IncorrectCredentialsException) {
+            resultMessage.setResultInfo("用户名密码不正确");
+            resultMessage.setServiceResult(false);
+            logger.info("resultMessage =>" + resultMessage.toJson());
+        } else if (ex instanceof UnknownAccountException) {
+            resultMessage.setResultInfo("用户名密码不正确");
+            resultMessage.setServiceResult(false);
+            logger.info("resultMessage => " + resultMessage.toJson());
+        } else if (ex instanceof SecurityException) {
+            resultMessage.setServiceResult(false);
+            resultMessage.setResultInfo(ex.getMessage());
+            logger.info("resultMessage =>" + resultMessage.toJson());
+        } else {
+            resultMessage.setServiceResult(false);
+            resultMessage.setResultInfo("系统出错");
+            logger.info("resultMessage =>" + resultMessage.toJson());
+        }
+        try {
+            out = response.getWriter();
+            out.write(resultMessage.toJson());
 //			out.println();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//注掉这个，后台不会报out.getWriter is ...异常
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //注掉这个，后台不会报out.getWriter is ...异常
 //		out.flush();
 //		out.close();
-		return null;
-	}
+        return null;
+    }
 }

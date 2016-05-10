@@ -2,6 +2,7 @@ package com.earl.carnet.service;
 
 import com.earl.carnet.commons.service.BaseService;
 import com.earl.carnet.domain.carnet.car.Car;
+import com.earl.carnet.domain.carnet.tem_car.Tem_Car;
 
 import java.util.List;
 
@@ -40,5 +41,25 @@ public interface CarService extends BaseService<Car, Car> {
      * @param vin
      * @return
      */
-    Car getCarByVin(String vin);
+    Tem_Car getCarByVin(String vin);
+
+    /**
+     * 用户更新汽车状态.
+     * @param id
+     * @return
+     */
+    Boolean updateCarState(Long id);
+
+    /**
+     * 更新汽车警报状态.
+     * @param id
+     * @return
+     */
+    Boolean updateCarAlarm(Long id);
+
+    /**
+     * 添加临时车辆信息.
+     * @param tem_car
+     */
+    void insertTem_Car(Tem_Car tem_car);
 }

@@ -1,13 +1,20 @@
 package com.earl.carnet.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.annotation.Resource;
 
 import com.earl.carnet.commons.util.SmsbaoHelper;
 import com.earl.carnet.commons.vo.TcpMessage;
+import com.earl.carnet.dao.Tem_CarDao;
 import com.earl.carnet.domain.carnet.Message.Message;
+import com.earl.carnet.domain.carnet.tem_car.Tem_Car;
 import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.MessageService;
 import com.earl.carnet.service.UserService;
 import org.apache.log4j.Logger;
@@ -33,6 +40,9 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
 
     @Resource
     CarDao carDao;
+
+    @Resource
+    Tem_CarDao tem_carDao;
 
     @Resource
     UserService userService;
@@ -65,7 +75,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
         List<Car> carList = getDao().searchQuery(car_update);
         if (carList.size() != 0) {
             Car model_data = carList.get(0);
-            if (model_data.getUserId() == null){
+            if (model_data.getUserId() == null) {
                 return result;
             }
 //            model.setId(model_data.getId());
@@ -280,15 +290,62 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
     }
 
     @Override
-    public Car getCarByVin(String vin) {
-        Car car_vin = new Car();
+    public Tem_Car getCarByVin(String vin) {
+        Tem_Car car_vin = new Tem_Car();
         car_vin.setVin(vin);
-        List<Car> carList = getDao().searchQuery(car_vin);
-        if(carList.size()!=0){
+        List<Tem_Car> carList = tem_carDao.searchQuery(car_vin);
+        if (carList.size() != 0) {
             return carList.get(0);
         } else {
             throw new SecurityException("无该车辆");
         }
+    }
+
+    @Override
+    public Boolean updateCarState(Long id) {
+        Boolean result = false;
+        Car car = getDao().findOneById(id);
+        TcpMessage tcpMessage = new TcpMessage();
+        if (car.getCarState()) {
+            tcpMessage.setMessagtype(1);//1为改变状态，2为改变警报
+            tcpMessage.setMessage("false");
+            jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
+            result = true;
+        } else {
+            tcpMessage.setMessagtype(1);//1为改变状态，2为改变警报
+            tcpMessage.setMessage("true");
+            jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
+    public Boolean updateCarAlarm(Long id) {
+        Car car = getDao().findOneById(id);
+        TcpMessage tcpMessage = new TcpMessage();
+        if (car.getCarAlarm()) {
+            tcpMessage.setMessagtype(2);//1为改变状态，2为改变警报
+            tcpMessage.setMessage("true");
+            jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
+           return true;
+        } else {
+            throw new DomainSecurityException("该警报状态已经响起");
+        }
+    }
+
+    @Override
+    public void insertTem_Car(Tem_Car tem_car) {
+        int tem_id = tem_carDao.insertBackId(tem_car);
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                tem_carDao.delete(tem_id);
+                logger.info("临时车辆信息已删除");
+            }
+        }, 60000);
+
     }
 
 

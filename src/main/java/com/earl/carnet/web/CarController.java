@@ -2,6 +2,7 @@ package com.earl.carnet.web;
 
 import java.util.List;
 
+import com.earl.carnet.domain.carnet.tem_car.Tem_Car;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,7 @@ public class CarController extends BaseController {
     }
 
     /**
-     * GET /car -> get  car by vin
+     * GET /car -> get  tem_car by vin
      */
     @RequestMapping(value = "/vin={vin}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据车架号获取汽车", notes = "get car by vin", httpMethod = "GET", response = String.class)
@@ -89,7 +90,7 @@ public class CarController extends BaseController {
             @PathVariable
             String vin) {
         log.debug("REST request to get one  Car");
-        Car car = carService.getCarByVin(vin);
+        Tem_Car car = carService.getCarByVin(vin);
         result = new ResultMessage();
         result.setResultInfo("获取成功");
         result.getResultParm().put("car",car);
@@ -151,6 +152,46 @@ public class CarController extends BaseController {
     }
 
     /**
+     * 添加临时汽车信息.
+     *
+     * @return
+     */
+    @RequestMapping(value = "/saveTem_Car", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "添加一个新汽车", notes = "add a new tem_car", httpMethod = "POST", response = String.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mark", value = "品牌标志", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "brand", value = "品牌", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "models", value = "品牌型号", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "plateNumber", value = "车牌号码", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "vin", value = "车牌号", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "engineNumber", value = "发动机型号", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "rank", value = "车身等级", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "mileage", value = "里程数", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "oilBox", value = "油箱容积", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "oil", value = "当前油量", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "temperature", value = "温度", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "engineProperty", value = "发动机性能", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "transmission", value = "变速器性能", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "carLight", value = "车灯性能", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "carState", value = "车状态", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "carAlarm", value = "车警报", required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name = "lon", value = "经度", required = true, dataType = "double", paramType = "query"),
+            @ApiImplicitParam(name = "lat", value = "纬度", required = true, dataType = "double", paramType = "query")
+    })
+    public ResponseEntity<ResultMessage> saveTem_Car(
+            @ApiParam(required = true, name = "tem_car", value = "临时车辆信息")
+            Tem_Car tem_car) {
+        if( tem_car.getVin() == null || tem_car.getVin().equals("")){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        result = new ResultMessage();
+        carService.insertTem_Car(tem_car);
+        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
+    }
+
+
+
+    /**
      * 更新汽车.
      *
      * @return
@@ -196,11 +237,8 @@ public class CarController extends BaseController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-
-
-
     /**
-     * 更新汽车.
+     * 车载系统更新汽车.
      *
      * @return
      */
@@ -219,6 +257,47 @@ public class CarController extends BaseController {
     }
 
     /**
+     * 用户更新汽车状态.
+     * @return
+     */
+    @RequestMapping(value = "/updateCarState", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "用户更新汽车状态", notes = "update car state by id", httpMethod = "POST", response = String.class)
+    public ResponseEntity<?> updateCarState(
+            @ApiParam(required = true, name = "id", value = "车辆id")
+            Long id){
+        result = new ResultMessage();
+        Boolean update = carService.updateCarState(id);
+        if (update) {
+            result.setResultInfo("更新成功");
+        } else {
+            result.setServiceResult(false);
+            result.setResultInfo("更新失败");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    /**
+     * 用户更新汽车警报状态.
+     * @return
+     */
+    @RequestMapping(value = "/updateCarAlarm", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "用户更新汽车警报状态", notes = "update car alarm by id", httpMethod = "POST", response = String.class)
+    public ResponseEntity<?> updateCarAlarm(
+            @ApiParam(required = true, name = "id", value = "车辆id")
+            Long id){
+        result = new ResultMessage();
+        Boolean update = carService.updateCarAlarm(id);
+        if (update) {
+            result.setResultInfo("更新成功");
+        } else {
+            result.setServiceResult(false);
+            result.setResultInfo("更新失败");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
+    /**
      * 删除汽车.
      *
      * @return
@@ -235,4 +314,7 @@ public class CarController extends BaseController {
         result.setServiceResult(true);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+
+
 }
