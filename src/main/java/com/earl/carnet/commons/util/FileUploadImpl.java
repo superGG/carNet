@@ -80,7 +80,7 @@ public class FileUploadImpl {
 	/**
 	 * 上传图片.
 	 *
-	 * @author 宋文光.
+	 * @author 宋.
 	 */
 	private String uploadFile(MultipartFile file, String filePath) {
 		logger.info("进入图片上传uploadFile方法");
@@ -113,7 +113,7 @@ public class FileUploadImpl {
 	/**
 	 * 自定义文件保存地址.
 	 *
-	 * @author 宋文光.
+	 * @author 宋.
 	 * @param filePath2
 	 * @return
 	 */
@@ -126,7 +126,7 @@ public class FileUploadImpl {
 	/**
 	 * 根据json格式的文件路径删除多文件.
 	 *
-	 * @author 宋文光.
+	 * @author 宋.
 	 */
 	public Boolean deleFileByJson(String JsonPath) {
 		logger.info("进入deleFileByJson方法");
@@ -149,7 +149,7 @@ public class FileUploadImpl {
 	/**
 	 * 根据路径删除文件.
 	 *
-	 * @author 宋文光.
+	 * @author 宋.
 	 */
 	public Boolean deleFile(String path) {
 		Boolean result = true;
@@ -170,7 +170,7 @@ public class FileUploadImpl {
 
 	/**
 	 * 删除文件.
-	 *@author 宋文光.
+	 *@author 宋.
 	 * @return
 	 */
 	public Boolean deleFile(File file) {
