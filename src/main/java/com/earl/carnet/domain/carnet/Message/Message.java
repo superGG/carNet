@@ -21,6 +21,8 @@ public class Message extends AbstractAuditingEntity<Long> implements Serializabl
 
     private Boolean state; //消息状态
 
+    private Integer type;//消息类型 1为普通消息，2为警告消息，3为危险消息
+
     @AutoID
     public Long getId() {
         return super.getId();
@@ -51,6 +53,14 @@ public class Message extends AbstractAuditingEntity<Long> implements Serializabl
         return state;
     }
 
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     public void setState(Boolean state) {
         this.state = state;
     }
@@ -58,9 +68,11 @@ public class Message extends AbstractAuditingEntity<Long> implements Serializabl
     @Override
     public String toString() {
         return "Message{" +
+                "id=" + super.getId() +
                 "userId=" + userId +
                 ", content='" + content + '\'' +
                 ", state=" + state +
+                ", type=" + type +
                 '}';
     }
 }

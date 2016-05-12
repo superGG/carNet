@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("MessageService")
 @Transactional
@@ -27,5 +28,10 @@ public class MessageServiceImpl extends BaseServiceImpl<Message,Message>
     @Override
     protected BaseDao<Message> getDao() {
         return messageDao;
+    }
+
+    @Override
+    public Boolean updateUserAll(Long userId) {
+        return messageDao.updateUserAll(userId);
     }
 }

@@ -12,7 +12,7 @@ import cn.jpush.api.push.model.audience.Audience;
 import cn.jpush.api.push.model.notification.Notification;
 
 /**
- * Created by Administrator on 2016/5/7.
+ * Created by 宋 on 2016/5/7.
  */
 public class BaseJPush {
 

@@ -50,6 +50,8 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
     private Boolean carState;//车状态
     
     private Boolean carAlarm;//车警报
+
+    private Boolean SRS; //安全气囊系统
     
     private Boolean alarmMessage ;//是否发送警报信息
     
@@ -132,6 +134,13 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.vin = vin;
     }
 
+    public Boolean getSRS() {
+        return SRS;
+    }
+
+    public void setSRS(Boolean SRS) {
+        this.SRS = SRS;
+    }
 
     public String getRank() {
         return rank;
@@ -275,7 +284,7 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
     public String toString() {
         return "Car{" +
                 "id=" + super.getId() +
-                ", userId=" + userId +
+                "userId=" + userId +
                 ", mark='" + mark + '\'' +
                 ", brand='" + brand + '\'' +
                 ", models='" + models + '\'' +
@@ -284,7 +293,7 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
                 ", engineNumber='" + engineNumber + '\'' +
                 ", rank='" + rank + '\'' +
                 ", mileage=" + mileage +
-                ", oilbox=" + oilBox +
+                ", oilBox=" + oilBox +
                 ", oil=" + oil +
                 ", temperature=" + temperature +
                 ", engineProperty=" + engineProperty +
@@ -292,6 +301,7 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
                 ", carLight=" + carLight +
                 ", carState=" + carState +
                 ", carAlarm=" + carAlarm +
+                ", SRS=" + SRS +
                 ", alarmMessage=" + alarmMessage +
                 ", propertyMessage=" + propertyMessage +
                 ", stateMessage=" + stateMessage +

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,7 +66,7 @@ public class MessageController extends BaseController{
 	@ApiOperation(value = "获取用户的未读信息", notes = "get user's unread message",httpMethod="GET",response=Brand.class,responseContainer = "List")
 	public ResultMessage getUnread(
 			@ApiParam(required = true, name = "userId", value = "用户id")
-			Long userId) {
+			@PathVariable Long userId) {
 		log.debug("get user's unread message");
 		Message message = new Message();
 		message.setUserId(userId);
@@ -84,7 +85,7 @@ public class MessageController extends BaseController{
 	@ApiOperation(value = "获取用户所有信息", notes = " get user's all message",httpMethod="GET",response=Brand.class,responseContainer = "List")
 	public ResultMessage getUserAll(
 			@ApiParam(required = true, name = "userId", value = "用户id")
-										Long userId) {
+			@PathVariable	Long userId) {
 		log.debug(" get user's all message");
 		Message message = new Message();
 		message.setUserId(userId);
@@ -92,6 +93,21 @@ public class MessageController extends BaseController{
 		result = new ResultMessage();
 		result.getResultParm().put("message",messageList);
 		result.getResultParm().put("count",messageList.size());
+		return result;
+	}
+
+	/**
+	 * GET /message -> update user's all unread message
+	 */
+	@RequestMapping(value = "/update/userId={userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "更新用户所有未读信息", notes = " update user's all unread message",httpMethod="GET",response=Brand.class,responseContainer = "List")
+	public ResultMessage updateUserAll(
+			@ApiParam(required = true, name = "userId", value = "用户id")
+			@PathVariable Long userId) {
+		log.debug(" get user's all message");
+		Boolean update = messageService.updateUserAll(userId);
+		result = new ResultMessage();
+		result.setServiceResult(update);
 		return result;
 	}
 

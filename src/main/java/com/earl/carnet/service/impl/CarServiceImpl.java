@@ -29,7 +29,7 @@ import com.earl.carnet.service.CarService;
 import com.earl.carnet.util.JPushForCar;
 import com.earl.carnet.util.JPushForUser;
 
-@Service("CarService")
+@Service("carService")
 @Transactional
 public class CarServiceImpl extends BaseServiceImpl<Car, Car>
         implements CarService {

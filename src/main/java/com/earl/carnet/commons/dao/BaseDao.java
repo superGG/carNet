@@ -1,5 +1,6 @@
 package com.earl.carnet.commons.dao;
 
+import com.earl.carnet.domain.carnet.Message.Message;
 import com.earl.carnet.domain.carnet.car.Car;
 
 import java.io.Serializable;
@@ -145,4 +146,5 @@ public interface BaseDao<T extends Serializable > {
      * @return
      */
 	int updateByNotSameParam(Object model, Object model_data);
+
 }
