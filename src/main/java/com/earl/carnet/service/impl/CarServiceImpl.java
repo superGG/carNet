@@ -99,12 +99,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
         return result;
     }
 
-    /**
-     * 汽车警报器监听器
-     *
-     * @param model
-     * @param model_data
-     */
+
     private void monitorAlarm(Car model, Car model_data) {
         if (model.getCarAlarm() != model_data.getCarAlarm()) { //当与数据库不同时
             if (model.getCarAlarm() && model_data.getAlarmMessage()) {

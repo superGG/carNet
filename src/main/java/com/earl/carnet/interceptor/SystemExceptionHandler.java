@@ -61,7 +61,6 @@ public class SystemExceptionHandler implements HandlerExceptionResolver {
                 logger.debug(constraintViolation.getInvalidValue());// 传入参数
                 logger.debug(constraintViolation.getLeafBean()); // 作用的bean对象
             });
-
             resultMessage.setResultInfo(builder.toString());
         } else if (ex instanceof IncorrectCredentialsException) {
             resultMessage.setResultInfo("用户名密码不正确");
@@ -79,7 +78,6 @@ public class SystemExceptionHandler implements HandlerExceptionResolver {
             resultMessage.setServiceResult(false);
             resultMessage.setResultInfo("系统出错");
             logger.info("resultMessage =>" + resultMessage.toJson());
-
         }
         try {
             out = response.getWriter();
