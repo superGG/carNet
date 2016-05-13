@@ -3,7 +3,7 @@ package com.earl.carnet.service;
 import com.earl.carnet.commons.service.BaseService;
 import com.earl.carnet.domain.carnet.VerifyCode.VerifyCode;
 
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpSession;
 
 public interface VerifyCodeService extends BaseService<VerifyCode, VerifyCode> {
 
@@ -13,5 +13,7 @@ public interface VerifyCodeService extends BaseService<VerifyCode, VerifyCode> {
      * @param verifyCode
      * @return
      */
-     Boolean getVerifyCode(String phoneNumber);
+     Boolean getVerifyCode(String phoneNumber, HttpSession session);
+
+    Boolean comfigVerifyCode(String verifyCode, String phoneNumber);
 }

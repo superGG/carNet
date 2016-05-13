@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.earl.carnet.commons.util.EhCacheHelper;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -30,6 +33,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         implements UserService {
 
     private static Logger logger = Logger.getLogger(UserServiceImpl.class);
+
+    private static Cache VerifyCode_CACHE = EhCacheHelper.getCacheManage().getCache("verifyCode");
 
     @Resource
     private UserDao userDao;
@@ -60,7 +65,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         Boolean result = false;
         User user = new User();
         user.setId(Id);
-        String oldPassword_Md5 = new SimpleHash("SHA-1",oldPassword).toString();
+        String oldPassword_Md5 = new SimpleHash("SHA-1", oldPassword).toString();
         String password = userDao.searchQuery(user).get(0).getPassword();
         if (password.equals(oldPassword_Md5)) {
             String newPassword_Md5 = new SimpleHash("SHA-1", newPassword).toString();
@@ -177,10 +182,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         user.setLoginid(loginid);
 
         User tmpuser = userDao.findOneByLoginId(loginid);
-        if(tmpuser != null){
+        if (tmpuser != null) {
             throw new DomainSecurityException("该账号已经被注册");
-        }else{
-            String password_Md5 = new SimpleHash("SHA-1",password).toString();
+        } else {
+            String password_Md5 = new SimpleHash("SHA-1", password).toString();
             user.setPassword(password_Md5);
             user.setUserImg("/img/userImg.jpg");
             userDao.insert(user);
@@ -191,10 +196,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     @Override
     public void changeRelatedPhone(String id, String newPhone, String verifyCode) {
         logger.info("进入service层changeRelatedPhone方法");
-        VerifyCode verifyCode_data_search = new VerifyCode(newPhone);
-        List<VerifyCode> verifyCode_data = verifyCodeService.searchQuery(verifyCode_data_search);
-        if (verifyCode_data.size() != 0) {
-            if (verifyCode.equals(verifyCode_data.get(0).getVerifyCode())) {
+            if (confirmVerifyCode(newPhone, verifyCode)) {
                 User user = new User();
                 user.setId(Long.parseLong(id));
                 user.setRelatedPhone(newPhone);
@@ -202,27 +204,33 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
             } else {
                 throw new SecurityException("验证码错误");
             }
-        } else {
-            throw new SecurityException("请重新获取验证码");
-        }
     }
 
-    @Override
-    public void addRelatedPhone(String id, String relatedPhone, String verifyCode) {
-        VerifyCode verifyCode_data_search = new VerifyCode(relatedPhone);
-        List<VerifyCode> verifyCode_data = verifyCodeService.searchQuery(verifyCode_data_search);
-        if (verifyCode_data.size() != 0) {
-            if (verifyCode.equals(verifyCode_data.get(0).getVerifyCode())) {
-                User user = new User();
-                user.setId(Long.parseLong(id));
-                user.setRelatedPhone(relatedPhone);
-                getDao().updateByPrimaryKeySelective(user);
-            } else {
-                throw new SecurityException("验证码错误");
-            }
-        } else {
-            throw new SecurityException("请重新获取验证码");
+//    @Override
+//    public void addRelatedPhone(String id, String relatedPhone, String verifyCode) {
+//        if (confirmVerifyCode(relatedPhone, verifyCode)) {
+//            User user_new = new User();
+//            user_new.setId(Long.parseLong(id));
+//            user_new.setRelatedPhone(relatedPhone);
+//            getDao().updateByPrimaryKeySelective(user_new);
+//        } else {
+//            throw new SecurityException("验证码错误");
+//        }
+//    }
+
+    /**
+     * 确认用户输入认证码是否正确.
+     *
+     * @param relatedPhone 用户手机
+     * @param verifyCode   用户输入的验证码
+     * @return
+     */
+    private Boolean confirmVerifyCode(String relatedPhone, String verifyCode) {
+        Element element = VerifyCode_CACHE.get(relatedPhone);
+        if (element != null) {
+            return verifyCode.equals(element.getObjectValue());
         }
+        return false;
     }
 
 }

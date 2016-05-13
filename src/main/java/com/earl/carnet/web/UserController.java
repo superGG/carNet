@@ -223,7 +223,7 @@ public class UserController extends BaseController {
                 || relatedPhone.length() > 15) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        userService.addRelatedPhone(id, relatedPhone,verifyCode);
+        userService.changeRelatedPhone(id, relatedPhone,verifyCode);
         result = new ResultMessage();
         result.setResultInfo("添加亲人号码成功");
         return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);

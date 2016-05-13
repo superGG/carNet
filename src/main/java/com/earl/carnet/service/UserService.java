@@ -87,11 +87,11 @@ public interface UserService extends BaseService<User, UserQuery> {
 	 */
 	void changeRelatedPhone(String verifyCode, String id, String newPhone);
 
-	/**
-	 * 绑定亲人号码.
-	 * @param id
-	 * @param relatedPhone
-	 * @param verifyCode
-     */
-	void addRelatedPhone(String id, String relatedPhone, String verifyCode);
+//	/**
+//	 * 绑定亲人号码.
+//	 * @param id
+//	 * @param relatedPhone
+//	 * @param verifyCode
+//     */
+//	void addRelatedPhone(String id, String relatedPhone, String verifyCode);
 }
