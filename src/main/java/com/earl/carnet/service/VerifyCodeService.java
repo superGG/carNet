@@ -1,11 +1,7 @@
 package com.earl.carnet.service;
 
-import com.earl.carnet.commons.service.BaseService;
-import com.earl.carnet.domain.carnet.VerifyCode.VerifyCode;
 
-import javax.servlet.http.HttpSession;
-
-public interface VerifyCodeService extends BaseService<VerifyCode, VerifyCode> {
+public interface VerifyCodeService {
 
     /**
      * 获取验证码.
@@ -13,7 +9,7 @@ public interface VerifyCodeService extends BaseService<VerifyCode, VerifyCode> {
      * @param verifyCode
      * @return
      */
-     Boolean getVerifyCode(String phoneNumber, HttpSession session);
+     Boolean getVerifyCode(String phoneNumber);
 
     Boolean comfigVerifyCode(String verifyCode, String phoneNumber);
 }

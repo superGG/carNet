@@ -1,12 +1,9 @@
 package com.earl.carnet.web;
 
-import java.io.UnsupportedEncodingException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.service.VerifyCodeService;
 import com.wordnik.swagger.annotations.ApiOperation;
-
-import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping(value = "/verifyCode")
@@ -35,8 +30,9 @@ public class VerifyCodeController extends BaseController{
 	 */
 	@RequestMapping(value = "/phoneNumber={phoneNumber}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "获取验证码", notes = "get verifyCode ",httpMethod="GET",response=String.class)
-	public ResultMessage getVerifyCode( @PathVariable String phoneNumber, HttpSession session){
-		Boolean get = verifyCodeService.getVerifyCode(phoneNumber,session);
+	public ResultMessage getVerifyCode( @PathVariable String phoneNumber){
+		log.info("进入controller层的getVerifyCode方法");
+		Boolean get = verifyCodeService.getVerifyCode(phoneNumber);
 
 		result = new ResultMessage();
 		result.setServiceResult(get);

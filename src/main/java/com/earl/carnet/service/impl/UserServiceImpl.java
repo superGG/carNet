@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.earl.carnet.commons.util.EhCacheHelper;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
+
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -17,9 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.service.BaseServiceImpl;
+import com.earl.carnet.commons.util.EhCacheHelper;
 import com.earl.carnet.commons.util.FileUploadImpl;
 import com.earl.carnet.dao.UserDao;
-import com.earl.carnet.domain.carnet.VerifyCode.VerifyCode;
 import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.domain.sercurity.user.UserQuery;
