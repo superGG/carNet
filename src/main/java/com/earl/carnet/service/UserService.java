@@ -87,6 +87,22 @@ public interface UserService extends BaseService<User, UserQuery> {
 	 */
 	void changeRelatedPhone(String verifyCode, String id, String newPhone);
 
+	/**
+	 * 确认用户的安全密码.
+	 * @param id
+	 * @param safePassword
+     * @return
+     */
+	Boolean confirmSafePassword(Long id, String safePassword);
+
+	/**
+	 * 修改安全密码.
+	 * @param id
+	 * @param oldSafePassword
+	 * @param newSafePassword
+     */
+	Boolean changeSafePassword(Long id, String oldSafePassword, String newSafePassword);
+
 //	/**
 //	 * 绑定亲人号码.
 //	 * @param id

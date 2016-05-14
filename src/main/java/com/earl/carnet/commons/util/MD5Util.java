@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 /**
  * MD5加密工具类
- * Created by Administrator on 2016/4/3.
+ * Created by 宋 on 2016/4/3.
  */
 public class MD5Util {
 

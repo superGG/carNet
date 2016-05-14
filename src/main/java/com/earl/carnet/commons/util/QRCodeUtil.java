@@ -27,9 +27,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 /**
  * 二维码工具类
- *
- * @author Johnson
- * @version Thursday July 4th, 2013
+ * Created by 宋 on 2016/4/3.
  */
 public class QRCodeUtil {
 

@@ -1,31 +1,32 @@
 package com.earl.carnet.service.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.annotation.Resource;
 
-import com.earl.carnet.commons.util.SmsbaoHelper;
-import com.earl.carnet.commons.vo.TcpMessage;
-import com.earl.carnet.dao.Tem_CarDao;
-import com.earl.carnet.domain.carnet.Message.Message;
-import com.earl.carnet.domain.carnet.tem_car.Tem_Car;
-import com.earl.carnet.domain.sercurity.user.User;
-import com.earl.carnet.exception.DomainSecurityException;
-import com.earl.carnet.service.MessageService;
-import com.earl.carnet.service.UserService;
+import com.earl.carnet.commons.util.EhCacheHelper;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.service.BaseServiceImpl;
+import com.earl.carnet.commons.util.SmsbaoHelper;
+import com.earl.carnet.commons.vo.TcpMessage;
 import com.earl.carnet.dao.CarDao;
+import com.earl.carnet.dao.Tem_CarDao;
+import com.earl.carnet.domain.carnet.Message.Message;
 import com.earl.carnet.domain.carnet.car.Car;
+import com.earl.carnet.domain.carnet.tem_car.Tem_Car;
+import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.CarService;
+import com.earl.carnet.service.MessageService;
+import com.earl.carnet.service.UserService;
 import com.earl.carnet.util.JPushForCar;
 import com.earl.carnet.util.JPushForUser;
 
@@ -36,7 +37,10 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
 
     private static Logger logger = Logger.getLogger(CarServiceImpl.class);
 
+    //项目标题
     private final String TITLE = "车辆网";
+
+    private static Cache CAR_CACHE = EhCacheHelper.getCacheManage().getCache("car");
 
     @Resource
     CarDao carDao;
@@ -347,6 +351,8 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
         }, 60000);
 
     }
+
+
 
 
 }

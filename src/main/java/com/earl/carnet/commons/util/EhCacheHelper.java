@@ -5,8 +5,8 @@ import net.sf.ehcache.CacheManager;
 import java.net.URL;
 
 /**
- * 宋.
- * Created by Administrator on 2016/5/13.
+ * 创建CacheManager工具类
+ * Created by 宋. on 2016/5/13.
  */
 public class EhCacheHelper {
 

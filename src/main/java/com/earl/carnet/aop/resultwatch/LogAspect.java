@@ -1,15 +1,15 @@
 package com.earl.carnet.aop.resultwatch;
 
-import com.earl.carnet.commons.vo.JsonEntry;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import com.earl.carnet.commons.vo.JsonEntry;
 
 @Service
 @Aspect

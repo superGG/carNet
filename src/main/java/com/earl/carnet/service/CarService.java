@@ -44,14 +44,14 @@ public interface CarService extends BaseService<Car, Car> {
     Tem_Car getCarByVin(String vin);
 
     /**
-     * 用户更新汽车状态.
+     * 用户请求更新汽车状态.
      * @param id
      * @return
      */
     Boolean updateCarState(Long id);
 
     /**
-     * 更新汽车警报状态.
+     * 用户请求更新汽车警报状态.
      * @param id
      * @return
      */

@@ -60,13 +60,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
 
     @Override
     public Boolean changePassword(Long Id, String oldPassword, String newPassword) {
-        // TODO 未测试.
         logger.info("进入修改密码changePassword方法");
         Boolean result = false;
-        User user = new User();
-        user.setId(Id);
+        User user = getDao().findOneById(Id);
         String oldPassword_Md5 = new SimpleHash("SHA-1", oldPassword).toString();
-        String password = userDao.searchQuery(user).get(0).getPassword();
+        String password = user.getPassword();
         if (password.equals(oldPassword_Md5)) {
             String newPassword_Md5 = new SimpleHash("SHA-1", newPassword).toString();
             user.setPassword(newPassword_Md5);
@@ -78,6 +76,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         logger.info("退出修改密码changePassword方法");
         return result;
     }
+
+
 
     @Override
     public List<Role> findRole(Long userId) {
@@ -117,14 +117,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
             e.printStackTrace();
             return false;
         }
-//        try {
-//
-//            String uuid = IdGen.uuid();
-//            System.out.println(userfile.getName());
-//            userfile.transferTo(new File("d:/aaa.jpg"));
-//        } catch (IllegalStateException | IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     //TODO 用户权限发生改变的时候，后台自动重新登录系统
@@ -165,7 +157,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
 
     @Override
     public User findOneByLoginId(String loginid) {
-        // TODO 未测试.
         UserQuery userQuery = new UserQuery();
         userQuery.setLoginid(loginid);
         List<User> user = userDao.searchQuery(userQuery);
@@ -204,6 +195,39 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
             } else {
                 throw new SecurityException("验证码错误");
             }
+    }
+
+    @Override
+    public Boolean confirmSafePassword(Long id, String safePassword) {
+        User user = getDao().findOneById(id);
+        String safePassword_Md5 = new SimpleHash("SHA-1", safePassword).toString();
+        return safePassword_Md5.equals(user.getSafePassword());
+    }
+
+    @Override
+    public Boolean changeSafePassword(Long id, String oldSafePassword, String newSafePassword) {
+        logger.info("进入修改安全密码changeSafePassword方法");
+        Boolean result = false;
+        User user = getDao().findOneById(id);
+        if (user.getSafePassword() != null) {
+            String oldPassword_Md5 = new SimpleHash("SHA-1", oldSafePassword).toString();
+            String password = user.getSafePassword();
+            if (password.equals(oldPassword_Md5)) {
+                String newPassword_Md5 = new SimpleHash("SHA-1", newSafePassword).toString();
+                user.setSafePassword(newPassword_Md5);
+                userDao.updateByPrimaryKeySelective(user);
+                result = true;
+            } else {
+                throw new DomainSecurityException("旧安全密码错误");
+            }
+        } else {  //当初次更新安全密码时
+            String newPassword_Md5 = new SimpleHash("SHA-1", newSafePassword).toString();
+            user.setSafePassword(newPassword_Md5);
+            userDao.updateByPrimaryKeySelective(user);
+            result = true;
+        }
+        logger.info("退出修改安全密码changeSafePassword方法");
+        return result;
     }
 
 //    @Override

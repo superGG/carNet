@@ -169,21 +169,37 @@ public class UserController extends BaseController {
             @RequestParam(name = "newPassword", required = true)
             @Length(min=5, max=30)
             String newPassword) {
-//        if (newPassword.isEmpty() || newPassword.length() < 5
-//                || newPassword.length() > 50) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-        userService.changePassword(id, oldPassword, newPassword);
         result = new ResultMessage();
-        result.setResultInfo("修改密码成功");
-        result.setServiceResult(true);
+        result.setServiceResult(userService.changePassword(id, oldPassword, newPassword));
+        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
+    }
+
+    /**
+     * POST /change -> changes the current user's safePassword
+     */
+    @Valid
+    @ApiOperation(value = "更改用户安全密码", notes = "CHANGE USER SAFEPASSWORD", httpMethod = "POST", response = String.class)
+    @RequestMapping(value = "/changeSafePassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResultMessage> changeSafePassword(
+            @ApiParam(required = true, name = "oldSafePassword", value = "旧安全密码")
+            @RequestParam(name = "oldSafePassword", required = true)
+            String oldSafePassword,
+            @ApiParam(required = true, name = "id", value = "用户id")
+            @RequestParam(name = "id", required = true)
+            Long id,
+            @ApiParam(required = true, name = "newSafePassword", value = "新安全密码")
+            @RequestParam(name = "newSafePassword", required = true)
+            @Length(min=5, max=30)
+            String newSafePassword) {
+        result = new ResultMessage();
+        result.setServiceResult(userService.changeSafePassword(id, oldSafePassword, newSafePassword));
         return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
     }
 
     /**
      * POST /change -> changes the current user's relatedPhone
      */
-    @ApiOperation(value = "更改用户密码", notes = "CHANGE USER PASSWORD", httpMethod = "POST", response = ResultMessage.class)
+    @ApiOperation(value = "更改至亲手机号码", notes = "CHANGE USER PASSWORD", httpMethod = "POST", response = ResultMessage.class)
     @RequestMapping(value = "/changeRelatedPhone", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultMessage> changeRelatedPhone(
             @ApiParam(required = true, name = "id", value = "用户id")
@@ -205,29 +221,29 @@ public class UserController extends BaseController {
         return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
     }
 
-    /**
-     * POST /save -> add the current user's relatedPhone
-     */
-    @RequestMapping(value = "/addRelatedPhone", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResultMessage> addRelatedPhone(
-            @ApiParam(required = true, name = "id", value = "用户id")
-            @RequestParam(name = "id", required = true)
-            String id,
-            @ApiParam(required = true, name = "verifyCode", value = "验证码")
-            @RequestParam(name = "verifyCode", required = true)
-            String verifyCode,
-            @ApiParam(required = true, name = "relatedPhone", value = "亲人号码")
-            @RequestParam(name = "relatedPhone", required = true)
-            String relatedPhone) {
-        if (relatedPhone.isEmpty() || relatedPhone.length() < 5
-                || relatedPhone.length() > 15) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        userService.changeRelatedPhone(id, relatedPhone,verifyCode);
-        result = new ResultMessage();
-        result.setResultInfo("添加亲人号码成功");
-        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
-    }
+//    /**
+//     * POST /save -> add the current user's relatedPhone
+//     */
+//    @RequestMapping(value = "/addRelatedPhone", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<ResultMessage> addRelatedPhone(
+//            @ApiParam(required = true, name = "id", value = "用户id")
+//            @RequestParam(name = "id", required = true)
+//            String id,
+//            @ApiParam(required = true, name = "verifyCode", value = "验证码")
+//            @RequestParam(name = "verifyCode", required = true)
+//            String verifyCode,
+//            @ApiParam(required = true, name = "relatedPhone", value = "亲人号码")
+//            @RequestParam(name = "relatedPhone", required = true)
+//            String relatedPhone) {
+//        if (relatedPhone.isEmpty() || relatedPhone.length() < 5
+//                || relatedPhone.length() > 15) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//        userService.changeRelatedPhone(id, relatedPhone,verifyCode);
+//        result = new ResultMessage();
+//        result.setResultInfo("添加亲人号码成功");
+//        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
+//    }
 
     /**
      * 用户登录
@@ -303,4 +319,17 @@ public class UserController extends BaseController {
         resultMessage.setResultInfo("注册成功");
         return new ResponseEntity<ResultMessage>(resultMessage, HttpStatus.OK);
     }
+
+    @ApiOperation(value = "验证用户安全密码", notes = "confirmSafePassword", httpMethod = "POST", response = String.class)
+    @RequestMapping(value = "/confirmSafePassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResultMessage> confirmSafePassword(
+            Long id, String safePassword) {
+        result = new ResultMessage();
+        result.setServiceResult(userService.confirmSafePassword(id,safePassword));
+        return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+    }
+
+
+
+
 }

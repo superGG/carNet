@@ -1,12 +1,7 @@
 package com.earl.carnet.web;
 
-import com.earl.carnet.commons.vo.ResultMessage;
-import com.earl.carnet.domain.carnet.Message.Message;
-import com.earl.carnet.domain.carnet.brand.Brand;
-import com.earl.carnet.service.BrandService;
-import com.earl.carnet.service.MessageService;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.domain.carnet.Message.Message;
+import com.earl.carnet.domain.carnet.brand.Brand;
+import com.earl.carnet.service.MessageService;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = "/message")

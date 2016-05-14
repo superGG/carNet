@@ -2,7 +2,6 @@ package com.earl.carnet.service.impl;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,7 @@ import com.earl.carnet.service.BrandService;
 public class BrandServiceImpl extends BaseServiceImpl<Brand,Brand>
         implements BrandService {
 
-    private static Logger logger = Logger.getLogger(BrandServiceImpl.class);
+//    private static Logger logger = Logger.getLogger(BrandServiceImpl.class);
 
     @Resource
     BrandDao brandDao;

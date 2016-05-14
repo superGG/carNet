@@ -6,18 +6,12 @@ import org.apache.catalina.filters.CorsFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.ErrorPage;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-
-import java.net.Inet4Address;
 
 @Configuration
 @Profile("demo")

@@ -2,16 +2,16 @@ package com.earl.carnet.commons.dao.impl;
 
 import static org.beetl.sql.core.kit.Constants.SELECT_BY_TEMPLATE;
 
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.annotation.Resource;
-
-import com.earl.carnet.domain.carnet.car.Car;
 import org.apache.commons.beanutils.BeanMap;
 import org.beetl.sql.core.SQLManager;
 import org.beetl.sql.core.SQLScript;
@@ -19,12 +19,12 @@ import org.beetl.sql.core.db.AbstractDBStyle;
 import org.beetl.sql.core.db.KeyHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.domain.AbstractEntity;
 import com.earl.carnet.commons.domain.DateQuery;
 import com.earl.carnet.commons.util.Assert;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T> {
