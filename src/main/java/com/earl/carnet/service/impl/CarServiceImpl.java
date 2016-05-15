@@ -7,6 +7,7 @@ import java.util.TimerTask;
 import javax.annotation.Resource;
 
 import com.earl.carnet.commons.util.EhCacheHelper;
+import com.earl.carnet.util.AddressHelper;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 import org.apache.log4j.Logger;
@@ -332,7 +333,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
             tcpMessage.setMessagtype(2);//1为改变状态，2为改变警报
             tcpMessage.setMessage("true");
             jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
-           return true;
+            return true;
         } else {
             throw new DomainSecurityException("该警报状态已经响起");
         }
@@ -353,6 +354,38 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
     }
 
 
+    /**
+     * 计算汽车10分钟内性能损坏数量.
+     *
+     * @param model
+     */
+    public void Car_Cache(Car model) {
+        Element car_element = CAR_CACHE.get(model.getVin());
+        if (car_element != null) {
+            Integer count = (Integer) car_element.getObjectValue();
+            if (count > 3) {
+                sendMessage(model);//发生事故通知车主的至亲
+            } else {
+                CAR_CACHE.remove(model.getVin());
+                CAR_CACHE.put(new Element(model.getVin(), count + 1));
+            }
+        } else {
+            CAR_CACHE.put(new Element(model.getVin(), 1));
+        }
+    }
 
+    /**
+     * 发送短信到至亲手机.
+     *
+     * @param model
+     */
+    public void sendMessage(Car model) {
+        User user = userService.findOne(model.getUserId());
+        String address = AddressHelper.getAddress(model.getLat(), model.getLon());
+        String message = "【车联网紧急通知】 您好，用户" + user.getUsername()
+                + "在大约" + address + "附近,"
+                + " 驾驶着车牌号为：" + model.getPlateNumber()
+                + " 的车辆多处发生故障，疑似发生事故，请及时联系车主确保安全。";
+    }
 
 }

@@ -65,7 +65,7 @@ public final class JsonHelper {
     
     /**
      * 将json格式的文件字符串转换成list类型
-     *@author 宋文光.
+     *@author 宋.
      * @param json
      * @return
      */

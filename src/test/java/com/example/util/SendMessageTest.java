@@ -1,8 +1,11 @@
 package com.example.util;
 
+import com.earl.carnet.util.AddressHelper;
 import org.junit.Test;
 
 import com.earl.carnet.commons.util.Assert;
+
+import java.util.Map;
 //import com.earl.carnet.util.SendMessage;
 
 /**
@@ -16,6 +19,21 @@ public class SendMessageTest {
 //       SendMessage sendMessage = new SendMessage();
 //        Boolean send = sendMessage.sendTo("16user").withMessage("i love you").send();
 //        Assert.assertTrue(send,"success");
+    }
+
+    @Test
+    public void testAddresshelper(){
+        String addr = AddressHelper.getAddress(31.71099194, 120.4019789);
+        System.out.println(addr);
+    }
+
+
+    @Test
+    public void getLocation(){
+        Map<String, Float> addr = AddressHelper.getLocation("广东海洋大学");
+
+        System.out.println("lon:" + addr.get("lon"));
+        System.out.println("lat:" + addr.get("lat"));
     }
 
 }
