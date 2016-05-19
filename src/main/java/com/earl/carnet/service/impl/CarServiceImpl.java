@@ -1,21 +1,8 @@
 package com.earl.carnet.service.impl;
 
-import java.util.*;
-
-import javax.annotation.Resource;
-
-import com.earl.carnet.commons.util.EhCacheHelper;
-import com.earl.carnet.util.AddressHelper;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
-import net.sf.ehcache.ElementEvictionData;
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.service.BaseServiceImpl;
-import com.earl.carnet.commons.util.SmsbaoHelper;
+import com.earl.carnet.commons.util.EhCacheHelper;
 import com.earl.carnet.commons.vo.TcpMessage;
 import com.earl.carnet.dao.CarDao;
 import com.earl.carnet.dao.Tem_CarDao;
@@ -27,8 +14,17 @@ import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.CarService;
 import com.earl.carnet.service.MessageService;
 import com.earl.carnet.service.UserService;
+import com.earl.carnet.util.AddressHelper;
 import com.earl.carnet.util.JPushForCar;
 import com.earl.carnet.util.JPushForUser;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.*;
 
 @Service("carService")
 @Transactional
@@ -37,8 +33,20 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
 
     private static Logger logger = Logger.getLogger(CarServiceImpl.class);
 
+    //推送消息对象
+    private TcpMessage tcpMessage;
+
     //项目标题
     private final String TITLE = "车辆网";
+
+    //空提醒类型
+    private final Integer NOTHING = 0;
+
+    //油量不足提醒类型
+    private final Integer OIL = 1;
+
+    //汽车损坏提醒类型
+    private final Integer REPAIR = 2;
 
     private static Cache CAR_CACHE = EhCacheHelper.getCacheManage().getCache("car");
 
@@ -93,7 +101,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
             monitorState(model, model_data);//状态
             monitorTemperature(model, model_data);//温度
             monitorTransmission(model, model_data);//转速器
-
+            monitorSRS(model,model_data);//安全气囊
             //更新数据
             carDao.updateByPrimaryKeySelective(model);
 //          int update = carDao.updateByNotSameParam(model,model_data);
@@ -114,7 +122,10 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
                 } else {
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为" + model_data.getVin() + " 的车辆警报器响起，请注意查看。";
                 }
-                sendMessageForUser(model_data.getUserId(), content);//推送信息到用户
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(NOTHING);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());//推送信息到用户
+                Car_Cache(model_data,"alarm");//缓存数据
             }
         }
     }
@@ -136,7 +147,9 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
                 } else {
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为" + model_data.getVin() + " 的车辆已经启动。";
                 }
-                sendMessageForUser(model_data.getUserId(), content);//推送信息到用户
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(NOTHING);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());//推送信息到用户
             }
         }
     }
@@ -158,7 +171,10 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
                 } else {
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为" + model_data.getVin() + " 的车辆发动机出现故障，请注意查看。";
                 }
-                sendMessageForUser(model_data.getUserId(), content);
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(REPAIR);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());//推送信息到用户
+                Car_Cache(model_data,"engineProperty");//缓存数据
             }
         }
     }
@@ -179,7 +195,10 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
                 } else {
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为" + model_data.getVin() + " 的车辆转速器出现故障，请注意查看。";
                 }
-                sendMessageForUser(model_data.getUserId(), content);
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(REPAIR);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());//推送信息到用户
+                Car_Cache(model_data,"transmission");//缓存数据
                 logger.info("转速器坏了");
             }
         }
@@ -223,7 +242,10 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
                 } else {
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为" + model_data.getVin() + " 的车辆车灯出现故障，请注意查看。";
                 }
-                sendMessageForUser(model_data.getUserId(), content);
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(REPAIR);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());//推送信息到用户
+                Car_Cache(model_data,"carLight");//缓存数据
                 logger.info("车灯坏了");
 //                jpushForUser.sendPush_Alias(model.getUserId().toString(),"车灯坏了");
             }
@@ -265,7 +287,9 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
             if (model.getOil() % 5 < model_data.getOil() % 5 || (model.getOil() < model.getOilBox() * 0.2 && model.getOil() > model.getOilBox() * 0.15)) { //避免多次发送信息，每降低5个单位量的油量就通知车主一次
                 User user = userService.findOne(model.getUserId());
                 String content = "尊敬的" + user.getUsername() + ": 您好，您当前的车辆 油量不足20%，请及时加油。";
-                sendMessageForUser(model.getUserId(), content);
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(OIL);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());//推送信息到用户
                 logger.info("汽车油量不足，请及时加油");
             }
         }
@@ -278,10 +302,12 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
      * @param model_data
      */
     private void monitorMileage(Car model, Car model_data) {
-        if ((model.getMileage() % 15000 < model_data.getMileage() % 15000) && model_data.getPropertyMessage() && && model.getCurrentCar()) {
+        if ((model.getMileage() % 15000 < model_data.getMileage() % 15000) && model_data.getPropertyMessage() && model.getCurrentCar()) {
             User user = userService.findOne(model.getUserId());
             String content = "尊敬的" + user.getUsername() + ": 您好，您当前的车辆已经行驶超过15000公里，请及时对汽车进行检查维修。";
-            sendMessageForUser(model.getUserId(), content);
+            tcpMessage.setMessage(content);
+            tcpMessage.setMessagtype(REPAIR);
+            sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());//推送信息到用户
             logger.info("汽车已行驶超过15000公里，请及时对汽车进行检查维修");
         }
     }
@@ -393,6 +419,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
      * @param type  需要缓存车辆部件
      */
     public void Car_Cache(Car model, String type) {
+        //TODO 未测试
         Map<String, Object> map = new HashMap<String, Object>();
         List<String> typelist = new ArrayList<String>();
         Element car_element = CAR_CACHE.get(model.getVin());
@@ -422,6 +449,9 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
             map.put("type", typelist);
             CAR_CACHE.put(new Element(model.getVin(), map));
         }
+        //test
+        Element test_element = CAR_CACHE.get(model.getVin());
+        logger.info("----------test_element:"+test_element.getObjectValue().toString());
     }
 
     /**
