@@ -58,4 +58,17 @@ public class VerifyCodeController extends BaseController{
 		return result;
 	}
 
+	/**
+	 * GET /test -> test
+	 */
+	@RequestMapping(value = "/test", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "test", notes = "test  ",httpMethod="GET",response=String.class)
+	public ResultMessage test(){
+		Boolean get = verifyCodeService.test();
+
+		result = new ResultMessage();
+		result.setServiceResult(get);
+		return result;
+	}
+
 }

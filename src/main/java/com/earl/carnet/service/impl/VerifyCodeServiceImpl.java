@@ -1,18 +1,16 @@
 package com.earl.carnet.service.impl;
 
-import java.util.Random;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
-
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.earl.carnet.commons.util.EhCacheHelper;
 import com.earl.carnet.commons.util.SmsbaoHelper;
 import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.service.VerifyCodeService;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Random;
 
 @Service("verifyCodeService")
 @Transactional
@@ -37,16 +35,15 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
         Boolean get_result = false;
         Element element = VerifyCode_CACHE.get(phoneNumber);
         if (element != null) {
-            get_result =  true;
-        } else {
-            ResultMessage result = send(phoneNumber);
-            if (result.getServiceResult()) {
-                element = new Element(phoneNumber, result.getResultInfo());
-                VerifyCode_CACHE.put(element);
-                logger.info("ehcache:" + element.getObjectValue());
-            }
-            get_result = result.getServiceResult();
+            VerifyCode_CACHE.remove(phoneNumber);//如果缓存存在，则先清除缓存
         }
+        ResultMessage result = send(phoneNumber);
+        if (result.getServiceResult()) {
+            element = new Element(phoneNumber, result.getResultInfo());
+            VerifyCode_CACHE.put(element);
+            logger.info("ehcache:" + element.getObjectValue());
+        }
+        get_result = result.getServiceResult();
         return get_result;
     }
 
@@ -62,6 +59,30 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Boolean test() {
+//        VerifyCode_CACHE.put(new Element("test","test1"));
+        Element test_elenment = VerifyCode_CACHE.get("test");
+//        logger.info("--------------------test_element:"+ test_elenment.getObjectValue());
+        logger.info("--------------------test_element:" + test_elenment.toString());
+//        DefaultElementEvictionData new_element = new DefaultElementEvictionData(test_elenment.getLastAccessTime());
+//        test_elenment.setElementEvictionData(new_element);
+        logger.info("------------time:" + (test_elenment.getLastAccessTime() - test_elenment.getCreationTime()));
+        Element new_element = new Element(test_elenment.getObjectKey(),
+                "2", test_elenment.getVersion(),
+                test_elenment.getCreationTime(), test_elenment.getLastAccessTime(),
+                test_elenment.getLastUpdateTime(), test_elenment.getHitCount());
+        VerifyCode_CACHE.remove("test");
+        VerifyCode_CACHE.put(new_element);
+
+        Element new_test = VerifyCode_CACHE.get("test");
+        if (new_test != null) {
+            logger.info("-----------new_test:" + new_test.toString());
+            logger.info("------------new_test:" + (new_test.getLastAccessTime() - new_test.getCreationTime()));
+        }
+        return true;
     }
 
     /**

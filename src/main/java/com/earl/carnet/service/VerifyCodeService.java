@@ -12,4 +12,10 @@ public interface VerifyCodeService {
      Boolean getVerifyCode(String phoneNumber);
 
     Boolean comfigVerifyCode(String verifyCode, String phoneNumber);
+
+    /**
+     * test
+     * @return
+     */
+    Boolean test();
 }
