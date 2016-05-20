@@ -2,6 +2,7 @@ package com.earl.carnet.service;
 
 import java.util.List;
 
+import com.earl.carnet.domain.carnet.car.Car;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.earl.carnet.commons.service.BaseService;
@@ -102,6 +103,13 @@ public interface UserService extends BaseService<User, UserQuery> {
 	 * @param newSafePassword
      */
 	Boolean changeSafePassword(Long id, String oldSafePassword, String newSafePassword);
+
+	/**
+	 * 获取用户当前车辆.
+	 * @param loginid
+	 * @return
+     */
+	Car getCurrentCar(String loginid);
 
 //	/**
 //	 * 绑定亲人号码.

@@ -3,6 +3,7 @@ package com.earl.carnet.dao;
 import java.util.List;
 
 import com.earl.carnet.commons.dao.BaseDao;
+import com.earl.carnet.domain.carnet.car.Car;
 import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;
 
@@ -45,4 +46,11 @@ public interface UserDao extends BaseDao<User>{
 	List<String> findRoleName(Long id);
 
 	User findOneByLoginId(String loginid);
+
+	/**
+	 * 获取用户当前车辆
+	 * @param id
+	 * @return
+     */
+	Car getCurrentCar(Long id);
 }

@@ -2,6 +2,7 @@ package com.earl.carnet.web;
 
 import javax.validation.Valid;
 
+import com.earl.carnet.domain.carnet.car.Car;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.validator.constraints.Length;
@@ -38,13 +39,13 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
-    private  ResultMessage result = null;
+    private ResultMessage result = null;
 
     /**
      * GET /users -> get all the users
      */
     @RequestMapping(value = "/getAlls", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "得到所有用户信息", notes = "find All User", httpMethod = "GET", response = User.class,responseContainer="List")
+    @ApiOperation(value = "得到所有用户信息", notes = "find All User", httpMethod = "GET", response = User.class, responseContainer = "List")
     public ResponseEntity<ResultMessage> getAll() {
         log.debug("REST request to get all Users");
         result = new ResultMessage();
@@ -109,6 +110,7 @@ public class UserController extends BaseController {
 
     /**
      * 更新指定用户.
+     *
      * @param user
      * @return
      */
@@ -122,23 +124,24 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "userImg", value = "User ID", required = false, dataType = "long", paramType = "query"),
             @ApiImplicitParam(name = "safePassword", value = "User ID", required = false, dataType = "long", paramType = "query")
     })
-    @RequestMapping(value = "/update", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
             @ApiParam(required = false, name = "user", value = "这个字段不要理！！！！")
             @RequestParam(name = "user", required = false)
             User user) {
         result = new ResultMessage();
-        if(userService.updateByPrimaryKeySelective(user) != 0) {
+        if (userService.updateByPrimaryKeySelective(user) != 0) {
             result.setServiceResult(true);
         } else {
             result.setServiceResult(false);
             result.setResultInfo("更新失败");
         }
-        return new ResponseEntity<>(result,HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     /**
      * 根据id删除用户
+     *
      * @param id
      * @return
      */
@@ -167,11 +170,11 @@ public class UserController extends BaseController {
             Long id,
             @ApiParam(required = true, name = "newPassword", value = "新密码")
             @RequestParam(name = "newPassword", required = true)
-            @Length(min=5, max=30)
+            @Length(min = 5, max = 30)
             String newPassword) {
         result = new ResultMessage();
         result.setServiceResult(userService.changePassword(id, oldPassword, newPassword));
-        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
+        return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
 
     /**
@@ -189,11 +192,11 @@ public class UserController extends BaseController {
             Long id,
             @ApiParam(required = true, name = "newSafePassword", value = "新安全密码")
             @RequestParam(name = "newSafePassword", required = true)
-            @Length(min=5, max=30)
+            @Length(min = 5, max = 30)
             String newSafePassword) {
         result = new ResultMessage();
         result.setServiceResult(userService.changeSafePassword(id, oldSafePassword, newSafePassword));
-        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
+        return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
 
     /**
@@ -215,10 +218,10 @@ public class UserController extends BaseController {
                 || newPhone.length() > 15) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        userService.changeRelatedPhone(id, newPhone,verifyCode);
+        userService.changeRelatedPhone(id, newPhone, verifyCode);
         result = new ResultMessage();
         result.setResultInfo("修改亲人号码成功");
-        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
+        return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
 
 //    /**
@@ -247,6 +250,7 @@ public class UserController extends BaseController {
 
     /**
      * 用户登录
+     *
      * @param loginid
      * @param password
      * @return
@@ -262,13 +266,16 @@ public class UserController extends BaseController {
             @ApiParam(required = true, value = "用户登录密码")
             @RequestParam(name = "password", required = true) String password) {
         userService.doLogin(loginid, password);
-
+        Car car_current = userService.getCurrentCar(loginid);
         ResultMessage resultMessage = new ResultMessage();
         resultMessage.setResultInfo("登录成功");
         ShiroPrincipal principal = (ShiroPrincipal) SecurityUtils.getSubject().getPrincipal();
         User user = principal.getUser();
 
-        resultMessage.getResultParm().put("user",user);
+        resultMessage.getResultParm().put("user", user);
+        if (car_current != null) {
+            resultMessage.getResultParm().put("car", car_current);
+        }
         return new ResponseEntity<ResultMessage>(resultMessage, HttpStatus.OK);
     }
 
@@ -282,14 +289,14 @@ public class UserController extends BaseController {
             @ApiParam(required = true, name = "id", value = "用户id")
             Long id) {
         result = new ResultMessage();
-        if (userService.updateImg(userfile, id)){
+        if (userService.updateImg(userfile, id)) {
             result.setResultInfo("更新用户头像成功");
             result.setServiceResult(true);
         } else {
             result.setResultInfo("更新用户头像失败");
             result.setServiceResult(false);
         }
-        return  result;
+        return result;
     }
 
     @ApiOperation(value = "得到用户信息", notes = "user info", httpMethod = "GET", response = String.class)
@@ -325,11 +332,9 @@ public class UserController extends BaseController {
     public ResponseEntity<ResultMessage> confirmSafePassword(
             Long id, String safePassword) {
         result = new ResultMessage();
-        result.setServiceResult(userService.confirmSafePassword(id,safePassword));
+        result.setServiceResult(userService.confirmSafePassword(id, safePassword));
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
-
-
 
 
 }

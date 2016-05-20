@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.earl.carnet.domain.carnet.car.Car;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 
@@ -229,6 +230,14 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         logger.info("退出修改安全密码changeSafePassword方法");
         return result;
     }
+
+    @Override
+    public Car getCurrentCar(String loginid) {
+        User user = userDao.findOneByLoginId(loginid);
+        return userDao.getCurrentCar(user.getId());
+    }
+
+
 
 //    @Override
 //    public void addRelatedPhone(String id, String relatedPhone, String verifyCode) {
