@@ -407,7 +407,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car>
                 tem_carDao.delete(tem_id);
                 logger.info("临时车辆信息已删除");
             }
-        }, 60000);
+        }, 300000);
 
     }
 
