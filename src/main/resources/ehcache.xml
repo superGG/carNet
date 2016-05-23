@@ -44,4 +44,14 @@
            statistics="false">
     </cache>
 
+    <!--临时车辆信息缓存，定时为10分钟-->
+    <cache name="tem_car"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToIdleSeconds="600"
+           timeToLiveSeconds="600"
+           overflowToDisk="false"
+           statistics="false">
+    </cache>
+
 </ehcache>

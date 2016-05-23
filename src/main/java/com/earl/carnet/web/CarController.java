@@ -2,7 +2,6 @@ package com.earl.carnet.web;
 
 import java.util.List;
 
-import com.earl.carnet.domain.carnet.tem_car.Tem_Car;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +89,7 @@ public class CarController extends BaseController {
             @PathVariable
             String vin) {
         log.debug("REST request to get one  Car");
-        Tem_Car car = carService.getCarByVin(vin);
+        Car car = carService.getCarByVin(vin);
         result = new ResultMessage();
         result.setResultInfo("获取成功");
         result.getResultParm().put("car",car);
@@ -180,7 +179,7 @@ public class CarController extends BaseController {
     })
     public ResponseEntity<ResultMessage> saveTem_Car(
             @ApiParam(required = true, name = "tem_car", value = "临时车辆信息")
-            Tem_Car tem_car) {
+            Car tem_car) {
         if( tem_car.getVin() == null || tem_car.getVin().equals("")){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
