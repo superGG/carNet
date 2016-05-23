@@ -19,6 +19,8 @@ public class RepairShop extends AbstractAuditingEntity<Long> implements Serializ
 
     private String img;//店图
 
+    private String introduce;//介绍
+
     private String address;//地址
 
     private String phoneNumber;//联系电话
@@ -26,6 +28,14 @@ public class RepairShop extends AbstractAuditingEntity<Long> implements Serializ
     private Double lat;//纬度
 
     private Double lon;//经度
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
 
     public String getName() {
         return name;
@@ -81,6 +91,7 @@ public class RepairShop extends AbstractAuditingEntity<Long> implements Serializ
                 "id=" + super.getId() +
                 "name='" + name + '\'' +
                 ", img='" + img + '\'' +
+                ", introduce='" + introduce + '\'' +
                 ", address='" + address + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", lat=" + lat +

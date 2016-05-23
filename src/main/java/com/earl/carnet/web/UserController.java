@@ -78,6 +78,29 @@ public class UserController extends BaseController {
     }
 
     /**
+     * GET /users/:id -> get the "id" user
+     */
+    @ApiOperation(value = "得到id指定用户", notes = "GET POINT USER", httpMethod = "GET", response = String.class)
+    @RequestMapping(value = "/id={id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResultMessage> getUser(
+            @ApiParam(required = true, name = "id", value = "用户id")
+            @PathVariable
+            Long id) {
+        log.info("REST request to get User : {}", id);
+        result = new ResultMessage();
+        User user = userService.findOne(id);
+        if (user != null) {
+            result.setServiceResult(true);
+            result.getResultParm().put("user", user);
+        } else {
+            result.setServiceResult(false);
+            result.setResultInfo("获取用户失败");
+        }
+//        log.info(result.toJson());
+        return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
+    }
+
+    /**
      * POST /users -> create a new user
      *
      * @RequestBody 专门处理非from表单数据，就是json,xml类型数据
