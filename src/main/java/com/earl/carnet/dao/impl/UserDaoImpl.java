@@ -50,7 +50,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     @Override
     public Car getCurrentCar(Long id) {
-        String sql = "select * from car where id=? and current = true";
+        String sql = "select * from car where id=? and currentCar = true";
         SQLReady sqlReady = new SQLReady(sql, id);
         List<Car> carList = sqlManager.execute(sqlReady, Car.class);
         if (carList.size() != 0) {
