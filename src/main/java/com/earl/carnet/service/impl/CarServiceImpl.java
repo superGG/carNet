@@ -40,7 +40,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements
 	private static Logger logger = Logger.getLogger(CarServiceImpl.class);
 
 	// 推送消息对象
-	private TcpMessage tcpMessage;
+	private TcpMessage tcpMessage = new TcpMessage();
 
 	// 项目标题
 	private final String TITLE = "车辆网";
@@ -112,6 +112,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements
 			monitorTransmission(model, model_data);// 转速器
 			monitorSRS(model, model_data);// 安全气囊
 			// 更新数据
+			model.setId(model_data.getId());
 			carDao.updateByPrimaryKeySelective(model);
 			// int update = carDao.updateByNotSameParam(model,model_data);
 			return true;
