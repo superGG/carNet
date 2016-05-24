@@ -78,7 +78,7 @@ public interface UserService extends BaseService<User, UserQuery> {
 	 * @param loginid
 	 * @param password
      */
-	void registerAccount(String loginid, String password);
+	void  registerAccount(String loginid, String password);
 
 	/**
 	 * 修改亲人号码.

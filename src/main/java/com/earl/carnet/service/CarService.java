@@ -61,4 +61,11 @@ public interface CarService extends BaseService<Car, Car> {
      * @param tem_car
      */
     void insertTem_Car(Car tem_car);
+
+    /**
+     * 更新用户当前车辆
+     * @param car
+     * @return
+     */
+    Boolean updateUserCurrentCar(Car car);
 }

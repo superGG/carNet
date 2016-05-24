@@ -237,6 +237,30 @@ public class CarController extends BaseController {
     }
 
     /**
+     * 更新用户当前车辆.
+     *
+     * @return
+     */
+    @RequestMapping(value = "/updateUserCurrentCar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "更新用户当前车辆", notes = "update user current car", httpMethod = "POST", response = String.class)
+    public ResponseEntity<?> updateCarByVin(
+                    @ApiParam(required = true, name = "id", value = "车辆id") Long id,
+                    @ApiParam(required = true, name = "userId", value = "用户id") Long userId) throws Exception {
+        result = new ResultMessage();
+        Car car = new Car();
+        car.setId(id);
+        car.setUserId(userId);
+        Boolean update = carService.updateUserCurrentCar(car);
+        if (update) {
+            result.setResultInfo("更新成功");
+        } else {
+            result.setServiceResult(false);
+            result.setResultInfo("更新失败");
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    /**
      * 车载系统更新汽车.
      *
      * @return
