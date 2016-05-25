@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.hateoas.Identifiable;
 
@@ -15,6 +16,7 @@ public abstract class AbstractEntity<T extends Serializable>  implements Identif
 
 	@Id
 	@GeneratedValue
+	@NotNull(message = "id不能为空")
 	private T id;
 
 	public T getId() {

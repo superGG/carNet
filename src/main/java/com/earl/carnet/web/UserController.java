@@ -1,6 +1,7 @@
 package com.earl.carnet.web;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.earl.carnet.domain.carnet.car.Car;
 import org.apache.shiro.SecurityUtils;
@@ -80,10 +81,12 @@ public class UserController extends BaseController {
     /**
      * GET /users/:id -> get the "id" user
      */
+    @Valid
     @ApiOperation(value = "得到id指定用户", notes = "GET POINT USER", httpMethod = "GET", response = String.class)
     @RequestMapping(value = "/id={id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultMessage> getUser(
             @ApiParam(required = true, name = "id", value = "用户id")
+            @NotNull(message = "用户id不能为空")
             @PathVariable
             Long id) {
         log.info("REST request to get User : {}", id);
@@ -143,7 +146,6 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "realName", value = "User's email", required = false, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "phone", value = "User ID", required = false, dataType = "long", paramType = "query"),
             @ApiImplicitParam(name = "loginid", value = "User ID", required = false, dataType = "long", paramType = "query"),
-            @ApiImplicitParam(name = "loginid", value = "User ID", required = false, dataType = "long", paramType = "query"),
             @ApiImplicitParam(name = "userImg", value = "User ID", required = false, dataType = "long", paramType = "query"),
             @ApiImplicitParam(name = "safePassword", value = "User ID", required = false, dataType = "long", paramType = "query")
     })
@@ -168,10 +170,12 @@ public class UserController extends BaseController {
      * @param id
      * @return
      */
+    @Valid
     @ApiOperation(value = "删除一个用户", notes = "DELETE ONE USER", httpMethod = "DELETE", response = String.class)
     @RequestMapping(value = "/deleteById", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteById(
             @ApiParam(required = true, name = "id", value = "用户id")
+            @NotNull(message = "用户id不能为空")
             @RequestParam(name = "id", required = true)
             Long id) {
         userService.delete(id);
@@ -189,6 +193,7 @@ public class UserController extends BaseController {
             @RequestParam(name = "oldPassword", required = true)
             String oldPassword,
             @ApiParam(required = true, name = "id", value = "用户id")
+            @NotNull(message = "用户id不能为空")
             @RequestParam(name = "id", required = true)
             Long id,
             @ApiParam(required = true, name = "newPassword", value = "新密码")
@@ -211,6 +216,7 @@ public class UserController extends BaseController {
             @RequestParam(name = "oldSafePassword", required = true)
             String oldSafePassword,
             @ApiParam(required = true, name = "id", value = "用户id")
+            @NotNull(message = "用户id不能为空")
             @RequestParam(name = "id", required = true)
             Long id,
             @ApiParam(required = true, name = "newSafePassword", value = "新安全密码")
@@ -225,10 +231,12 @@ public class UserController extends BaseController {
     /**
      * POST /change -> changes the current user's relatedPhone
      */
+    @Valid
     @ApiOperation(value = "更改至亲手机号码", notes = "CHANGE USER PASSWORD", httpMethod = "POST", response = ResultMessage.class)
     @RequestMapping(value = "/changeRelatedPhone", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultMessage> changeRelatedPhone(
             @ApiParam(required = true, name = "id", value = "用户id")
+            @NotNull(message = "用户id不能为空")
             @RequestParam(name = "id", required = true)
             String id,
             @ApiParam(required = true, name = "verifyCode", value = "验证码")
@@ -305,10 +313,12 @@ public class UserController extends BaseController {
     /**
      * 上传图片
      */
+    @Valid
     @ApiOperation(value = "更新用户头像", notes = "loginSystem", httpMethod = "POST", response = String.class)
     @RequestMapping(value = "/updateImg", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResultMessage updateImg(
             MultipartFile userfile,
+            @NotNull(message = "用户id不能为空")
             @ApiParam(required = true, name = "id", value = "用户id")
             Long id) {
         result = new ResultMessage();
@@ -333,6 +343,7 @@ public class UserController extends BaseController {
         return new ResponseEntity<ShiroPrincipal>(principal, HttpStatus.OK);
     }
 
+    @Valid
     @ApiOperation(value = "用户注册", notes = "user register system account ", httpMethod = "POST", response = String.class)
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultMessage> regitsterAccount(
@@ -350,9 +361,11 @@ public class UserController extends BaseController {
         return new ResponseEntity<ResultMessage>(resultMessage, HttpStatus.OK);
     }
 
+    @Valid
     @ApiOperation(value = "验证用户安全密码", notes = "confirmSafePassword", httpMethod = "POST", response = String.class)
     @RequestMapping(value = "/confirmSafePassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultMessage> confirmSafePassword(
+            @NotNull(message="用户id不能为空")
             Long id, String safePassword) {
         result = new ResultMessage();
         result.setServiceResult(userService.confirmSafePassword(id, safePassword));

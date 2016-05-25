@@ -11,6 +11,8 @@ import com.earl.carnet.dao.RepairShopDao;
 import com.earl.carnet.domain.carnet.RepairShop.RepairShop;
 import com.earl.carnet.service.RepairShopService;
 
+import java.util.List;
+
 @Service("repairShopService")
 @Transactional
 public class RepairShopServiceImpl extends BaseServiceImpl<RepairShop, RepairShop>
@@ -24,5 +26,11 @@ public class RepairShopServiceImpl extends BaseServiceImpl<RepairShop, RepairSho
     @Override
     protected BaseDao<RepairShop> getDao() {
         return repairShopDao;
+    }
+
+    @Override
+    public List<RepairShop> getAroundShop(Double lat, Double lon) {
+        List<RepairShop> shopList = repairShopDao.getAroundShop(lat,lon);
+        return shopList;
     }
 }

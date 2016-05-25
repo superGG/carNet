@@ -132,7 +132,7 @@ public class MessageController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(value = "根据id删除汽车", notes = "delete message by id", httpMethod = "POST", response = String.class)
+	@ApiOperation(value = "根据id信息", notes = "delete message by id", httpMethod = "POST", response = String.class)
 	public ResponseEntity<ResultMessage> delete(
 			@ApiParam(required = true, name = "id", value = "消息id")
 			Long id) {
