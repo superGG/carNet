@@ -152,7 +152,6 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(
             @ApiParam(required = false, name = "user", value = "这个字段不要理！！！！")
-            @RequestParam(name = "user", required = false)
             User user) {
         result = new ResultMessage();
         if (userService.updateByPrimaryKeySelective(user) != 0) {
