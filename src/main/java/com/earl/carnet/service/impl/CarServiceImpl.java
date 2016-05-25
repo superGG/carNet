@@ -33,8 +33,7 @@ import com.earl.carnet.util.JPushForUser;
 
 @Service("carService")
 @Transactional
-public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements
-		CarService
+public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarService
 {
 
 	private static Logger logger = Logger.getLogger(CarServiceImpl.class);
@@ -422,104 +421,108 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements
 	public void insertTem_Car(Car tem_car) {
 		// 先在数据库car中查询是否有该车架号vin的车辆
 //		System.out.println("----------开始检车数据库car中是否存在车架号vin为：" + tem_car.getVin() + "的车辆");
-		Car car_vin = new Car();
-		car_vin.setVin(tem_car.getVin());
-		List<Car> carList = getDao().searchAccurate(car_vin);
-		if (carList.size() != 0)
-			throw new DomainSecurityException("该车辆在数据库car中已存在");
+        Car car_vin = new Car();
+        car_vin.setVin(tem_car.getVin());
+        List<Car> carList = getDao().searchAccurate(car_vin);
+        if (carList.size() != 0)
+            throw new DomainSecurityException("该车辆在数据库car中已存在");
 //		System.out.println("-------检查数据库完毕");
-		// Ehcache缓存临时车辆信息
-		Element tem_car_element = TEM_CAR.get(tem_car.getVin());
+        // Ehcache缓存临时车辆信息
+        Element tem_car_element = TEM_CAR.get(tem_car.getVin());
 //		System.out.println("-------开始检车缓存中是否存在");
-		if (tem_car_element != null) {
-			throw new DomainSecurityException("该车辆已存在");
-		} else {
+        if (tem_car_element != null) {
+            throw new DomainSecurityException("该车辆已存在");
+        } else {
 //			System.out.println("-------缓存中不存在");
 //			System.out.println("-------开始给缓存中添加临时车辆信息");
-			TEM_CAR.put(new Element(tem_car.getVin(), tem_car));
-		}
-	}
+            TEM_CAR.put(new Element(tem_car.getVin(), tem_car));
+        }
+    }
+
+    @Override
+    public Car getCarByVin(String vin) {
+        // Ehcache缓存临时车辆信息
+        Element tem_car = TEM_CAR.get(vin);
+        if (tem_car != null) {
+            return (Car) tem_car.getObjectValue();
+        } else {
+            throw new DomainSecurityException("无该车辆");
+        }
+    }
+
+    /**
+     * 计算汽车10分钟内性能损坏数量.
+     *
+     * @param model 对象
+     * @param type  需要缓存车辆部件
+     */
+    @SuppressWarnings("unchecked")
+    public void Car_Cache(Car model, String type) {
+        // TODO 未测试
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<String> typelist = new ArrayList<String>();
+        Element car_element = CAR_CACHE.get(model.getVin());
+        if (car_element != null) { //
+            map = (Map<String, Object>) car_element.getObjectValue();
+            Integer count = (Integer) map.get("count");
+            typelist = (List<String>) map.get("type");
+            if (!typelist.contains(type)) { // 如果该部件损坏没有缓存
+                count++;
+                if (count > 3) {
+                    sendMessage(model);// 发生事故通知车主的至亲
+                } else {
+                    CAR_CACHE.remove(model.getVin()); // 清除旧缓存
+                    typelist.add(type);
+                    map.replace("count", count);
+                    map.replace("type", typelist);
+                    Element new_element = new Element(
+                            car_element.getObjectKey(), // 更新旧缓存的数据
+                            map, car_element.getVersion(),
+                            car_element.getCreationTime(),
+                            car_element.getLastAccessTime(),
+                            car_element.getLastUpdateTime(),
+                            car_element.getHitCount());
+                    CAR_CACHE.put(new_element);// 添加更新缓存
+                }
+            }
+        } else { // 如果没有该车量的缓存数据
+            typelist.add(type);
+            map.put("count", 1);
+            map.put("type", typelist);
+            CAR_CACHE.put(new Element(model.getVin(), map));
+        }
+        // test
+        Element test_element = CAR_CACHE.get(model.getVin());
+        logger.info("----------test_element:"
+                + test_element.getObjectValue().toString());
+    }
+
+    /**
+     * 发送短信到至亲手机.
+     *
+     * @param model
+     */
+    public void sendMessage(Car model) {
+        User user = userService.findOne(model.getUserId());
+        String address = AddressHelper.getAddress(model.getLat(),
+                model.getLon());// 获取用处当前地址
+        String message = "【车联网紧急通知】 您好，用户" + user.getUsername() + "在大约"
+                + address + "附近," + " 驾驶着车牌号为：" + model.getPlateNumber()
+                + " 的车辆多处发生故障，疑似发生事故，请及时联系车主确保安全。";
+        try {
+            int send = SmsbaoHelper.send(user.getRelatedPhone(), message);
+            if (send != 0) {
+                throw new DomainSecurityException("发送失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	@Override
-	public Car getCarByVin(String vin) {
-		// Ehcache缓存临时车辆信息
-		Element tem_car = TEM_CAR.get(vin);
-		if (tem_car != null) {
-			return (Car) tem_car.getObjectValue();
-		} else {
-			throw new DomainSecurityException("无该车辆");
-		}
-	}
-
-	/**
-	 * 计算汽车10分钟内性能损坏数量.
-	 *
-	 * @param model
-	 *            对象
-	 * @param type
-	 *            需要缓存车辆部件
-	 */
-	@SuppressWarnings("unchecked")
-	public void Car_Cache(Car model, String type) {
-		// TODO 未测试
-		Map<String, Object> map = new HashMap<String, Object>();
-		List<String> typelist = new ArrayList<String>();
-		Element car_element = CAR_CACHE.get(model.getVin());
-		if (car_element != null) { //
-			map = (Map<String, Object>) car_element.getObjectValue();
-			Integer count = (Integer) map.get("count");
-			typelist = (List<String>) map.get("type");
-			if (!typelist.contains(type)) { // 如果该部件损坏没有缓存
-				count++;
-				if (count > 3) {
-					sendMessage(model);// 发生事故通知车主的至亲
-				} else {
-					CAR_CACHE.remove(model.getVin()); // 清除旧缓存
-					typelist.add(type);
-					map.replace("count", count);
-					map.replace("type", typelist);
-					Element new_element = new Element(
-							car_element.getObjectKey(), // 更新旧缓存的数据
-							map, car_element.getVersion(),
-							car_element.getCreationTime(),
-							car_element.getLastAccessTime(),
-							car_element.getLastUpdateTime(),
-							car_element.getHitCount());
-					CAR_CACHE.put(new_element);// 添加更新缓存
-				}
-			}
-		} else { // 如果没有该车量的缓存数据
-			typelist.add(type);
-			map.put("count", 1);
-			map.put("type", typelist);
-			CAR_CACHE.put(new Element(model.getVin(), map));
-		}
-		// test
-		Element test_element = CAR_CACHE.get(model.getVin());
-		logger.info("----------test_element:"
-				+ test_element.getObjectValue().toString());
-	}
-
-	/**
-	 * 发送短信到至亲手机.
-	 *
-	 * @param model
-	 */
-	public void sendMessage(Car model) {
-		User user = userService.findOne(model.getUserId());
-		String address = AddressHelper.getAddress(model.getLat(),
-				model.getLon());// 获取用处当前地址
-		String message = "【车联网紧急通知】 您好，用户" + user.getUsername() + "在大约"
-				+ address + "附近," + " 驾驶着车牌号为：" + model.getPlateNumber()
-				+ " 的车辆多处发生故障，疑似发生事故，请及时联系车主确保安全。";
-		try {
-			int send = SmsbaoHelper.send(user.getRelatedPhone(), message);
-			if (send != 0) {
-				throw new DomainSecurityException("发送失败");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public Boolean updateUserCurrentCar(Car car) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -39,7 +39,6 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     @Override
     //根据登录id查询用户.
     public User findOneByLoginId(String loginid) {
-        // TODO 未测试.
         UserQuery user = new UserQuery();
         user.setLoginid(loginid);
         List<User> unique = searchQuery(user);
@@ -51,7 +50,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     @Override
     public Car getCurrentCar(Long id) {
-        String sql = "select * from car where id=? and currentCar=true";
+        String sql = "select * from car where id=? and currentCar = true";
         SQLReady sqlReady = new SQLReady(sql, id);
         List<Car> carList = sqlManager.execute(sqlReady, Car.class);
         if (carList.size() != 0) {
