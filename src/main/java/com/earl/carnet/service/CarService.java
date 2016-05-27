@@ -68,4 +68,11 @@ public interface CarService extends BaseService<Car, Car> {
      * @return
      */
     Boolean updateUserCurrentCar(Car car);
+
+    /**
+     * 获取用户当前车辆.
+     * @param userId
+     * @return
+     */
+    List<Car> getCurrentCarByUser(Long userId);
 }

@@ -1,8 +1,7 @@
 package com.earl.carnet.web;
 
-import com.earl.carnet.domain.carnet.RepairShop.RepairShop;
-import com.earl.carnet.exception.DomainSecurityException;
-import com.wordnik.swagger.annotations.ApiParam;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.domain.carnet.RepairShop.RepairShop;
 import com.earl.carnet.domain.carnet.brand.Brand;
+import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.RepairShopService;
 import com.wordnik.swagger.annotations.ApiOperation;
-
-import java.util.List;
-import java.util.zip.DataFormatException;
+import com.wordnik.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = "/repairShop")

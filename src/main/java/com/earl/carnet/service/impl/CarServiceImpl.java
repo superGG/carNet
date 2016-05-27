@@ -33,393 +33,397 @@ import com.earl.carnet.util.JPushForUser;
 
 @Service("carService")
 @Transactional
-public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarService
-{
+public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarService {
 
-	private static Logger logger = Logger.getLogger(CarServiceImpl.class);
+    private static Logger logger = Logger.getLogger(CarServiceImpl.class);
 
-	// 推送消息对象
-	private TcpMessage tcpMessage = new TcpMessage();
+    // 推送消息对象
+    private TcpMessage tcpMessage = new TcpMessage();
 
-	// 项目标题
-	private final String TITLE = "车辆网";
+    // 项目标题
+    private final String TITLE = "车辆网";
 
-	// 空提醒类型
-	private final Integer NOTHING = 0;
+    // 空提醒类型
+    private final Integer NOTHING = 0;
 
-	// 油量不足提醒类型
-	private final Integer OIL = 1;
+    // 油量不足提醒类型
+    private final Integer OIL = 1;
 
-	// 汽车损坏提醒类型
-	private final Integer REPAIR = 2;
+    // 汽车损坏提醒类型
+    private final Integer REPAIR = 2;
 
-	// 缓存车辆状态信息
-	private static Cache CAR_CACHE = EhCacheHelper.getCacheManage().getCache(
-			"car");
+    // 缓存车辆状态信息
+    private static Cache CAR_CACHE = EhCacheHelper.getCacheManage().getCache(
+            "car");
 
-	// 临时车辆信息缓存
-	private static Cache TEM_CAR = EhCacheHelper.getCacheManage().getCache(
-			"tem_car");
+    // 临时车辆信息缓存
+    private static Cache TEM_CAR = EhCacheHelper.getCacheManage().getCache(
+            "tem_car");
 
-	@Resource
-	CarDao carDao;
+    @Resource
+    CarDao carDao;
 
-	@Resource
-	UserService userService;
+    @Resource
+    UserService userService;
 
-	@Resource
-	MessageService messageService;
+    @Resource
+    MessageService messageService;
 
-	@Resource
-	JPushForUser jpushForUser;
+    @Resource
+    JPushForUser jpushForUser;
 
-	@Resource
-	JPushForCar jpushForCar;
+    @Resource
+    JPushForCar jpushForCar;
 
-	@Override
-	protected BaseDao<Car> getDao() {
-		return carDao;
-	}
+    @Override
+    protected BaseDao<Car> getDao() {
+        return carDao;
+    }
 
-	@Override
-	public int update(Car car_update) {
-		int update = getDao().updateByPrimaryKeySelective(car_update);
-		return update;
-	}
+    @Override
+    public int update(Car car_update) {
+        int update = getDao().updateByPrimaryKeySelective(car_update);
+        return update;
+    }
 
-	@Override
-	public Boolean updateCarByVin(Car model) throws Exception {
-		Boolean result = false;
-		Car car_update = new Car();
-		car_update.setVin(model.getVin());
-		List<Car> carList = getDao().searchQuery(car_update);
-		if (carList.size() != 0) {
-			Car model_data = carList.get(0);
-			if (model_data.getUserId() == null) {
-				return result;
-			}
-			// model.setId(model_data.getId());
+    @Override
+    public Boolean updateCarByVin(Car model) throws Exception {
+        Boolean result = false;
+        Car car_update = new Car();
+        car_update.setVin(model.getVin());
+        List<Car> carList = getDao().searchQuery(car_update);
+        if (carList.size() != 0) {
+            Car model_data = carList.get(0);
+            if (model_data.getUserId() == null) {
+                return result;
+            }
+            // model.setId(model_data.getId());
 
-			// 监听更新内容，判断是否需要发送信息通知
-			monitorCarLight(model, model_data);// 车灯监听
-			monitorAlarm(model, model_data);// 汽车警报
-			monitorEngineProperty(model, model_data);// 发动机
-			monitorMileage(model, model_data);// 里程数
-			monitorOil(model, model_data);// 油量
-			monitorState(model, model_data);// 状态
-			monitorTemperature(model, model_data);// 温度
-			monitorTransmission(model, model_data);// 转速器
-			monitorSRS(model, model_data);// 安全气囊
-			// 更新数据
-			model.setId(model_data.getId());
-			carDao.updateByPrimaryKeySelective(model);
-			// int update = carDao.updateByNotSameParam(model,model_data);
-			return true;
-		}
-		return result;
-	}
+            // 监听更新内容，判断是否需要发送信息通知
+            monitorCarLight(model, model_data);// 车灯监听
+            monitorAlarm(model, model_data);// 汽车警报
+            monitorEngineProperty(model, model_data);// 发动机
+            monitorMileage(model, model_data);// 里程数
+            monitorOil(model, model_data);// 油量
+            monitorState(model, model_data);// 状态
+            monitorTemperature(model, model_data);// 温度
+            monitorTransmission(model, model_data);// 转速器
+            monitorSRS(model, model_data);// 安全气囊
+            // 更新数据
+            model.setId(model_data.getId());
+            carDao.updateByPrimaryKeySelective(model);
+            // int update = carDao.updateByNotSameParam(model,model_data);
+            return true;
+        } else {
+            throw new DomainSecurityException("无该车辆");
+        }
+        return result;
+    }
 
-	private void monitorAlarm(Car model, Car model_data) {
-		if (model.getCarAlarm() != model_data.getCarAlarm()) { // 当与数据库不同时
-			if (model.getCarAlarm() && model_data.getAlarmMessage()) {
-				logger.info("汽车警报器响了");
-				User user = userService.findOne(model_data.getUserId());
-				String content = null;
-				if (model_data.getPlateNumber() != null) {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
-							+ model_data.getPlateNumber() + " 的车辆警报器响起，请注意查看。";
-				} else {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
-							+ model_data.getVin() + " 的车辆警报器响起，请注意查看。";
-				}
-				tcpMessage.setMessage(content);
-				tcpMessage.setMessagtype(NOTHING);
-				sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
-				Car_Cache(model_data, "alarm");// 缓存数据
-			}
-		}
-	}
+    private void monitorAlarm(Car model, Car model_data) {
+        if (model.getCarAlarm() != model_data.getCarAlarm()) { // 当与数据库不同时
+            if (model.getCarAlarm() && model_data.getAlarmMessage()) {
+                logger.info("汽车警报器响了");
+                User user = userService.findOne(model_data.getUserId());
+                String content = null;
+                if (model_data.getPlateNumber() != null) {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
+                            + model_data.getPlateNumber() + " 的车辆警报器响起，请注意查看。";
+                } else {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
+                            + model_data.getVin() + " 的车辆警报器响起，请注意查看。";
+                }
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(NOTHING);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
+                Car_Cache(model_data, "alarm");// 缓存数据
+            }
+        }
+    }
 
-	/**
-	 * 汽车状态监听器
-	 *
-	 * @param model
-	 * @param model_data
-	 */
-	private void monitorState(Car model, Car model_data) {
-		if (model.getCarState() != model_data.getCarState()) { // 当与数据库不同时
-			if (model.getCarState() && model_data.getStateMessage()) {
-				logger.info("汽车启动了");
-				User user = userService.findOne(model_data.getUserId());
-				String content = null;
-				if (model_data.getPlateNumber() != null) {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
-							+ model_data.getPlateNumber() + " 的车辆已经启动。";
-				} else {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
-							+ model_data.getVin() + " 的车辆已经启动。";
-				}
-				tcpMessage.setMessage(content);
-				tcpMessage.setMessagtype(NOTHING);
-				sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
-			}
-		}
-	}
+    /**
+     * 汽车状态监听器
+     *
+     * @param model
+     * @param model_data
+     */
+    private void monitorState(Car model, Car model_data) {
+        if (model.getCarState() != model_data.getCarState()) { // 当与数据库不同时
+            if (model.getCarState() && model_data.getStateMessage()) {
+                logger.info("汽车启动了");
+                User user = userService.findOne(model_data.getUserId());
+                String content = null;
+                if (model_data.getPlateNumber() != null) {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
+                            + model_data.getPlateNumber() + " 的车辆已经启动。";
+                } else {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
+                            + model_data.getVin() + " 的车辆已经启动。";
+                }
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(NOTHING);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
+            }
+        }
+    }
 
-	/**
-	 * 发动机监听器
-	 *
-	 * @param model
-	 * @param model_data
-	 */
-	private void monitorEngineProperty(Car model, Car model_data) {
-		if (model.getEngineProperty() != model_data.getEngineProperty()) { // 当与数据库不同时
-			if (!model.getEngineProperty() && model_data.getPropertyMessage()) {
-				logger.info("发动机坏了");
-				User user = userService.findOne(model_data.getUserId());
-				String content = null;
-				if (model_data.getPlateNumber() != null) {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
-							+ model_data.getPlateNumber()
-							+ " 的车辆发动机出现故障，请注意查看。";
-				} else {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
-							+ model_data.getVin() + " 的车辆发动机出现故障，请注意查看。";
-				}
-				tcpMessage.setMessage(content);
-				tcpMessage.setMessagtype(REPAIR);
-				sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
-				Car_Cache(model_data, "engineProperty");// 缓存数据
-			}
-		}
-	}
+    /**
+     * 发动机监听器
+     *
+     * @param model
+     * @param model_data
+     */
+    private void monitorEngineProperty(Car model, Car model_data) {
+        if (model.getEngineProperty() != model_data.getEngineProperty()) { // 当与数据库不同时
+            if (!model.getEngineProperty() && model_data.getPropertyMessage()) {
+                logger.info("发动机坏了");
+                User user = userService.findOne(model_data.getUserId());
+                String content = null;
+                if (model_data.getPlateNumber() != null) {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
+                            + model_data.getPlateNumber()
+                            + " 的车辆发动机出现故障，请注意查看。";
+                } else {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
+                            + model_data.getVin() + " 的车辆发动机出现故障，请注意查看。";
+                }
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(REPAIR);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
+                Car_Cache(model_data, "engineProperty");// 缓存数据
+            }
+        }
+    }
 
-	/**
-	 * 转速器监听器
-	 *
-	 * @param model
-	 * @param model_data
-	 */
-	private void monitorTransmission(Car model, Car model_data) {
-		if (model.getTransmission() != model_data.getTransmission()) { // 当与数据库不同时
-			if (!model.getTransmission() && model_data.getPropertyMessage()) { // 转速器坏了
-				User user = userService.findOne(model_data.getUserId());
-				String content = null;
-				if (model_data.getPlateNumber() != null) {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
-							+ model_data.getPlateNumber()
-							+ " 的车辆转速器出现故障，请注意查看。";
-				} else {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
-							+ model_data.getVin() + " 的车辆转速器出现故障，请注意查看。";
-				}
-				tcpMessage.setMessage(content);
-				tcpMessage.setMessagtype(REPAIR);
-				sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
-				Car_Cache(model_data, "transmission");// 缓存数据
-				logger.info("转速器坏了");
-			}
-		}
-	}
+    /**
+     * 转速器监听器
+     *
+     * @param model
+     * @param model_data
+     */
+    private void monitorTransmission(Car model, Car model_data) {
+        if (model.getTransmission() != model_data.getTransmission()) { // 当与数据库不同时
+            if (!model.getTransmission() && model_data.getPropertyMessage()) { // 转速器坏了
+                User user = userService.findOne(model_data.getUserId());
+                String content = null;
+                if (model_data.getPlateNumber() != null) {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
+                            + model_data.getPlateNumber()
+                            + " 的车辆转速器出现故障，请注意查看。";
+                } else {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
+                            + model_data.getVin() + " 的车辆转速器出现故障，请注意查看。";
+                }
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(REPAIR);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
+                Car_Cache(model_data, "transmission");// 缓存数据
+                logger.info("转速器坏了");
+            }
+        }
+    }
 
-	/**
-	 * SRS监听器
-	 *
-	 * @param model
-	 * @param model_data
-	 */
-	private void monitorSRS(Car model, Car model_data) {
-		if (model.getSRS() != model_data.getSRS()) { // 当与数据库不同时
-			if (!model.getSRS()) { // 安全气囊启动
-				User user = userService.findOne(model_data.getUserId());
-				String content = null;
-				if (model_data.getPlateNumber() != null) {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
-							+ model_data.getPlateNumber()
-							+ " 的车辆安全气囊出现故障，请注意查看。";
-				} else {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
-							+ model_data.getVin() + " 的车辆安全气囊出现故障，请注意查看。";
-				}
-				sendMessageForUser(model_data.getUserId(), content);
-				logger.info("安全气囊启动");
-			}
-		}
-	}
+    /**
+     * SRS监听器
+     *
+     * @param model
+     * @param model_data
+     */
+    private void monitorSRS(Car model, Car model_data) {
+        if (model.getSRS() != model_data.getSRS()) { // 当与数据库不同时
+            if (!model.getSRS()) { // 安全气囊启动
+                User user = userService.findOne(model_data.getUserId());
+                String content = null;
+                if (model_data.getPlateNumber() != null) {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
+                            + model_data.getPlateNumber()
+                            + " 的车辆安全气囊出现故障，请注意查看。";
+                } else {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
+                            + model_data.getVin() + " 的车辆安全气囊出现故障，请注意查看。";
+                }
+                sendMessageForUser(model_data.getUserId(), content);
+                logger.info("安全气囊启动");
+            }
+        }
+    }
 
-	/**
-	 * 车灯监听器
-	 *
-	 * @param model
-	 * @param model_data
-	 */
-	private void monitorCarLight(Car model, Car model_data) {
-		if (model.getCarLight() != model_data.getCarLight()) { // 当与数据库不同时
-			if (!model.getCarLight() && model_data.getPropertyMessage()) { // 车灯坏了
-				User user = userService.findOne(model_data.getUserId());
-				String content = null;
-				if (model_data.getPlateNumber() != null) {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
-							+ model_data.getPlateNumber() + " 的车辆车灯出现故障，请注意查看。";
-				} else {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
-							+ model_data.getVin() + " 的车辆车灯出现故障，请注意查看。";
-				}
-				tcpMessage.setMessage(content);
-				tcpMessage.setMessagtype(REPAIR);
-				sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
-				Car_Cache(model_data, "carLight");// 缓存数据
-				logger.info("车灯坏了");
-				// jpushForUser.sendPush_Alias(model.getUserId().toString(),"车灯坏了");
-			}
-		}
-	}
+    /**
+     * 车灯监听器
+     *
+     * @param model
+     * @param model_data
+     */
+    private void monitorCarLight(Car model, Car model_data) {
+        if (model.getCarLight() != model_data.getCarLight()) { // 当与数据库不同时
+            if (!model.getCarLight() && model_data.getPropertyMessage()) { // 车灯坏了
+                User user = userService.findOne(model_data.getUserId());
+                String content = null;
+                if (model_data.getPlateNumber() != null) {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
+                            + model_data.getPlateNumber() + " 的车辆车灯出现故障，请注意查看。";
+                } else {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
+                            + model_data.getVin() + " 的车辆车灯出现故障，请注意查看。";
+                }
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(REPAIR);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
+                Car_Cache(model_data, "carLight");// 缓存数据
+                logger.info("车灯坏了");
+                // jpushForUser.sendPush_Alias(model.getUserId().toString(),"车灯坏了");
+            }
+        }
+    }
 
-	/**
-	 * 温度监听器
-	 *
-	 * @param model
-	 * @param model_data
-	 */
-	private void monitorTemperature(Car model, Car model_data) {
-		if (model.getTemperature() > model_data.getTemperature()
-				&& model.getTemperature() >= 100) { // 当汽车当前水温>数据库水温，并且数据库水温>=100度
-			if ((model.getTemperature() % 5 < model_data.getTemperature() % 5 || (model
-					.getTemperature() > 100 && model.getTemperature() < 105))
-					&& model_data.getPropertyMessage()) { // 避免多次发送信息，每升高5个单位的温度就通知车主一次
-				User user = userService.findOne(model_data.getUserId());
-				String content = null;
-				if (model_data.getPlateNumber() != null) {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
-							+ model_data.getPlateNumber() + " 的车辆温度过高，请注意行驶。";
-				} else {
-					content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
-							+ model_data.getVin() + " 的车辆温度过高，请注意行驶。";
-				}
-				sendMessageForUser(model_data.getUserId(), content);
-				logger.info("汽车温度过高，需要降温");
-			}
-		}
-	}
+    /**
+     * 温度监听器
+     *
+     * @param model
+     * @param model_data
+     */
+    private void monitorTemperature(Car model, Car model_data) {
+        if (model.getTemperature() > model_data.getTemperature()
+                && model.getTemperature() >= 100) { // 当汽车当前水温>数据库水温，并且数据库水温>=100度
+            if ((model.getTemperature() % 5 < model_data.getTemperature() % 5 || (model
+                    .getTemperature() > 100 && model.getTemperature() < 105))
+                    && model_data.getPropertyMessage()) { // 避免多次发送信息，每升高5个单位的温度就通知车主一次
+                User user = userService.findOne(model_data.getUserId());
+                String content = null;
+                if (model_data.getPlateNumber() != null) {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
+                            + model_data.getPlateNumber() + " 的车辆温度过高，请注意行驶。";
+                } else {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
+                            + model_data.getVin() + " 的车辆温度过高，请注意行驶。";
+                }
+                sendMessageForUser(model_data.getUserId(), content);
+                logger.info("汽车温度过高，需要降温");
+            }
+        }
+    }
 
-	/**
-	 * 油箱监听器
-	 *
-	 * @param model
-	 * @param model_data
-	 */
-	private void monitorOil(Car model, Car model_data) {
-		if (model.getOil() < model_data.getOil()
-				&& model.getOil() < model.getOilBox() * 0.2
-				&& model.getCurrentCar()) { // 当前油量<数据库油量 并且 数据库油量剩余不足20%
-			if (model.getOil() % 5 < model_data.getOil() % 5
-					|| (model.getOil() < model.getOilBox() * 0.2 && model
-							.getOil() > model.getOilBox() * 0.15)) { // 避免多次发送信息，每降低5个单位量的油量就通知车主一次
-				User user = userService.findOne(model.getUserId());
-				String content = "尊敬的" + user.getUsername()
-						+ ": 您好，您当前的车辆 油量不足20%，请及时加油。";
-				tcpMessage.setMessage(content);
-				tcpMessage.setMessagtype(OIL);
-				sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
-				logger.info("汽车油量不足，请及时加油");
-			}
-		}
-	}
+    /**
+     * 油箱监听器
+     *
+     * @param model
+     * @param model_data
+     */
+    private void monitorOil(Car model, Car model_data) {
+        if (model.getOil() < model_data.getOil()
+                && model.getOil() < model.getOilBox() * 0.2
+                && model.getCurrentCar()) { // 当前油量<数据库油量 并且 数据库油量剩余不足20%
+            if (model.getOil() % 5 < model_data.getOil() % 5
+                    || (model.getOil() < model.getOilBox() * 0.2 && model
+                    .getOil() > model.getOilBox() * 0.15)) { // 避免多次发送信息，每降低5个单位量的油量就通知车主一次
+                User user = userService.findOne(model.getUserId());
+                String content = "尊敬的" + user.getUsername()
+                        + ": 您好，您当前的车辆 油量不足20%，请及时加油。";
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagtype(OIL);
+                sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
+                logger.info("汽车油量不足，请及时加油");
+            }
+        }
+    }
 
-	/**
-	 * 里程表监听器
-	 *
-	 * @param model
-	 * @param model_data
-	 */
-	private void monitorMileage(Car model, Car model_data) {
-		if ((model.getMileage() % 15000 < model_data.getMileage() % 15000)
-				&& model_data.getPropertyMessage() && model.getCurrentCar()) {
-			User user = userService.findOne(model.getUserId());
-			String content = "尊敬的" + user.getUsername()
-					+ ": 您好，您当前的车辆已经行驶超过15000公里，请及时对汽车进行检查维修。";
-			tcpMessage.setMessage(content);
-			tcpMessage.setMessagtype(REPAIR);
-			sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
-			logger.info("汽车已行驶超过15000公里，请及时对汽车进行检查维修");
-		}
-	}
+    /**
+     * 里程表监听器
+     *
+     * @param model
+     * @param model_data
+     */
+    private void monitorMileage(Car model, Car model_data) {
+        if ((model.getMileage() % 15000 < model_data.getMileage() % 15000)
+                && model_data.getPropertyMessage() && model.getCurrentCar()) {
+            User user = userService.findOne(model.getUserId());
+            String content = "尊敬的" + user.getUsername()
+                    + ": 您好，您当前的车辆已经行驶超过15000公里，请及时对汽车进行检查维修。";
+            tcpMessage.setMessage(content);
+            tcpMessage.setMessagtype(REPAIR);
+            sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
+            logger.info("汽车已行驶超过15000公里，请及时对汽车进行检查维修");
+        }
+    }
 
-	/**
-	 * 向用户发送信息.
-	 *
-	 * @param userId
-	 * @param content
-	 */
-	private void sendMessageForUser(Long userId, String content) {
-		Message message = new Message();
-		message.setState(false);
-		message.setUserId(userId);
-		message.setContent(content);
-		messageService.insertBackId(message);
-		jpushForUser.sendPush_Alias(userId.toString(), message.getContent(),
-				TITLE);
-	}
+    /**
+     * 向用户发送信息.
+     *
+     * @param userId
+     * @param content
+     */
+    private void sendMessageForUser(Long userId, String content) {
+        Message message = new Message();
+        message.setState(false);
+        message.setUserId(userId);
+        message.setContent(content);
+        messageService.insertBackId(message);
+        jpushForUser.sendPush_Alias(userId.toString(), message.getContent(),
+                TITLE);
+    }
 
-	@Override
-	public List<Car> getAllCarByUser(Long userId) {
-		Car car = new Car();
-		car.setUserId(userId);
-		List<Car> carList = getDao().searchQuery(car);
-		return carList;
-	}
+    @Override
+    public List<Car> getAllCarByUser(Long userId) {
+        Car car = new Car();
+        car.setUserId(userId);
+        List<Car> carList = getDao().searchQuery(car);
+        return carList;
+    }
 
-	@Override
-	public int saveCar(Car car) {
-		Car car_data = new Car();
-		car_data.setVin(car.getVin());
-		List<Car> carList = getDao().searchQuery(car_data);
-		if (carList.size() == 0) {
-			car.setAlarmMessage(true);
-			car.setPropertyMessage(true);
-			car.setStateMessage(true);
-			return insertBackId(car);
-		} else {
-			throw new SecurityException("该车辆已经被注册");
-		}
-	}
+    @Override
+    public int saveCar(Car car) {
+        Car car_data = new Car();
+        car_data.setVin(car.getVin());
+        List<Car> carList = getDao().searchQuery(car_data);
+        if (carList.size() == 0) {
+            car.setAlarmMessage(true);
+            car.setPropertyMessage(true);
+            car.setStateMessage(true);
+            int backId = insertBackId(car);
+            //添加车辆后更新当前车辆，默认新添加的车辆为当前车辆
+            if (backId != 0) carDao.updateUserCurrentCar(getDao().findOneById(backId));
+            return backId;
+        } else {
+            throw new SecurityException("该车辆已经被注册");
+        }
+    }
 
-	@Override
-	public Boolean updateCarState(Long id) {
-		Boolean result = false;
-		Car car = getDao().findOneById(id);
-		TcpMessage tcpMessage = new TcpMessage();
-		if (car.getCarState()) {
-			tcpMessage.setMessagtype(1);// 1为改变状态，2为改变警报
-			tcpMessage.setMessage("false");
-			jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
-			result = true;
-		} else {
-			tcpMessage.setMessagtype(1);// 1为改变状态，2为改变警报
-			tcpMessage.setMessage("true");
-			jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
-			result = true;
-		}
-		return result;
-	}
+    @Override
+    public Boolean updateCarState(Long id) {
+        Boolean result = false;
+        Car car = getDao().findOneById(id);
+        TcpMessage tcpMessage = new TcpMessage();
+        if (car.getCarState()) {
+            tcpMessage.setMessagtype(1);// 1为改变状态，2为改变警报
+            tcpMessage.setMessage("false");
+            jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
+            result = true;
+        } else {
+            tcpMessage.setMessagtype(1);// 1为改变状态，2为改变警报
+            tcpMessage.setMessage("true");
+            jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
+            result = true;
+        }
+        return result;
+    }
 
-	@Override
-	public Boolean updateCarAlarm(Long id) {
-		Car car = getDao().findOneById(id);
-		TcpMessage tcpMessage = new TcpMessage();
-		if (car.getCarAlarm()) {
-			tcpMessage.setMessagtype(2);// 1为改变状态，2为改变警报
-			tcpMessage.setMessage("true");
-			jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
-			return true;
-		} else {
-			throw new DomainSecurityException("该警报状态已经响起");
-		}
-	}
+    @Override
+    public Boolean updateCarAlarm(Long id) {
+        Car car = getDao().findOneById(id);
+        TcpMessage tcpMessage = new TcpMessage();
+        if (car.getCarAlarm()) {
+            tcpMessage.setMessagtype(2);// 1为改变状态，2为改变警报
+            tcpMessage.setMessage("true");
+            jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
+            return true;
+        } else {
+            throw new DomainSecurityException("该警报状态已经响起");
+        }
+    }
 
-	@Override
-	public void insertTem_Car(Car tem_car) {
-		// 先在数据库car中查询是否有该车架号vin的车辆
+    @Override
+    public void insertTem_Car(Car tem_car) {
+        // 先在数据库car中查询是否有该车架号vin的车辆
 //		System.out.println("----------开始检车数据库car中是否存在车架号vin为：" + tem_car.getVin() + "的车辆");
         Car car_vin = new Car();
         car_vin.setVin(tem_car.getVin());
@@ -519,10 +523,15 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
         }
     }
 
-	@Override
-	public Boolean updateUserCurrentCar(Car car) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Boolean updateUserCurrentCar(Car car) {
+        return carDao.updateUserCurrentCar(car);
+    }
+
+    @Override
+    public List<Car> getCurrentCarByUser(Long userId) {
+        List<Car> catList = carDao.getCurrentCarByUser(userId);
+        return catList;
+    }
 
 }
