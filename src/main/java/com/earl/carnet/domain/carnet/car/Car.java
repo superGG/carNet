@@ -58,7 +58,7 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
     private Boolean propertyMessage ;//是否发送行性能信息
     
     private Boolean stateMessage ;//是否发送车状态信息
-    
+
     private Boolean currentCar;//是否当前车辆
 
     private Double lon;//经度

@@ -86,7 +86,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/id={id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultMessage> getUser(
             @ApiParam(required = true, name = "id", value = "用户id")
-            @NotNull(message = "用户id不能为空")
+            @NotNull(message = "用户id不能为空") 
             @PathVariable
             Long id) {
         log.info("REST request to get User : {}", id);

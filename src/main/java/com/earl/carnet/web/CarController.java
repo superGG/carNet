@@ -34,7 +34,7 @@ public class CarController extends BaseController {
      * GET /car -> get all the car
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "得到所有车辆信息", notes = "find All car", httpMethod = "GET", response = Car.class,responseContainer = "List")
+    @ApiOperation(value = "得到所有车辆信息", notes = "find All car", httpMethod = "GET", response = Car.class, responseContainer = "List")
     public ResultMessage getAll() {
         log.debug("REST request to get all Car");
         result = new ResultMessage();
@@ -68,11 +68,37 @@ public class CarController extends BaseController {
             @ApiParam(required = true, name = "userId", value = "用户id")
             @PathVariable
             Long userId) {
-        log.debug("REST request to get one  Car");
+        log.debug("REST request to get all  Car");
         List<Car> carList = carService.getAllCarByUser(userId);
         result = new ResultMessage();
-        result.setResultInfo("获取成功");
-        result.getResultParm().put("cars",carList);
+        if (carList.size() != 0) {
+            result.setResultInfo("获取成功");
+            result.getResultParm().put("car", carList);
+        } else {
+            result.setResultInfo("用户当前无车辆");
+        }
+        return result;
+    }
+
+    /**
+     * GET /car -> get  user current car
+     */
+    @RequestMapping(value = "/currentCar={userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "获取用户的当前汽车", notes = "get  user current car", httpMethod = "GET", response = String.class)
+    public ResultMessage getCurrentCarByUser(
+            @ApiParam(required = true, name = "userId", value = "用户id")
+            @PathVariable
+            Long userId) {
+        log.debug("get  user current car");
+        List<Car> carList = carService.getCurrentCarByUser(userId);
+        result = new ResultMessage();
+        if (carList.size() != 0) {
+            result.setResultInfo("获取成功");
+            result.getResultParm().put("car", carList.get(0));
+        } else {
+            result.setResultInfo("该用户无当前车辆");
+            result.setServiceResult(false);
+        }
         return result;
     }
 
@@ -89,7 +115,7 @@ public class CarController extends BaseController {
         Car car = carService.getCarByVin(vin);
         result = new ResultMessage();
         result.setResultInfo("获取成功");
-        result.getResultParm().put("car",car);
+        result.getResultParm().put("car", car);
         return result;
     }
 
@@ -98,13 +124,13 @@ public class CarController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "/saveCar", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/saveCar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "添加一个新汽车", notes = "add a new car", httpMethod = "POST", response = String.class)
     public ResponseEntity<ResultMessage> saveCar(
-            @ApiParam(required = false, name = "car", value = "车辆信息")
             @RequestBody
+            @ApiParam(required = false, name = "car", value = "车辆信息")
             Car car) {
-        if( car.getVin() == null || car.getVin().equals("")){
+        if (car.getVin() == null || car.getVin().equals("")) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         log.info("进入controller层添加汽车saveOrder方法");
@@ -120,7 +146,7 @@ public class CarController extends BaseController {
             result.setResultInfo("添加汽车失败");
             result.setServiceResult(false);
         }
-        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
+        return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
 
     /**
@@ -153,14 +179,13 @@ public class CarController extends BaseController {
     public ResponseEntity<ResultMessage> saveTem_Car(
             @ApiParam(required = true, name = "tem_car", value = "临时车辆信息")
             Car tem_car) {
-        if( tem_car.getVin() == null || tem_car.getVin().equals("")){
+        if (tem_car.getVin() == null || tem_car.getVin().equals("")) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         result = new ResultMessage();
         carService.insertTem_Car(tem_car);
-        return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
+        return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
-
 
 
     /**
@@ -217,8 +242,8 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/updateUserCurrentCar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "更新用户当前车辆", notes = "update user current car", httpMethod = "POST", response = String.class)
     public ResponseEntity<?> updateCarByVin(
-                    @ApiParam(required = true, name = "id", value = "车辆id") Long id,
-                    @ApiParam(required = true, name = "userId", value = "用户id") Long userId) throws Exception {
+            @ApiParam(required = true, name = "id", value = "车辆id") Long id,
+            @ApiParam(required = true, name = "userId", value = "用户id") Long userId) throws Exception {
         result = new ResultMessage();
         Car car = new Car();
         car.setId(id);
@@ -254,13 +279,14 @@ public class CarController extends BaseController {
 
     /**
      * 用户更新汽车状态.
+     *
      * @return
      */
     @RequestMapping(value = "/updateCarState", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "用户更新汽车状态", notes = "update car state by id", httpMethod = "POST", response = String.class)
     public ResponseEntity<?> updateCarState(
             @ApiParam(required = true, name = "id", value = "车辆id")
-            Long id){
+            Long id) {
         result = new ResultMessage();
         Boolean update = carService.updateCarState(id);
         if (update) {
@@ -274,13 +300,14 @@ public class CarController extends BaseController {
 
     /**
      * 用户更新汽车警报状态.
+     *
      * @return
      */
     @RequestMapping(value = "/updateCarAlarm", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "用户更新汽车警报状态", notes = "update car alarm by id", httpMethod = "POST", response = String.class)
     public ResponseEntity<?> updateCarAlarm(
             @ApiParam(required = true, name = "id", value = "车辆id")
-            Long id){
+            Long id) {
         result = new ResultMessage();
         Boolean update = carService.updateCarAlarm(id);
         if (update) {
