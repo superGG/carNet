@@ -2,13 +2,19 @@ package com.earl.carnet.web;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.carnet.car.Car;
@@ -126,31 +132,6 @@ public class CarController extends BaseController {
      */
     @RequestMapping(value = "/saveCar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "添加一个新汽车", notes = "add a new car", httpMethod = "POST", response = String.class)
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "Long", paramType = "query"),
-//            @ApiImplicitParam(name = "mark", value = "品牌标志", required = true, dataType = "string", paramType = "query"),
-//            @ApiImplicitParam(name = "brand", value = "品牌", required = true, dataType = "string", paramType = "query"),
-//            @ApiImplicitParam(name = "models", value = "品牌型号", required = true, dataType = "string", paramType = "query"),
-//            @ApiImplicitParam(name = "plateNumber", value = "车牌号码", required = true, dataType = "string", paramType = "query"),
-//            @ApiImplicitParam(name = "vin", value = "车牌号", required = true, dataType = "long", paramType = "query"),
-//            @ApiImplicitParam(name = "engineNumber", value = "发动机型号", required = true, dataType = "long", paramType = "query"),
-//            @ApiImplicitParam(name = "rank", value = "车身等级", required = true, dataType = "long", paramType = "query"),
-//            @ApiImplicitParam(name = "mileage", value = "里程数", required = true, dataType = "long", paramType = "query"),
-//            @ApiImplicitParam(name = "oilBox", value = "油箱容积", required = true, dataType = "long", paramType = "query"),
-//            @ApiImplicitParam(name = "oil", value = "当前油量", required = true, dataType = "boolean", paramType = "query"),
-//            @ApiImplicitParam(name = "temperature", value = "温度", required = true, dataType = "boolean", paramType = "query"),
-//            @ApiImplicitParam(name = "engineProperty", value = "发动机性能", required = true, dataType = "boolean", paramType = "query"),
-//            @ApiImplicitParam(name = "transmission", value = "变速器性能", required = true, dataType = "boolean", paramType = "query"),
-//            @ApiImplicitParam(name = "carLight", value = "车灯性能", required = true, dataType = "boolean", paramType = "query"),
-//            @ApiImplicitParam(name = "carState", value = "车状态", required = true, dataType = "boolean", paramType = "query"),
-//            @ApiImplicitParam(name = "carAlarm", value = "车警报", required = true, dataType = "boolean", paramType = "query"),
-//            @ApiImplicitParam(name = "alarmMessage", value = "是否发送警报信息", required = true, dataType = "boolean", paramType = "query"),
-//            @ApiImplicitParam(name = "propertyMessage", value = "是否发送行性能信息", required = true, dataType = "boolean", paramType = "query"),
-//            @ApiImplicitParam(name = "stateMessage", value = "是否发送车状态信息", required = true, dataType = "boolean", paramType = "query"),
-//            @ApiImplicitParam(name = "currentCar", value = "是否当前车辆", required = true, dataType = "boolean", paramType = "query"),
-//            @ApiImplicitParam(name = "lon", value = "经度", required = false, dataType = "double", paramType = "query"),
-//            @ApiImplicitParam(name = "lat", value = "纬度", required = false, dataType = "double", paramType = "query")
-//    })
     public ResponseEntity<ResultMessage> saveCar(
             @RequestBody
             @ApiParam(required = false, name = "car", value = "车辆信息")
@@ -267,8 +248,8 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/updateUserCurrentCar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "更新用户当前车辆", notes = "update user current car", httpMethod = "POST", response = String.class)
     public ResponseEntity<?> updateCarByVin(
-            @ApiParam(required = true, name = "id", value = "车辆id") Long id,
-            @ApiParam(required = true, name = "userId", value = "用户id") Long userId) throws Exception {
+            @ApiParam(required = true, name = "id", value = "车辆id") @NotNull(message="车辆id不能为空") Long id,
+            @ApiParam(required = true, name = "userId", value = "用户id") @NotNull(message="用户id不能为空") Long userId) throws Exception {
         result = new ResultMessage();
         Car car = new Car();
         car.setId(id);
@@ -280,7 +261,7 @@ public class CarController extends BaseController {
             result.setServiceResult(false);
             result.setResultInfo("更新失败");
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK); 
     }
 
     /**
@@ -362,6 +343,4 @@ public class CarController extends BaseController {
         result.setServiceResult(true);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
-
 }

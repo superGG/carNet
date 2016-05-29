@@ -17,19 +17,19 @@ public class TcpMessage {
     /**
      * 返回参数，又vo的json字符串组成.
      */
-    private Integer messagtype;
+    private Integer messagetype;
 
     private String message;
+    
+    public Integer getMessagetype() {
+		return messagetype;
+	}
 
-    public Integer getMessagtype() {
-        return messagtype;
-    }
+	public void setMessagetype(Integer messagetype) {
+		this.messagetype = messagetype;
+	}
 
-    public void setMessagtype(Integer messagtype) {
-        this.messagtype = messagtype;
-    }
-
-    public String getMessage() {
+	public String getMessage() {
         return message;
     }
 
@@ -37,14 +37,7 @@ public class TcpMessage {
         this.message = message;
     }
 
-    @Override
-    public String toString() {
-        return "TcpMessage{" +
-                "messagtype=" + messagtype +
-                ", message='" + message + '\'' +
-                '}';
-    }
-
+   
     public String toJson(){
 		return GsonUtil.toJson(this);
 	}

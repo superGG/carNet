@@ -133,7 +133,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                             + model_data.getVin() + " 的车辆警报器响起，请注意查看。";
                 }
                 tcpMessage.setMessage(content);
-                tcpMessage.setMessagtype(NOTHING);
+                tcpMessage.setMessagetype(NOTHING);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
                 Car_Cache(model_data, "alarm");// 缓存数据
             }
@@ -160,7 +160,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                             + model_data.getVin() + " 的车辆已经启动。";
                 }
                 tcpMessage.setMessage(content);
-                tcpMessage.setMessagtype(NOTHING);
+                tcpMessage.setMessagetype(NOTHING);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
             }
         }
@@ -187,7 +187,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                             + model_data.getVin() + " 的车辆发动机出现故障，请注意查看。";
                 }
                 tcpMessage.setMessage(content);
-                tcpMessage.setMessagtype(REPAIR);
+                tcpMessage.setMessagetype(REPAIR);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
                 Car_Cache(model_data, "engineProperty");// 缓存数据
             }
@@ -214,7 +214,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                             + model_data.getVin() + " 的车辆转速器出现故障，请注意查看。";
                 }
                 tcpMessage.setMessage(content);
-                tcpMessage.setMessagtype(REPAIR);
+                tcpMessage.setMessagetype(REPAIR);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
                 Car_Cache(model_data, "transmission");// 缓存数据
                 logger.info("转速器坏了");
@@ -266,7 +266,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                             + model_data.getVin() + " 的车辆车灯出现故障，请注意查看。";
                 }
                 tcpMessage.setMessage(content);
-                tcpMessage.setMessagtype(REPAIR);
+                tcpMessage.setMessagetype(REPAIR);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
                 Car_Cache(model_data, "carLight");// 缓存数据
                 logger.info("车灯坏了");
@@ -319,7 +319,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                 String content = "尊敬的" + user.getUsername()
                         + ": 您好，您当前的车辆 油量不足20%，请及时加油。";
                 tcpMessage.setMessage(content);
-                tcpMessage.setMessagtype(OIL);
+                tcpMessage.setMessagetype(OIL);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
                 logger.info("汽车油量不足，请及时加油");
             }
@@ -334,12 +334,12 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
      */
     private void monitorMileage(Car model, Car model_data) {
         if ((model.getMileage() % 15000 < model_data.getMileage() % 15000)
-                && model_data.getPropertyMessage() && model.getCurrentCar()) {
-            User user = userService.findOne(model.getUserId());
+                && model_data.getPropertyMessage() && model_data.getCurrentCar()) {
+            User user = userService.findOne(model_data.getUserId());
             String content = "尊敬的" + user.getUsername()
                     + ": 您好，您当前的车辆已经行驶超过15000公里，请及时对汽车进行检查维修。";
             tcpMessage.setMessage(content);
-            tcpMessage.setMessagtype(REPAIR);
+            tcpMessage.setMessagetype(REPAIR);
             sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
             logger.info("汽车已行驶超过15000公里，请及时对汽车进行检查维修");
         }
@@ -393,12 +393,12 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
         Car car = getDao().findOneById(id);
         TcpMessage tcpMessage = new TcpMessage();
         if (car.getCarState()) {
-            tcpMessage.setMessagtype(1);// 1为改变状态，2为改变警报
+            tcpMessage.setMessagetype(1);// 1为改变状态，2为改变警报
             tcpMessage.setMessage("false");
             jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
             result = true;
         } else {
-            tcpMessage.setMessagtype(1);// 1为改变状态，2为改变警报
+            tcpMessage.setMessagetype(1);// 1为改变状态，2为改变警报
             tcpMessage.setMessage("true");
             jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
             result = true;
@@ -410,8 +410,8 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
     public Boolean updateCarAlarm(Long id) {
         Car car = getDao().findOneById(id);
         TcpMessage tcpMessage = new TcpMessage();
-        if (car.getCarAlarm()) {
-            tcpMessage.setMessagtype(2);// 1为改变状态，2为改变警报
+        if (!car.getCarAlarm()) {
+            tcpMessage.setMessagetype(2);// 1为改变状态，2为改变警报
             tcpMessage.setMessage("true");
             jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
             return true;
