@@ -2,13 +2,19 @@ package com.earl.carnet.web;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.carnet.car.Car;
@@ -242,8 +248,8 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/updateUserCurrentCar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "更新用户当前车辆", notes = "update user current car", httpMethod = "POST", response = String.class)
     public ResponseEntity<?> updateCarByVin(
-            @ApiParam(required = true, name = "id", value = "车辆id") Long id,
-            @ApiParam(required = true, name = "userId", value = "用户id") Long userId) throws Exception {
+            @ApiParam(required = true, name = "id", value = "车辆id") @NotNull(message="车辆id不能为空") Long id,
+            @ApiParam(required = true, name = "userId", value = "用户id") @NotNull(message="用户id不能为空") Long userId) throws Exception {
         result = new ResultMessage();
         Car car = new Car();
         car.setId(id);
@@ -255,7 +261,7 @@ public class CarController extends BaseController {
             result.setServiceResult(false);
             result.setResultInfo("更新失败");
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK); 
     }
 
     /**
