@@ -97,7 +97,6 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
             if (model_data.getUserId() == null) {
                 return result;
             }
-            // model.setId(model_data.getId());
 
             // 监听更新内容，判断是否需要发送信息通知
             monitorCarLight(model, model_data);// 车灯监听
