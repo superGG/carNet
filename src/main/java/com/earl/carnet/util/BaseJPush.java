@@ -47,13 +47,15 @@ public class BaseJPush {
      * @param alias 目标别名.
      * @param content 内容.
      */
-    public void sendPush_Alias(String alias,String content) {
+    public void sendPush_Alias(String alias,String content,String jsonObject) {
 //        jpush = new JPushClient(masterSecret,appKey);
+    	
+    	
         //生成推送的内容
         PushPayload payload = PushPayload.newBuilder()
                 .setPlatform(Platform.all())//所有平台
                 .setAudience(Audience.alias(alias))
-                .setNotification(Notification.alert(content))
+                .setNotification(Notification.alert(jsonObject))
                 .build();
         //推送
         send(payload);

@@ -82,4 +82,6 @@ public interface CarService extends BaseService<Car, Car> {
      * @return
      */
     Car getCarByVin(String vin);
+
+    Car getTmpCarByVin(String vin);
 }

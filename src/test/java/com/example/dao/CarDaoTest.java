@@ -43,11 +43,11 @@ public class CarDaoTest {
 
     
     
-    @Test
-    public void testDeleUser() {
-        JPushForCar test = new JPushForCar();
-        test.sendPush_Alias("user1","test");
-    
-    }
+//    @Test
+//    public void testDeleUser() {
+//        JPushForCar test = new JPushForCar();
+//        test.sendPush_Alias("user1","test");
+//    
+//    }
 
 }
