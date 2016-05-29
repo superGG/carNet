@@ -108,6 +108,29 @@ public class CarController extends BaseController {
         return result;
     }
 
+    
+    /**
+     * GET /car -> get  tem_car by vin
+     */
+    @RequestMapping(value = "/tmpCar/vin={vin}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "根据车架号获取汽车", notes = "get car by vin", httpMethod = "GET", response = String.class)
+    public ResultMessage getTmpCarByVin(
+            @ApiParam(required = true, name = "vin", value = "车架号")
+            @PathVariable
+            String vin) {
+        log.debug("REST request to get one  Car");
+        Car car = carService.getTmpCarByVin(vin);
+        result = new ResultMessage();
+        if(car != null){
+        	 result.setResultInfo("获取成功");
+             result.getResultParm().put("car", car);
+        }else{
+        	result.setResultInfo("不存在该车辆");
+        }
+       
+        return result;
+    }
+    
     /**
      * GET /car -> get  tem_car by vin
      */

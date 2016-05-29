@@ -366,7 +366,7 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
      * 向用户发送信息.
      *
      * @param userId
-     * @param content
+     * @param tcpMessage
      */
     private void sendMessageForUser(Long userId, TcpMessage tcpMessage) {
     	String tmpMessage = tcpMessage.toJson();
@@ -391,13 +391,14 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
     public int saveCar(Car car) {
         Car car_data = new Car();
         car_data.setVin(car.getVin());
-        Element carList = CAR_CACHE.get(car.getVin());
+        Element carList = TEM_CAR.get(car.getVin());
         if (carList != null) {
             car.setAlarmMessage(true);
             car.setPropertyMessage(true);
             car.setStateMessage(true);
             int backId = insertBackId(car);
             //添加车辆后更新当前车辆，默认新添加的车辆为当前车辆
+            TEM_CAR.remove(car.getVin());
             if (backId != 0) carDao.updateUserCurrentCar(getDao().findOneById(backId));
             return backId;
         } else {
@@ -445,7 +446,7 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
         Car car_vin = new Car();
         car_vin.setVin(tem_car.getVin());
         List<Car> carList = getDao().searchAccurate(car_vin);
-        if (carList.size() != 0)
+        if (!carList.isEmpty())
             throw new DomainSecurityException("该车辆在数据库car中已存在");
 //		System.out.println("-------检查数据库完毕");
         // Ehcache缓存临时车辆信息
@@ -459,17 +460,6 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
             TEM_CAR.put(new Element(tem_car.getVin(), tem_car));
         }
     }
-
-//    @Override
-//    public Car getTem_CarByVin(String vin) {
-//        // Ehcache缓存临时车辆信息
-//        Element tem_car = TEM_CAR.get(vin);
-//        if (tem_car != null) {
-//            return (Car) tem_car.getObjectValue();
-//        } else {
-//            throw new DomainSecurityException("无该车辆");
-//        }
-//    }
 
     /**
      * 计算汽车10分钟内性能损坏数量.
@@ -562,5 +552,15 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
             return carList.get(0);
         }
     }
+
+	@Override
+	public Car getTmpCarByVin(String vin) {
+		// TODO Auto-generated method stub
+        Element element = TEM_CAR.get(vin);
+        if(element != null){
+            return (Car)element.getObjectValue();
+        }
+        return null;
+	}
 
 }
