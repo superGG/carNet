@@ -117,7 +117,6 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
         } else {
             throw new DomainSecurityException("无该车辆");
         }
-        return result;
     }
 
     private void monitorAlarm(Car model, Car model_data) {
