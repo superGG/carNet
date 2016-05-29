@@ -6,6 +6,7 @@ import cn.jpush.api.JPushClient;
 import cn.jpush.api.common.resp.APIConnectionException;
 import cn.jpush.api.common.resp.APIRequestException;
 import cn.jpush.api.push.PushResult;
+import cn.jpush.api.push.model.Message;
 import cn.jpush.api.push.model.Platform;
 import cn.jpush.api.push.model.PushPayload;
 import cn.jpush.api.push.model.audience.Audience;
@@ -83,13 +84,17 @@ public class BaseJPush {
      * @param content 消息内容
      * @param title 消息标题
      */
-    public void sendPush_Alias(String alias,String content,String title) {
+    public void sendPush_Alias(String alias,String content,String title,String jsonObject) {
 //        jpush = new JPushClient(masterSecret,appKey);
         //生成推送的内容
         PushPayload payload = PushPayload.newBuilder()
                 .setPlatform(Platform.android())//Andriod平台
                 .setAudience(Audience.alias(alias))
                 .setNotification(Notification.android(content,title,null))
+                .setMessage(Message.newBuilder()
+                        .setMsgContent(jsonObject)
+                        .addExtra("from", "JPush")
+                        .build())
                 .build();
         //推送
         send(payload);
