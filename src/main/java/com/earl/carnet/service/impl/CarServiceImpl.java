@@ -89,11 +89,12 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
     @Override
     public Boolean updateCarByVin(Car model) throws Exception {
         Boolean result = false;
-        Car car_update = new Car();
-        car_update.setVin(model.getVin());
-        List<Car> carList = getDao().searchQuery(car_update);
-        if (carList.size() != 0) {
-            Car model_data = carList.get(0);
+//        Car car_update = new Car();
+//        car_update.setVin(model.getVin());
+//        List<Car> carList = getDao().searchQuery(car_update);
+        Car car = getCarByVin(model.getVin());
+        if (car != null) {
+            Car model_data = car;
             if (model_data.getUserId() == null) {
                 return result;
             }
@@ -132,6 +133,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
                             + model_data.getVin() + " 的车辆警报器响起，请注意查看。";
                 }
+                logger.info("-----content:" + content);
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(NOTHING);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
@@ -159,6 +161,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
                             + model_data.getVin() + " 的车辆已经启动。";
                 }
+                logger.info("-----content:" + content);
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(NOTHING);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
@@ -186,6 +189,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
                             + model_data.getVin() + " 的车辆发动机出现故障，请注意查看。";
                 }
+                logger.info("-----content:" + content);
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(REPAIR);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
@@ -213,6 +217,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
                             + model_data.getVin() + " 的车辆转速器出现故障，请注意查看。";
                 }
+                logger.info("-----content:" + content);
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(REPAIR);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
@@ -241,6 +246,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
                             + model_data.getVin() + " 的车辆安全气囊出现故障，请注意查看。";
                 }
+                logger.info("-----content:" + content);
                 sendMessageForUser(model_data.getUserId(), content);
                 logger.info("安全气囊启动");
             }
@@ -265,12 +271,12 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
                             + model_data.getVin() + " 的车辆车灯出现故障，请注意查看。";
                 }
+                logger.info("-----content:" + content);
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(REPAIR);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
                 Car_Cache(model_data, "carLight");// 缓存数据
                 logger.info("车灯坏了");
-                // jpushForUser.sendPush_Alias(model.getUserId().toString(),"车灯坏了");
             }
         }
     }
@@ -282,22 +288,26 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
      * @param model_data
      */
     private void monitorTemperature(Car model, Car model_data) {
-        if (model.getTemperature() > model_data.getTemperature()
-                && model.getTemperature() >= 100) { // 当汽车当前水温>数据库水温，并且数据库水温>=100度
-            if ((model.getTemperature() % 5 < model_data.getTemperature() % 5 || (model
-                    .getTemperature() > 100 && model.getTemperature() < 105))
-                    && model_data.getPropertyMessage()) { // 避免多次发送信息，每升高5个单位的温度就通知车主一次
-                User user = userService.findOne(model_data.getUserId());
-                String content = null;
-                if (model_data.getPlateNumber() != null) {
-                    content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
-                            + model_data.getPlateNumber() + " 的车辆温度过高，请注意行驶。";
-                } else {
-                    content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
-                            + model_data.getVin() + " 的车辆温度过高，请注意行驶。";
-                }
+        if (model.getTemperature() != model_data.getTemperature()) { //幂等处理
+            if (model.getTemperature() > model_data.getTemperature()
+                    && model.getTemperature() >= 100) { // 当汽车当前水温>数据库水温，并且数据库水温>=100度
+                if ((model.getTemperature() % 5 < model_data.getTemperature() % 5 || (model
+                        .getTemperature() > 100 && model.getTemperature() < 105))
+                        && model_data.getPropertyMessage()) { // 避免多次发送信息，每升高5个单位的温度就通知车主一次
+                    User user = userService.findOne(model_data.getUserId());
+                    String content = null;
+                    if (model_data.getPlateNumber() != null) {
+                        content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
+                                + model_data.getPlateNumber() + " 的车辆温度过高，请注意行驶。";
+                    } else {
+                        content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
+                                + model_data.getVin() + " 的车辆温度过高，请注意行驶。";
+                    }
+                    logger.info("-----content:" + content);
+                    Car_Cache(model_data, "temperature");
                 sendMessageForUser(model_data.getUserId(), content);
-                logger.info("汽车温度过高，需要降温");
+                    logger.info("汽车温度过高，需要降温");
+                }
             }
         }
     }
@@ -309,19 +319,22 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
      * @param model_data
      */
     private void monitorOil(Car model, Car model_data) {
-        if (model.getOil() < model_data.getOil()
-                && model.getOil() < model.getOilBox() * 0.2
-                && model.getCurrentCar()) { // 当前油量<数据库油量 并且 数据库油量剩余不足20%
-            if (model.getOil() % 5 < model_data.getOil() % 5
-                    || (model.getOil() < model.getOilBox() * 0.2 && model
-                    .getOil() > model.getOilBox() * 0.15)) { // 避免多次发送信息，每降低5个单位量的油量就通知车主一次
-                User user = userService.findOne(model.getUserId());
-                String content = "尊敬的" + user.getUsername()
-                        + ": 您好，您当前的车辆 油量不足20%，请及时加油。";
-                tcpMessage.setMessage(content);
-                tcpMessage.setMessagetype(OIL);
+        if (model.getOil() != model_data.getOil()) {//幂等处理
+            if (model.getOil() < model_data.getOil()
+                    && model.getOil() < model.getOilBox() * 0.2
+                    && model.getCurrentCar()) { // 当前油量<数据库油量 并且 数据库油量剩余不足20%
+                if (model.getOil() % 5 < model_data.getOil() % 5
+                        || (model.getOil() < model.getOilBox() * 0.2 && model
+                        .getOil() > model.getOilBox() * 0.15)) { // 避免多次发送信息，每降低5个单位量的油量就通知车主一次
+                    User user = userService.findOne(model.getUserId());
+                    String content = "尊敬的" + user.getUsername()
+                            + ": 您好，您当前的车辆 油量不足20%，请及时加油。";
+                    logger.info("-----content:" + content);
+                    tcpMessage.setMessage(content);
+                    tcpMessage.setMessagetype(OIL);
                 sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
-                logger.info("汽车油量不足，请及时加油");
+                    logger.info("汽车油量不足，请及时加油");
+                }
             }
         }
     }
@@ -333,15 +346,17 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
      * @param model_data
      */
     private void monitorMileage(Car model, Car model_data) {
-        if ((model.getMileage() % 15000 < model_data.getMileage() % 15000)
-                && model_data.getPropertyMessage() && model_data.getCurrentCar()) {
-            User user = userService.findOne(model_data.getUserId());
-            String content = "尊敬的" + user.getUsername()
-                    + ": 您好，您当前的车辆已经行驶超过15000公里，请及时对汽车进行检查维修。";
-            tcpMessage.setMessage(content);
-            tcpMessage.setMessagetype(REPAIR);
+        if (model.getMileage() != model_data.getMileage()) {//幂等处理
+            if ((model.getMileage() % 15000 < model_data.getMileage() % 15000)
+                    && model_data.getPropertyMessage() && model_data.getCurrentCar()) {
+                User user = userService.findOne(model_data.getUserId());
+                String content = "尊敬的" + user.getUsername()
+                        + ": 您好，您当前的车辆已经行驶超过15000公里，请及时对汽车进行检查维修。";
+                tcpMessage.setMessage(content);
+                tcpMessage.setMessagetype(REPAIR);
             sendMessageForUser(model_data.getUserId(), tcpMessage.toJson());// 推送信息到用户
-            logger.info("汽车已行驶超过15000公里，请及时对汽车进行检查维修");
+                logger.info("汽车已行驶超过15000公里，请及时对汽车进行检查维修");
+            }
         }
     }
 
@@ -442,16 +457,16 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
         }
     }
 
-    @Override
-    public Car getCarByVin(String vin) {
-        // Ehcache缓存临时车辆信息
-        Element tem_car = TEM_CAR.get(vin);
-        if (tem_car != null) {
-            return (Car) tem_car.getObjectValue();
-        } else {
-            throw new DomainSecurityException("无该车辆");
-        }
-    }
+//    @Override
+//    public Car getTem_CarByVin(String vin) {
+//        // Ehcache缓存临时车辆信息
+//        Element tem_car = TEM_CAR.get(vin);
+//        if (tem_car != null) {
+//            return (Car) tem_car.getObjectValue();
+//        } else {
+//            throw new DomainSecurityException("无该车辆");
+//        }
+//    }
 
     /**
      * 计算汽车10分钟内性能损坏数量.
@@ -471,7 +486,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
             typelist = (List<String>) map.get("type");
             if (!typelist.contains(type)) { // 如果该部件损坏没有缓存
                 count++;
-                if (count > 3) {
+                if (count >= 3) {
                     sendMessage(model);// 发生事故通知车主的至亲
                 } else {
                     CAR_CACHE.remove(model.getVin()); // 清除旧缓存
@@ -531,6 +546,18 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
     public List<Car> getCurrentCarByUser(Long userId) {
         List<Car> catList = carDao.getCurrentCarByUser(userId);
         return catList;
+    }
+
+    @Override
+    public Car getCarByVin(String vin) {
+        Car car = new Car();
+        car.setVin(vin);
+        List<Car> carList = getDao().searchQuery(car);
+        if (carList.size() == 0) {
+            return null;
+        } else {
+            return carList.get(0);
+        }
     }
 
 }

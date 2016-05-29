@@ -36,11 +36,11 @@ public interface CarService extends BaseService<Car, Car> {
     int saveCar(Car car);
 
     /**
-     * 根据车架号获取车辆信息.
-     * @param vin
-     * @return
-     */
-    Car getCarByVin(String vin);
+//     * 根据车架号获取车辆信息.
+//     * @param vin
+//     * @return
+//     */
+//    Car getTem_CarByVin(String vin);
 
     /**
      * 用户请求更新汽车状态.
@@ -75,4 +75,11 @@ public interface CarService extends BaseService<Car, Car> {
      * @return
      */
     List<Car> getCurrentCarByUser(Long userId);
+
+    /**
+     * 根据车架号获取车辆信息.
+     * @param vin
+     * @return
+     */
+    Car getCarByVin(String vin);
 }
