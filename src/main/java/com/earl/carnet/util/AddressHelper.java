@@ -1,6 +1,7 @@
 package com.earl.carnet.util;
 
 import com.earl.carnet.commons.util.JsonHelper;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +16,8 @@ import java.util.Map;
  * Created by Administrator on 2016/5/15.
  */
 public class AddressHelper {
+
+    private static Logger logger = Logger.getLogger(AddressHelper.class);
 
     /**
      * 百度地图Geocoding API 密钥
@@ -34,6 +37,7 @@ public class AddressHelper {
         String url = String.format("http://api.map.baidu.com/geocoder/v2/?ak="
                 + key
                 + "&callback=renderReverse&location=%s,%s&output=json&pois=1", latitude, longitude);
+        logger.info("url:" + url);
         URL myURL = null;
         URLConnection httpsConn = null;
         try {
@@ -50,14 +54,16 @@ public class AddressHelper {
                 BufferedReader br = new BufferedReader(insr);
                 String data = null;
                 if ((data = br.readLine()) != null) {
-                    System.out.println(data);
-                    Map<String, Object> objectMap = JsonHelper.jsonToMapForSina(data);
+                	System.out.println(data);
+                    String new_data = data.substring(data.indexOf("(")+1,data.indexOf(")")-1);
+                    
+                    Map<String, Object> objectMap = JsonHelper.jsonToMapForSina(new_data);
                     Map<String, Object> result = (Map<String, Object>) objectMap.get("result");
                     String formatted_address = (String) result.get("formatted_address");
                     String sematic_description = (String) result.get("sematic_description");
                     if (sematic_description != null || !sematic_description.equals("")) {
                         addr = formatted_address + sematic_description;
-                    } else  {
+                    } else {
                         addr = formatted_address;
                     }
                 }
@@ -72,15 +78,16 @@ public class AddressHelper {
 
     /**
      * 根据详细地址获取经纬度
+     *
      * @param address
      * @return
      */
-    public static Map<String,Float> getLocation(String address) {
+    public static Map<String, Float> getLocation(String address) {
         Float lon = null; //经度
         Float lat = null; //纬度
         String url = String.format("http://api.map.baidu.com/geocoder/v2/?ak="
                 + key
-                + "&callback=renderOption&output=json&address=%s",address );
+                + "&callback=renderOption&output=json&address=%s", address);
         URL myURL = null;
         URLConnection httpsConn = null;
         try {
@@ -97,17 +104,17 @@ public class AddressHelper {
                 BufferedReader br = new BufferedReader(insr);
                 String data = null;
                 if ((data = br.readLine()) != null) {
-                    String json = data.substring(data.indexOf("(")+1,data.length()-1);
+                    String json = data.substring(data.indexOf("(") + 1, data.length() - 1);
                     System.out.println(data);
                     System.out.println(json);
                     Map<String, Object> objectMap = JsonHelper.jsonToMapForSina(json);
                     System.out.println(objectMap.toString());
                     if (objectMap.get("status").toString().equals("0.0")) {
                         Map<String, Map<String, Object>> result = (Map<String, Map<String, Object>>) objectMap.get("result");
-                        Map<String,  Object> location = result.get("location");
+                        Map<String, Object> location = result.get("location");
                         System.out.println(location.get("lng"));
-                        lon =  Float.valueOf(location.get("lng").toString());
-                        lat =  Float.valueOf(location.get("lat").toString());
+                        lon = Float.valueOf(location.get("lng").toString());
+                        lat = Float.valueOf(location.get("lat").toString());
                     }
                 }
                 insr.close();
@@ -116,9 +123,9 @@ public class AddressHelper {
             e.printStackTrace();
             return null;
         }
-        Map<String,Float> map = new HashMap<>();
-        map.put("lon",lon);
-        map.put("lat",lat);
+        Map<String, Float> map = new HashMap<>();
+        map.put("lon", lon);
+        map.put("lat", lat);
         return map;
     }
 }

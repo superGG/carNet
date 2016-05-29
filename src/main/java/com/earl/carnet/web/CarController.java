@@ -276,6 +276,7 @@ public class CarController extends BaseController {
         Boolean update = carService.updateCarByVin(car);
         if (update) {
             result.setResultInfo("更新成功");
+            result.getResultParm().put("car",carService.getCarByVin(car.getVin()));
         } else {
             result.setServiceResult(false);
             result.setResultInfo("更新失败");
