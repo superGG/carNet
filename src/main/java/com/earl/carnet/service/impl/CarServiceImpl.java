@@ -325,11 +325,11 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
     private void monitorOil(Car model, Car model_data) {
         if (model.getOil() != model_data.getOil()) {//幂等处理
             if (model.getOil() < model_data.getOil()
-                    && model.getOil() < model.getOilBox() * 0.2
+                    && model.getOil() < model_data.getOilBox() * 0.2
                     && model.getCurrentCar()) { // 当前油量<数据库油量 并且 数据库油量剩余不足20%
                 if (model.getOil() % 5 < model_data.getOil() % 5
-                        || (model.getOil() < model.getOilBox() * 0.2 && model
-                        .getOil() > model.getOilBox() * 0.15)) { // 避免多次发送信息，每降低5个单位量的油量就通知车主一次
+                        || (model.getOil() < model_data.getOilBox() * 0.2 && model
+                        .getOil() > model_data.getOilBox() * 0.15)) { // 避免多次发送信息，每降低5个单位量的油量就通知车主一次
                     User user = userService.findOne(model.getUserId());
                     String content = "尊敬的" + user.getUsername()
                             + ": 您好，您当前的车辆 油量不足20%，请及时加油。";
