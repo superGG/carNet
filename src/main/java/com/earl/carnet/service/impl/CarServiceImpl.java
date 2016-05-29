@@ -41,7 +41,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
     private TcpMessage tcpMessage = new TcpMessage();
 
     // 项目标题
-    private final String TITLE = "车辆网";
+    private final String TITLE = "车联网";
 
     // 空提醒类型
     private final Integer NOTHING = 0;
@@ -391,8 +391,8 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
     public int saveCar(Car car) {
         Car car_data = new Car();
         car_data.setVin(car.getVin());
-        List<Car> carList = getDao().searchQuery(car_data);
-        if (carList.size() == 0) {
+        Element carList = CAR_CACHE.get(car.getVin());
+        if (carList != null) {
             car.setAlarmMessage(true);
             car.setPropertyMessage(true);
             car.setStateMessage(true);
@@ -401,7 +401,7 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
             if (backId != 0) carDao.updateUserCurrentCar(getDao().findOneById(backId));
             return backId;
         } else {
-            throw new SecurityException("该车辆已经被注册");
+            throw new SecurityException("车辆不存在");
         }
     }
 
@@ -413,12 +413,12 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
         if (car.getCarState()) {
             tcpMessage.setMessagetype(1);// 1为改变状态，2为改变警报
             tcpMessage.setMessage("false");
-            jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
+            jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.getMessage(),tcpMessage.toJson());
             result = true;
         } else {
             tcpMessage.setMessagetype(1);// 1为改变状态，2为改变警报
             tcpMessage.setMessage("true");
-            jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
+            jpushForCar.sendPush_Alias(car.getVin(),tcpMessage.getMessage(), tcpMessage.toJson());
             result = true;
         }
         return result;
@@ -431,7 +431,7 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
         if (!car.getCarAlarm()) {
             tcpMessage.setMessagetype(2);// 1为改变状态，2为改变警报
             tcpMessage.setMessage("true");
-            jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.toJson());
+            jpushForCar.sendPush_Alias(car.getVin(),tcpMessage.getMessage(), tcpMessage.toJson());
             return true;
         } else {
             throw new DomainSecurityException("该警报状态已经响起");
