@@ -329,7 +329,7 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
             if (model.getOil() % 5 < model_data.getOil() % 5
                     || (model.getOil() < model_data.getOilBox() * 0.2 && model
                     .getOil() > model_data.getOilBox() * 0.15)) { // 避免多次发送信息，每降低5个单位量的油量就通知车主一次
-                User user = userService.findOne(model.getUserId());
+                User user = userService.findOne(model_data.getUserId());
                 String content = "尊敬的" + user.getUsername()
                         + ": 您好，您当前的车辆 油量不足20%，请及时加油。";
                 tcpMessage.setMessage(content);
