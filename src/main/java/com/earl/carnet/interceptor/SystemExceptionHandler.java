@@ -87,6 +87,7 @@ public class SystemExceptionHandler implements HandlerExceptionResolver {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        ex.printStackTrace();
         //注掉这个，后台不会报out.getWriter is ...异常
 //		out.flush();
 //		out.close();
