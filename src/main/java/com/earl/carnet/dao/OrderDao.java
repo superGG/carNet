@@ -7,6 +7,6 @@ import com.earl.carnet.domain.carnet.order.Order;
 public interface OrderDao extends BaseDao<Order> {
 
 
-
+    Long insertBackLongId(Order order);
 
 }

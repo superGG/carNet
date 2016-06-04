@@ -38,17 +38,18 @@ public class OrderServiceImpl extends BaseServiceImpl<Order,Order>
     }
 
     @Override
-    public int saveOrder(Order order)  {
+    public Long saveOrder(Order order)  {
     	logger.info("进入service层的saveOrder方法");
-        int orderId = orderDao.insertBackId(order);
-        String order_json = GsonUtil.toJson(orderDao.findOneById(orderId)).toString();
-        String orderId_json = GsonUtil.toJson(orderId).toString();
+        String URL = "localhost:8080";
+        Long orderId = orderDao.insertBackLongId(order);
+        String OrderUrl = URL + "/order/getOrderById="+ orderId.toString();
+        logger.info("-------------------------------------"+OrderUrl);
         try {
 			String path = "src\\main\\webapp\\QRCodeImg"; //二维码保存路径
 			File filePath = new File(path);
 			FileOutputStream out = new FileOutputStream(filePath+"//"+orderId+".png");
 			String rootPath = OrderServiceImpl.class.getClassLoader().getResource("").getPath(); //TODO 迁移到服务器上时使用
-            QRCodeUtil.encode(orderId_json,"D:\\My Documents\\GitHub\\carNet\\src\\main\\webapp\\img\\earl.jpg",out,true);
+            QRCodeUtil.encode(OrderUrl,"D:\\My Documents\\GitHub\\carNet\\src\\main\\webapp\\img\\earl.jpg",out,true);
             out.flush();
             out.close();
 		} catch (Exception e) {

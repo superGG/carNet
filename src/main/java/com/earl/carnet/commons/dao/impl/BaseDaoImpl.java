@@ -212,7 +212,7 @@ public class BaseDaoImpl<T extends AbstractEntity<?>> implements BaseDao<T> {
      * @param object
      * @return
      */
-    private Map<String, Object> getNotNullProperties(Object object) {
+    protected Map<String, Object> getNotNullProperties(Object object) {
         Map<String, Object> notNullParam = null;
         BeanMap beanMap = new BeanMap(object);
         notNullParam = new HashMap<String, Object>();

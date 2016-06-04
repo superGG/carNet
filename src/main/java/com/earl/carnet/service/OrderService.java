@@ -13,5 +13,5 @@ public interface OrderService extends BaseService<Order, Order> {
      * @param order
      * @return
      */
-    int saveOrder(Order order) throws IOException, WriterException;
+    Long saveOrder(Order order) throws IOException, WriterException;
 }

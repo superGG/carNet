@@ -17,11 +17,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Table(name = "odrder")
 public class Order extends AbstractAuditingEntity<Long> implements Serializable{
 
-    private Long carId;  //汽车id
 
     private Long userId; //用户id
 
     private String stationName;//加油站名称
+
+    private String plateNumber;//车牌号
+
+    private String userName;//用户名
 
     private String address;//加油站地址
 
@@ -51,12 +54,12 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
 //        this.id = id;
     }
 
-    public Long getCarId() {
-        return carId;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setCarId(Long carId) {
-        this.carId = carId;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public Long getUserId() {
@@ -99,6 +102,13 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
         this.address = address;
     }
 
+    public String getPlateNumber() {
+        return plateNumber;
+    }
+
+    public void setPlateNumber(String plateNumber) {
+        this.plateNumber = plateNumber;
+    }
 
     public String getType() {
         return type;
@@ -148,16 +158,18 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
         this.state = state;
     }
 
+
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + super.getId() +
-                ", carId=" + carId +
-                ", userId=" + userId +
+                "userId=" + userId +
                 ", stationName='" + stationName + '\'' +
+                ", plateNumber='" + plateNumber + '\'' +
+                ", userName='" + userName + '\'' +
                 ", address='" + address + '\'' +
                 ", brandName='" + brandName + '\'' +
-                ", agreementTime=" + agreementTime +
+                ", agreementTime='" + agreementTime + '\'' +
                 ", type='" + type + '\'' +
                 ", units=" + units +
                 ", price=" + price +
