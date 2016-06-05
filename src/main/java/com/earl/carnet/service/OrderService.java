@@ -5,6 +5,8 @@ import com.earl.carnet.domain.carnet.order.Order;
 import com.google.zxing.WriterException;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
 
 public interface OrderService extends BaseService<Order, Order> {
 
@@ -14,4 +16,17 @@ public interface OrderService extends BaseService<Order, Order> {
      * @return
      */
     Long saveOrder(Order order) throws IOException, WriterException;
+
+    /**
+     * 获取所有订单.
+     * @return
+     */
+    List<Order> findAllOrder() throws ParseException;
+
+    /**
+     * 获取用户订单.
+     * @param id
+     * @return
+     */
+    List<Order> getUserOrder(Long id) throws ParseException;
 }

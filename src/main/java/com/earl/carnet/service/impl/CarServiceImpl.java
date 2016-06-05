@@ -135,7 +135,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                 logger.info("-----content:" + content);
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(NOTHING);
-                sendMessageForUser(model_data.getUserId(), tcpMessage);// 推送信息到用户
+                sendMessageForUser(model_data.getUserId(),"警报器响起", tcpMessage);// 推送信息到用户
                 Car_Cache(model_data, "alarm");// 缓存数据
             }
         }
@@ -149,10 +149,10 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
      */
     private void monitorState(Car model, Car model_data) {
         if (model.getCarState() != model_data.getCarState()) { // 当与数据库不同时
+            String content = null;
+            User user = userService.findOne(model_data.getUserId());
             if (model.getCarState() && model_data.getStateMessage()) {
                 logger.info("汽车启动了");
-                User user = userService.findOne(model_data.getUserId());
-                String content = null;
                 if (model_data.getPlateNumber() != null) {
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
                             + model_data.getPlateNumber() + " 的车辆已经启动。";
@@ -160,11 +160,20 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
                             + model_data.getVin() + " 的车辆已经启动。";
                 }
-                logger.info("-----content:" + content);
-                tcpMessage.setMessage(content);
-                tcpMessage.setMessagetype(NOTHING);
-                sendMessageForUser(model_data.getUserId(), tcpMessage);// 推送信息到用户
+            } else {
+                logger.info("汽车熄火了");
+                if (model_data.getPlateNumber() != null) {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
+                            + model_data.getPlateNumber() + " 的车辆已经熄火。";
+                } else {
+                    content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
+                            + model_data.getVin() + " 的车辆已经熄火。";
+                }
             }
+            logger.info("-----content:" + content);
+            tcpMessage.setMessage(content);
+            tcpMessage.setMessagetype(NOTHING);
+            sendMessageForUser(model_data.getUserId(),"汽车状态", tcpMessage);// 推送信息到用户
         }
     }
 
@@ -191,7 +200,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                 logger.info("-----content:" + content);
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(REPAIR);
-                sendMessageForUser(model_data.getUserId(), tcpMessage);// 推送信息到用户
+                sendMessageForUser(model_data.getUserId(),"发动机损坏", tcpMessage);// 推送信息到用户
                 Car_Cache(model_data, "engineProperty");// 缓存数据
             }
         }
@@ -219,7 +228,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                 logger.info("-----content:" + content);
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(REPAIR);
-                sendMessageForUser(model_data.getUserId(), tcpMessage);// 推送信息到用户
+                sendMessageForUser(model_data.getUserId(),"转速器损坏", tcpMessage);// 推送信息到用户
                 Car_Cache(model_data, "transmission");// 缓存数据
                 logger.info("转速器坏了");
             }
@@ -248,7 +257,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                 logger.info("-----content:" + content);
                 TcpMessage tcpMessage = new TcpMessage();
                 tcpMessage.setMessage(content);
-                sendMessageForUser(model_data.getUserId(), tcpMessage);
+                sendMessageForUser(model_data.getUserId(),"安全气囊异常", tcpMessage);
                 logger.info("安全气囊启动");
             }
         }
@@ -275,7 +284,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                 logger.info("-----content:" + content);
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(REPAIR);
-                sendMessageForUser(model_data.getUserId(), tcpMessage);// 推送信息到用户
+                sendMessageForUser(model_data.getUserId(),"车灯损坏", tcpMessage);// 推送信息到用户
                 Car_Cache(model_data, "carLight");// 缓存数据
                 logger.info("车灯坏了");
             }
@@ -308,7 +317,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                     Car_Cache(model_data, "temperature");
                     TcpMessage tcpMessage = new TcpMessage();
                     tcpMessage.setMessage(content);
-                    sendMessageForUser(model_data.getUserId(), tcpMessage);
+                    sendMessageForUser(model_data.getUserId(),"温度过高", tcpMessage);
                     logger.info("汽车温度过高，需要降温");
                 }
             }
@@ -334,7 +343,7 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
                         + ": 您好，您当前的车辆 油量不足20%，请及时加油。";
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(OIL);
-                sendMessageForUser(model_data.getUserId(), tcpMessage);// 推送信息到用户
+                sendMessageForUser(model_data.getUserId(),"油量不足", tcpMessage);// 推送信息到用户
                 logger.info("汽车油量不足，请及时加油");
             }
            }
@@ -356,7 +365,7 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
                         + ": 您好，您当前的车辆已经行驶超过15000公里，请及时对汽车进行检查维修。";
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(REPAIR);
-                sendMessageForUser(model_data.getUserId(), tcpMessage);// 推送信息到用户
+                sendMessageForUser(model_data.getUserId(),"汽车已行驶15000公里", tcpMessage);// 推送信息到用户
                 logger.info("汽车已行驶超过15000公里，请及时对汽车进行检查维修");
             }
         }
@@ -368,12 +377,13 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
      * @param userId
      * @param tcpMessage
      */
-    private void sendMessageForUser(Long userId, TcpMessage tcpMessage) {
-    	String tmpMessage = tcpMessage.toJson();
+    private void sendMessageForUser(Long userId,String title, TcpMessage tcpMessage) {
+    	String tmpMessage = tcpMessage.getMessage();
         Message message = new Message();
         message.setState(false);
         message.setUserId(userId);
         message.setContent(tmpMessage);
+        message.setTitle(title);
         messageService.insertBackId(message);
         jpushForUser.sendPush_Alias(userId.toString(),tcpMessage.getMessage(),
                 TITLE,tmpMessage);

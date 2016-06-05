@@ -1,6 +1,7 @@
 package com.earl.carnet.domain.carnet.order;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Table;
 
@@ -43,6 +44,8 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
     private Double amounts;//总价
 
     private Integer state;//订单状态
+
+    private String createTime;//创建时间
 
     @AutoID
     public Long getId() {
@@ -158,6 +161,13 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
         this.state = state;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 
     @Override
     public String toString() {
@@ -176,6 +186,7 @@ public class Order extends AbstractAuditingEntity<Long> implements Serializable{
                 ", number=" + number +
                 ", amounts=" + amounts +
                 ", state=" + state +
+                ", createTime='" + createTime + '\'' +
                 '}';
     }
 }

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,18 +48,9 @@ public class OrderController extends BaseController {
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "得到所有订单信息", notes = "find All order", httpMethod = "GET", response = Order.class, responseContainer = "List")
-    public ResultMessage getAll() {
+    public ResultMessage getAll() throws ParseException {
         log.debug("REST request to get all Order");
-        List<Order> orders = orderService.findAll();
-        List<Order> orderList = new ArrayList<Order>();
-        User user = new User();
-        for (Order order : orders) {
-            user = userService.findOne(order.getUserId());
-            order.setUserName("");
-            if (user.getRealName() != null)
-                order.setUserName(user.getRealName());
-            orderList.add(order);
-        }
+        List<Order> orderList = orderService.findAllOrder();
         result = new ResultMessage();
         result.getResultParm().put("order", orderList);
         return result;
@@ -82,6 +74,24 @@ public class OrderController extends BaseController {
         if (user.getRealName() != null) order.setUserName(user.getRealName());
         result = new ResultMessage();
         result.getResultParm().put("order", order);
+        return result;
+    }
+
+    /**
+     * GET /order -> get order by userId
+     */
+    @Valid
+    @RequestMapping(value = "/getUserOrder={id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "得到订单明细", notes = "get order by userId", httpMethod = "GET", response = Order.class, responseContainer = "List")
+    public ResultMessage getUserOrder(
+            @PathVariable
+            @ApiParam(required = true, name = "id", value = "订单id")
+            @NotNull(message = "id不能为空")
+            Long id) throws ParseException {
+        log.debug("REST request to get order by userId");
+        List<Order> orderList = orderService.getUserOrder(id);
+        result = new ResultMessage();
+        result.getResultParm().put("order", orderList);
         return result;
     }
 
