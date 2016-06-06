@@ -21,12 +21,12 @@ public interface OrderService extends BaseService<Order, Order> {
      * 获取所有订单.
      * @return
      */
-    List<Order> findAllOrder() throws ParseException;
+    List<Order> findAllOrder();
 
     /**
      * 获取用户订单.
      * @param id
      * @return
      */
-    List<Order> getUserOrder(Long id) throws ParseException;
+    List<Order> getUserOrder(Long id);
 }

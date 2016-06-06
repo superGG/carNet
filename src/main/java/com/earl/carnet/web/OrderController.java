@@ -3,6 +3,7 @@ package com.earl.carnet.web;
 import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.carnet.order.Order;
 import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.OrderService;
 import com.earl.carnet.service.UserService;
 import com.google.zxing.WriterException;
@@ -48,7 +49,7 @@ public class OrderController extends BaseController {
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "得到所有订单信息", notes = "find All order", httpMethod = "GET", response = Order.class, responseContainer = "List")
-    public ResultMessage getAll() throws ParseException {
+    public ResultMessage getAll() {
         log.debug("REST request to get all Order");
         List<Order> orderList = orderService.findAllOrder();
         result = new ResultMessage();
@@ -87,14 +88,13 @@ public class OrderController extends BaseController {
             @PathVariable
             @ApiParam(required = true, name = "id", value = "订单id")
             @NotNull(message = "id不能为空")
-            Long id) throws ParseException {
+            Long id) {
         log.debug("REST request to get order by userId");
         List<Order> orderList = orderService.getUserOrder(id);
         result = new ResultMessage();
         result.getResultParm().put("order", orderList);
         return result;
     }
-
 
 
     /**
@@ -124,7 +124,7 @@ public class OrderController extends BaseController {
         log.info("进入controller层添加订单saveOrder方法");
         result = new ResultMessage();
         Long orderId = orderService.saveOrder(order);
-        System.out.println("-----------------------"+orderId);
+        System.out.println("-----------------------" + orderId);
         if (orderId != 0) {
             Order new_order = orderService.findOne(orderId);
             result.getResultParm().put("order", new_order);
@@ -145,6 +145,7 @@ public class OrderController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "更新订单信息", notes = "update order message", httpMethod = "POST", response = ResultMessage.class)
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "订单id(不能为空)", required = true, dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "plateNumber", value = "车牌号", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "userId", value = "用户id", required = false, dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "stationName", value = "加油站名称", required = false, dataType = "String", paramType = "query"),
@@ -162,6 +163,7 @@ public class OrderController extends BaseController {
             @ApiParam(required = false, name = "order", value = "订单实体，这个字段不要理！！！")
             Order order) {
         log.info("进入controller层添加订单update方法");
+        if (order.getId() == null) throw new DomainSecurityException("所更新的订单id不能为空");
         result = new ResultMessage();
         if (orderService.updateByPrimaryKeySelective(order) != 0) {
             result.setServiceResult(true);
@@ -177,10 +179,12 @@ public class OrderController extends BaseController {
      *
      * @return
      */
+    @Valid
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据id删除订单", notes = "delete order by id", httpMethod = "POST", response = ResultMessage.class)
     public ResponseEntity<ResultMessage> delete(
             @ApiParam(required = true, name = "id", value = "订单id")
+            @NotNull(message = "id不能为空")
             Long id) {
         log.info("进入controller层添加订单delete方法");
         result = new ResultMessage();

@@ -11,6 +11,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,23 +78,21 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order>
     }
 
     @Override
-    public List<Order> findAllOrder() throws ParseException {
+    public List<Order> findAllOrder() {
         List<Order> orders = orderDao.findAll();
         //检查更新订单状态
-        updateOrderState(orders);
-        orders = orderDao.findAll();
+        orders = updateOrderState(orders);
         List<Order> orderList = addUserName(orders);
         return orderList;
     }
 
     @Override
-    public List<Order> getUserOrder(Long id) throws ParseException {
+    public List<Order> getUserOrder(Long id) {
         Order order = new Order();
         order.setUserId(id);
         List<Order> orders = orderDao.searchAccurate(order);
         //检查更新订单状态
-        updateOrderState(orders);
-        orders = orderDao.searchAccurate(order);
+        orders = updateOrderState(orders);
         List<Order> orderList = addUserName(orders);
         return orderList;
     }
@@ -120,18 +119,25 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order>
     /**
      * 检查更新所有订单状态
      */
-    private void updateOrderState(List<Order> orders) throws ParseException {
+    private List<Order> updateOrderState(List<Order> orders) {
+        List<Order> orderList = new ArrayList<Order>();
         Date nowDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         logger.info("--------------nowDate:" + nowDate);
         for (Order order : orders) {
-            Date orderDate = sdf.parse(order.getAgreementTime());
-            if (orderDate.getTime() < nowDate.getTime()) {
-                logger.info("------------------------该订单已过期" + order.getId());
-                order.setState(PAST);
-                getDao().updateByPrimaryKeySelective(order);
+            try {
+                Date orderDate = sdf.parse(order.getAgreementTime());
+                if (orderDate.getTime() < nowDate.getTime()) {
+                    logger.info("------------------------该订单已过期" + order.getId());
+                    order.setState(PAST);
+                    getDao().updateByPrimaryKeySelective(order);
+                }
+            } catch (ParseException e) {
+                throw new DomainSecurityException("Date格式报错");
             }
+            orderList.add(order);
         }
+        return orderList;
     }
 
 
