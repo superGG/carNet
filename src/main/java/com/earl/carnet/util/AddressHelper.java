@@ -1,8 +1,5 @@
 package com.earl.carnet.util;
 
-import com.earl.carnet.commons.util.JsonHelper;
-import org.apache.log4j.Logger;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +8,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
+
+import net.sf.json.JSONObject;
+
+import org.apache.log4j.Logger;
+
+import com.earl.carnet.commons.util.JsonHelper;
 
 /**
  * Created by Administrator on 2016/5/15.
@@ -55,9 +58,18 @@ public class AddressHelper {
                 String data = null;
                 if ((data = br.readLine()) != null) {
                 	System.out.println(data);
-                    String new_data = data.substring(data.indexOf("(")+1,data.indexOf(")")-1);
+                    String jsonAddress = data.substring(data.indexOf("(")+1,data.indexOf(")"));
                     
-                    Map<String, Object> objectMap = JsonHelper.jsonToMapForSina(new_data);
+                    JSONObject json = JSONObject.fromObject(jsonAddress);
+                    JSONObject addressComponent = json.getJSONObject("result").getJSONObject("addressComponent");
+                    String city = addressComponent.getString("city");
+                    String district = addressComponent.getString("district");
+                    System.out.println(city);
+                    //北京市
+                    System.out.println(district);
+                    //海淀区
+
+                    Map<String, Object> objectMap = JsonHelper.jsonToMapForSina(jsonAddress);
                     Map<String, Object> result = (Map<String, Object>) objectMap.get("result");
                     String formatted_address = (String) result.get("formatted_address");
                     String sematic_description = (String) result.get("sematic_description");
