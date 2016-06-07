@@ -243,18 +243,20 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
      */
     private void monitorSRS(Car model, Car model_data) {
         if (model.getSRS() != model_data.getSRS()) { // 当与数据库不同时
-            if (!model.getSRS()) { // 安全气囊启动
+            if (model.getSRS()) { // 安全气囊启动
                 User user = userService.findOne(model_data.getUserId());
                 String content = null;
                 if (model_data.getPlateNumber() != null) {
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
                             + model_data.getPlateNumber()
-                            + " 的车辆安全气囊出现故障，请注意查看。";
+                            + " 的车辆安全气囊呈启动状态，系统已联系短信通知至亲用户（如果已经绑定至亲用户），若无意外，请及时联系至亲用户。";
                 } else {
                     content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
-                            + model_data.getVin() + " 的车辆安全气囊出现故障，请注意查看。";
+                            + model_data.getVin() + " 的车辆安全气囊呈启动状态，系统已联系短信通知至亲用户（如果已经绑定至亲用户），若无意外，请及时联系至亲用户。";
                 }
                 logger.info("-----content:" + content);
+                //短信通知至亲用户
+                sendMessage(model);
                 TcpMessage tcpMessage = new TcpMessage();
                 tcpMessage.setMessage(content);
                 sendMessageForUser(model_data.getUserId(),"安全气囊异常", tcpMessage);

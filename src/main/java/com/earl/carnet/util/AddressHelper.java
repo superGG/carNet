@@ -57,27 +57,32 @@ public class AddressHelper {
                 BufferedReader br = new BufferedReader(insr);
                 String data = null;
                 if ((data = br.readLine()) != null) {
-                	System.out.println(data);
-                    String jsonAddress = data.substring(data.indexOf("(")+1,data.indexOf(")"));
-                    
-                    JSONObject json = JSONObject.fromObject(jsonAddress);
-                    JSONObject addressComponent = json.getJSONObject("result").getJSONObject("addressComponent");
-                    String city = addressComponent.getString("city");
-                    String district = addressComponent.getString("district");
-                    System.out.println(city);
-                    //北京市
-                    System.out.println(district);
-                    //海淀区
+                	logger.info(data);
+                    int start = data.indexOf("(");
+                    String jsonResult = data.substring(start+1,data.length()-1);
+                    logger.info("jsonResult:" + jsonResult);
+                    //使用net.sf.json.JSONObject; 解析json
+                    JSONObject json = JSONObject.fromObject(jsonResult);
+                    int status = json.getInt("status");
+                    if (status == 0) {
+                        JSONObject result = json.getJSONObject("result");
+                        String formatted_address = result.getString("formatted_address");
+                        if (formatted_address != null && !formatted_address.equals("")) {
+                            addr = formatted_address;
+                            logger.info("formatted_address :" + formatted_address);
+                        }
+                    }
 
-                    Map<String, Object> objectMap = JsonHelper.jsonToMapForSina(jsonAddress);
+                    //使用传统方法自己解析json
+                    Map<String, Object> objectMap = JsonHelper.jsonToMapForSina(jsonResult);
                     Map<String, Object> result = (Map<String, Object>) objectMap.get("result");
                     String formatted_address = (String) result.get("formatted_address");
                     String sematic_description = (String) result.get("sematic_description");
-                    if (sematic_description != null || !sematic_description.equals("")) {
-                        addr = formatted_address + sematic_description;
-                    } else {
-                        addr = formatted_address;
-                    }
+//                    if (sematic_description != null || !sematic_description.equals("")) {
+//                        addr = formatted_address + sematic_description;
+//                    } else {
+//                        addr = formatted_address;
+//                    }
                 }
                 insr.close();
             }
