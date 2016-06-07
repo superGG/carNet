@@ -7,9 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +27,9 @@ import com.earl.carnet.service.UserService;
 import com.earl.carnet.util.AddressHelper;
 import com.earl.carnet.util.JPushForCar;
 import com.earl.carnet.util.JPushForUser;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 
 @Service("carService")
 @Transactional
@@ -412,7 +412,7 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
             if (backId != 0) carDao.updateUserCurrentCar(getDao().findOneById(backId));
             return backId;
         } else {
-            throw new SecurityException("车辆不存在");
+            throw new DomainSecurityException("车辆不存在");
         }
     }
 
@@ -463,7 +463,7 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
         Element tem_car_element = TEM_CAR.get(tem_car.getVin());
 //		System.out.println("-------开始检车缓存中是否存在");
         if (tem_car_element != null) {
-            throw new DomainSecurityException("该车辆已存在");
+            throw new DomainSecurityException("该车辆已存在缓存");
         } else {
 //			System.out.println("-------缓存中不存在");
 //			System.out.println("-------开始给缓存中添加临时车辆信息");
