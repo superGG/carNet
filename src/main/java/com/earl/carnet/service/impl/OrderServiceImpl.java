@@ -64,15 +64,18 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order>
         String OrderUrl = URL + "/order/getOrderById=" + orderId.toString();
         logger.info("-------------------------------------" + OrderUrl);
         try {
+        	String rootPath2 = OrderServiceImpl.class.getClassLoader().getResource("").getPath(); //TODO 迁移到服务器上时使用
             String path = "src\\main\\webapp\\QRCodeImg"; //二维码保存路径
             File filePath = new File(path);
             FileOutputStream out = new FileOutputStream(filePath + "//" + orderId + ".png");
             String rootPath = OrderServiceImpl.class.getClassLoader().getResource("").getPath(); //TODO 迁移到服务器上时使用
-            QRCodeUtil.encode(OrderUrl, "D:\\My Documents\\GitHub\\carNet\\src\\main\\webapp\\img\\earl.jpg", out, true);
+//            "D:\\My Documents\\GitHub\\carNet\\src\\main\\webapp\\img\\earl.jpg"
+            QRCodeUtil.encode(OrderUrl,"src\\main\\webapp\\img\\earl.jpg", out, true);
             out.flush();
             out.close();
         } catch (Exception e) {
-            throw new SecurityException("生成二维码失败", e);
+        	e.printStackTrace();
+//            throw new SecurityException("生成二维码失败", e);
         }
         return orderId;
     }
