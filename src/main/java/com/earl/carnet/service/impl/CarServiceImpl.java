@@ -397,6 +397,9 @@ if (model.getOil() != model_data.getOil()) {//幂等处理
         Car car = new Car();
         car.setUserId(userId);
         List<Car> carList = getDao().searchQuery(car);
+        carList.sort((car1,car2)->{
+        	return car2.getCurrentCar().compareTo(car1.getCurrentCar());
+        });
         return carList;
     }
 
