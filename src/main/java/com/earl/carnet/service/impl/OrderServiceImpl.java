@@ -11,9 +11,6 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import com.earl.carnet.domain.sercurity.user.User;
-import com.earl.carnet.exception.DomainSecurityException;
-import com.earl.carnet.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.service.BaseServiceImpl;
-import com.earl.carnet.commons.util.GsonUtil;
 import com.earl.carnet.commons.util.QRCodeUtil;
 import com.earl.carnet.dao.OrderDao;
 import com.earl.carnet.domain.carnet.order.Order;
+import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.OrderService;
+import com.earl.carnet.service.UserService;
 
 @Service("OrderService")
 @Transactional
@@ -70,12 +69,16 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order>
         try {
             String path = rootPath +  "QRCodeImg"; //二维码保存路径
             File filePath = new File(path);
+            if(!filePath.exists()){ 
+            	filePath.mkdirs();
+            	}
             FileOutputStream out = new FileOutputStream(filePath + "//" + orderId + ".png");
             QRCodeUtil.encode(OrderUrl, rootPath + "img\\earl.jpg", out, true);
             out.flush();
             out.close();
         } catch (Exception e) {
-            throw new SecurityException("生成二维码失败", e);
+        	e.printStackTrace();
+            throw new DomainSecurityException("生成二维码失败");
         }
         return orderId;
     }
