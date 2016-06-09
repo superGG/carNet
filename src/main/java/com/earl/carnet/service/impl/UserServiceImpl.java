@@ -79,7 +79,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     }
 
 
-
     @Override
     public List<Role> findRole(Long userId) {
         // TODO 未测试.
@@ -146,12 +145,23 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     public Boolean saveUser(User user) {
         logger.info("进入saveUser方法");
         Boolean result = false;
+
+        logger.info("对用户密码进行加密");
         String oldPassword = user.getPassword();
         String newPassword = new SimpleHash("SHA-1", oldPassword).toString();
-//        String newPassword = MD5Util.md5(oldPassword);
         user.setPassword(newPassword);
-        int save = userDao.insert(user);
-        if (save != 0) result = true;
+
+        int userId = userDao.insertBackId(user);
+        if (userId != 0) {
+            //设置默认值
+            user.setId((long) userId);
+            user.setUsername("用户" + userId);
+            user.setUserImg("img/earl.jpg");
+            int save = updateByPrimaryKeySelective(user);
+            if (save != 0) {
+                result = true;
+            }
+        }
         logger.info("退出saveUser方法");
         return result;
     }
@@ -188,14 +198,14 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     @Override
     public void changeRelatedPhone(String id, String newPhone, String verifyCode) {
         logger.info("进入service层changeRelatedPhone方法");
-            if (confirmVerifyCode(newPhone, verifyCode)) {
-                User user = new User();
-                user.setId(Long.parseLong(id));
-                user.setRelatedPhone(newPhone);
-                getDao().updateByPrimaryKeySelective(user);
-            } else {
-                throw new SecurityException("验证码错误");
-            }
+        if (confirmVerifyCode(newPhone, verifyCode)) {
+            User user = new User();
+            user.setId(Long.parseLong(id));
+            user.setRelatedPhone(newPhone);
+            getDao().updateByPrimaryKeySelective(user);
+        } else {
+            throw new SecurityException("验证码错误");
+        }
     }
 
     @Override
@@ -236,7 +246,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         User user = userDao.findOneByLoginId(loginid);
         return userDao.getCurrentCar(user.getId());
     }
-
 
 
 //    @Override
