@@ -31,6 +31,7 @@ import com.earl.carnet.util.AddressHelper;
 import com.earl.carnet.util.JPushForCar;
 import com.earl.carnet.util.JPushForUser;
 
+
 @Service("carService")
 @Transactional
 public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarService {

@@ -1,7 +1,6 @@
 package com.earl.carnet.web;
 
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
