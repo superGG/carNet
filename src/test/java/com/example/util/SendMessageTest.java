@@ -23,7 +23,7 @@ public class SendMessageTest {
 
     @Test
     public void testAddresshelper(){
-        String addr = AddressHelper.getAddress(31.71099194, 120.4019789);
+        String addr = AddressHelper.getAddress(21.8545210000, 111.5016700000);
         System.out.println(addr);
     }
 

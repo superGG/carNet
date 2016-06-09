@@ -1,8 +1,5 @@
 package com.earl.carnet.util;
 
-import com.earl.carnet.commons.util.JsonHelper;
-import org.apache.log4j.Logger;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +8,13 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
+
+import net.sf.json.JSONObject;
+
+import org.apache.log4j.Logger;
+
+import com.earl.carnet.commons.util.JsonHelper;
+
 
 /**
  * Created by Administrator on 2016/5/15.
@@ -54,18 +58,32 @@ public class AddressHelper {
                 BufferedReader br = new BufferedReader(insr);
                 String data = null;
                 if ((data = br.readLine()) != null) {
-                	System.out.println(data);
-                    String new_data = data.substring(data.indexOf("(")+1,data.indexOf(")")-1);
-                    
-                    Map<String, Object> objectMap = JsonHelper.jsonToMapForSina(new_data);
+                	logger.info(data);
+                    int start = data.indexOf("(");
+                    String jsonResult = data.substring(start+1,data.length()-1);
+                    logger.info("jsonResult:" + jsonResult);
+                    //使用net.sf.json.JSONObject; 解析json
+                    JSONObject json = JSONObject.fromObject(jsonResult);
+                    int status = json.getInt("status");
+                    if (status == 0) {
+                        JSONObject result = json.getJSONObject("result");
+                        String formatted_address = result.getString("formatted_address");
+                        if (formatted_address != null && !formatted_address.equals("")) {
+                            addr = formatted_address;
+                            logger.info("formatted_address :" + formatted_address);
+                        }
+                    }
+
+                    //使用传统方法自己解析json
+                    Map<String, Object> objectMap = JsonHelper.jsonToMapForSina(jsonResult);
                     Map<String, Object> result = (Map<String, Object>) objectMap.get("result");
                     String formatted_address = (String) result.get("formatted_address");
                     String sematic_description = (String) result.get("sematic_description");
-                    if (sematic_description != null || !sematic_description.equals("")) {
-                        addr = formatted_address + sematic_description;
-                    } else {
-                        addr = formatted_address;
-                    }
+//                    if (sematic_description != null || !sematic_description.equals("")) {
+//                        addr = formatted_address + sematic_description;
+//                    } else {
+//                        addr = formatted_address;
+//                    }
                 }
                 insr.close();
             }

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -120,10 +121,10 @@ public class OrderController extends BaseController {
     })
     public ResultMessage saveOrder(
             @ApiParam(required = false, name = "order", value = "订单实体,这个字段不要理！！！")
-            Order order) throws IOException, WriterException {
+            Order order, HttpServletRequest request) {
         log.info("进入controller层添加订单saveOrder方法");
         result = new ResultMessage();
-        Long orderId = orderService.saveOrder(order);
+        Long orderId = orderService.saveOrder(order,request);
         System.out.println("-----------------------" + orderId);
         if (orderId != 0) {
             Order new_order = orderService.findOne(orderId);

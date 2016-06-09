@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.exception.DomainSecurityException;
@@ -56,21 +57,21 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order>
     }
 
     @Override
-    public Long saveOrder(Order order) {
+    public Long saveOrder(Order order, HttpServletRequest request) {
         logger.info("进入service层的saveOrder方法");
         String URL = "localhost:8080";
         order.setState(UNPAY);
         Long orderId = orderDao.insertBackLongId(order);
         String OrderUrl = URL + "/order/getOrderById=" + orderId.toString();
-        logger.info("-------------------------------------" + OrderUrl);
+        logger.info("-------------------------------------二维码内容：" + OrderUrl);
+
+        String rootPath = request.getSession().getServletContext().getRealPath("/");
+        logger.info("-------------- rootPath" + rootPath);
         try {
-        	String rootPath2 = OrderServiceImpl.class.getClassLoader().getResource("").getPath(); //TODO 迁移到服务器上时使用
-            String path = "src\\main\\webapp\\QRCodeImg"; //二维码保存路径
+            String path = rootPath +  "QRCodeImg"; //二维码保存路径
             File filePath = new File(path);
             FileOutputStream out = new FileOutputStream(filePath + "//" + orderId + ".png");
-            String rootPath = OrderServiceImpl.class.getClassLoader().getResource("").getPath(); //TODO 迁移到服务器上时使用
-//            "D:\\My Documents\\GitHub\\carNet\\src\\main\\webapp\\img\\earl.jpg"
-            QRCodeUtil.encode(OrderUrl,"src\\main\\webapp\\img\\earl.jpg", out, true);
+            QRCodeUtil.encode(OrderUrl, rootPath + "img\\earl.jpg", out, true);
             out.flush();
             out.close();
         } catch (Exception e) {
