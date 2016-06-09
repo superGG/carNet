@@ -1,12 +1,11 @@
 package com.example.util;
 
-import com.earl.carnet.util.AddressHelper;
-import org.junit.Test;
-
-import com.earl.carnet.commons.util.Assert;
-
 import java.util.Map;
 //import com.earl.carnet.util.SendMessage;
+
+import org.junit.Test;
+
+import com.earl.carnet.util.AddressHelper;
 
 /**
  * Created by Administrator on 2016/4/15.
