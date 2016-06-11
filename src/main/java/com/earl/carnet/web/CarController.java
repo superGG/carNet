@@ -386,7 +386,7 @@ public class CarController extends BaseController {
             Long id) {
         log.info("进入controller层添加汽车delete方法");
         result = new ResultMessage();
-        carService.delete(id);
+        carService.deleteCar(id);
         result.setResultInfo("删除汽车成功");
         result.setServiceResult(true);
         return new ResponseEntity<>(result, HttpStatus.OK);

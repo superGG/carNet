@@ -84,4 +84,10 @@ public interface CarService extends BaseService<Car, Car> {
     Car getCarByVin(String vin);
 
     Car getTmpCarByVin(String vin);
+
+    /**
+     * 删除非当前车辆.
+     * @param id
+     */
+    void deleteCar(Long id);
 }

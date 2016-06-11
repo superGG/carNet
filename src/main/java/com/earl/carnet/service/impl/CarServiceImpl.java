@@ -576,4 +576,14 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
         return null;
     }
 
+    @Override
+    public void deleteCar(Long id) {
+        Car car = getDao().findOneById(id);
+        if (car.getCurrentCar()) {
+            throw new DomainSecurityException("不能删除当前车辆");
+        } else {
+            getDao().delete(id);
+        }
+    }
+
 }
