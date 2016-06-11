@@ -397,6 +397,9 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
         Car car = new Car();
         car.setUserId(userId);
         List<Car> carList = getDao().searchQuery(car);
+        carList.sort((car1,car2)->{
+        	return car2.getCurrentCar().compareTo(car1.getCurrentCar());
+        });
         return carList;
     }
 
