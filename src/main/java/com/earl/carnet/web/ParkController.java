@@ -1,5 +1,6 @@
 package com.earl.carnet.web;
 
+
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.carnet.Park.Park;
-import com.earl.carnet.domain.carnet.brand.Brand;
 import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.ParkService;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -92,7 +92,7 @@ public class ParkController extends BaseController {
      * POST /shop -> save shop
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "添加停车场信息", notes = "save shop", httpMethod = "POST", response = Brand.class, responseContainer = "List")
+    @ApiOperation(value = "添加停车场信息", notes = "save shop", httpMethod = "POST", response = Park.class, responseContainer = "List")
     public ResponseEntity<ResultMessage> save(Park park) {
         log.debug("save shop");
         int id = parkService.insertBackId(park);

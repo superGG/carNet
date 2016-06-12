@@ -189,7 +189,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
         } else {
             String password_Md5 = new SimpleHash("SHA-1", password).toString();
             user.setPassword(password_Md5);
-            user.setUserImg("/img/userImg.jpg");
+            user.setUserImg("/img/earl.jpg");
             userDao.insert(user);
         }
         logger.info("退出用户注册registerAccount方法");
