@@ -2,11 +2,8 @@ package com.earl.carnet.web;
 
 import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.carnet.Park.Park;
-import com.earl.carnet.domain.carnet.park.park;
-import com.earl.carnet.domain.carnet.brand.Brand;
 import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.ParkService;
-import com.earl.carnet.service.parkService;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -41,7 +38,7 @@ public class ParkController extends BaseController {
      * GET /park -> get all the park
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "得到所有停车场信息", notes = "find All park", httpMethod = "GET", response = park.class, responseContainer = "List")
+    @ApiOperation(value = "得到所有停车场信息", notes = "find All park", httpMethod = "GET", response = Park.class, responseContainer = "List")
     public ResultMessage getAll() {
         log.debug("REST request to get all park");
         result = new ResultMessage();
@@ -51,7 +48,7 @@ public class ParkController extends BaseController {
 
     @Valid
     @RequestMapping(value = "/getAroundPark", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "获取周围停车场信息", notes = "get user's around park", httpMethod = "GET", response = park.class, responseContainer = "List")
+    @ApiOperation(value = "获取周围停车场信息", notes = "get user's around park", httpMethod = "GET", response = Park.class, responseContainer = "List")
     public ResultMessage getAroundShop(
             @NotNull(message = "lon不能为空")
             @ApiParam(required = true, name = "lon", value = "纬度坐标")
@@ -71,7 +68,7 @@ public class ParkController extends BaseController {
      */
     @Valid
     @RequestMapping(value = "/getParkById={id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "得到停车场详情", notes = "get park by id", httpMethod = "GET", response = park.class, responseContainer = "List")
+    @ApiOperation(value = "得到停车场详情", notes = "get park by id", httpMethod = "GET", response = Park.class, responseContainer = "List")
     public ResultMessage getParkById(
             @PathVariable
             @ApiParam(required = true, name = "id", value = "停车场id")
@@ -92,7 +89,7 @@ public class ParkController extends BaseController {
      * POST /shop -> save shop
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "添加停车场信息", notes = "save shop", httpMethod = "POST", response = Brand.class, responseContainer = "List")
+    @ApiOperation(value = "添加停车场信息", notes = "save shop", httpMethod = "POST", response = Park.class, responseContainer = "List")
     public ResponseEntity<ResultMessage> save(Park park) {
         log.debug("save shop");
         int id = parkService.insertBackId(park);
