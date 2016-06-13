@@ -156,6 +156,7 @@ public class UserController extends BaseController {
         result = new ResultMessage();
         if (userService.updateByPrimaryKeySelective(user) != 0) {
             result.setServiceResult(true);
+            result.setResultInfo("更新成功");
         } else {
             result.setServiceResult(false);
             result.setResultInfo("更新失败");
@@ -197,7 +198,7 @@ public class UserController extends BaseController {
             Long id,
             @ApiParam(required = true, name = "newPassword", value = "新密码")
             @RequestParam(name = "newPassword", required = true)
-            @Length(min = 5, max = 30)
+            @Length(min = 5, max = 32)
             String newPassword) {
         result = new ResultMessage();
         result.setServiceResult(userService.changePassword(id, oldPassword, newPassword));
@@ -220,7 +221,7 @@ public class UserController extends BaseController {
             Long id,
             @ApiParam(required = true, name = "newSafePassword", value = "新安全密码")
             @RequestParam(name = "newSafePassword", required = true)
-            @Length(min = 5, max = 30)
+            @Length(min = 5, max = 32)
             String newSafePassword) {
         result = new ResultMessage();
         result.setServiceResult(userService.changeSafePassword(id, oldSafePassword, newSafePassword));
@@ -367,7 +368,9 @@ public class UserController extends BaseController {
             @NotNull(message="用户id不能为空")
             Long id, String safePassword) {
         result = new ResultMessage();
-        result.setServiceResult(userService.confirmSafePassword(id, safePassword));
+        result.setResultInfo("安全密码验证成功");
+        userService.confirmSafePassword(id, safePassword);
+        result.setServiceResult(true);
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
 

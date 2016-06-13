@@ -94,7 +94,7 @@ public interface UserService extends BaseService<User, UserQuery> {
 	 * @param safePassword
      * @return
      */
-	Boolean confirmSafePassword(Long id, String safePassword);
+	void confirmSafePassword(Long id, String safePassword);
 
 	/**
 	 * 修改安全密码.
