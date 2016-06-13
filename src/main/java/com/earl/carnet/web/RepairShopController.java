@@ -63,7 +63,7 @@ public class RepairShopController extends BaseController {
         result = new ResultMessage();
         List<RepairShop> shopList = repairShopService.getAroundShop(lat, lon);
         result.getResultParm().put("repairshop", shopList);
-        if (shopList.size() == 0) throw new DomainSecurityException("周围3公里都没有加盟维修店");
+        if (shopList.size() == 0) throw new DomainSecurityException("周围10公里都没有加盟维修店");
         return result;
     }
 
