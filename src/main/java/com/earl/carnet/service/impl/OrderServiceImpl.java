@@ -136,7 +136,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         for (Order order : orders) {
             try {
                 Date orderDate = sdf.parse(order.getAgreementTime());
-                if (orderDate.getTime() < nowDate.getTime()) {
+                if (orderDate.getTime() < nowDate.getTime() && order.getState()!=PAST) {
                     logger.info("------------------------该订单已过期"
                             + order.getId());
                     order.setState(PAST);
