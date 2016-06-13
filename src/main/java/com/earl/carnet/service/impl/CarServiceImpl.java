@@ -137,7 +137,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                 tcpMessage.setMessage(content);
                 tcpMessage.setMessagetype(NOTHING);
                 sendMessageForUser(model_data.getUserId(), "警报器响起", tcpMessage);// 推送信息到用户
-                Car_Cache(model_data, "alarm");// 缓存数据
+//                Car_Cache(model_data, "alarm");// 缓存数据
             }
         }
     }
@@ -257,7 +257,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                 }
                 logger.info("-----content:" + content);
                 //短信通知至亲用户
-                sendMessage(model);
+                sendMessage(model_data);
                 TcpMessage tcpMessage = new TcpMessage();
                 tcpMessage.setMessage(content);
                 sendMessageForUser(model_data.getUserId(), "安全气囊异常", tcpMessage);
