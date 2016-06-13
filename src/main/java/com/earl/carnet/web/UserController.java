@@ -368,8 +368,9 @@ public class UserController extends BaseController {
             @NotNull(message="用户id不能为空")
             Long id, String safePassword) {
         result = new ResultMessage();
-        result.setResultInfo("验证成功");
-        result.setServiceResult(userService.confirmSafePassword(id, safePassword));
+        result.setResultInfo("安全密码验证成功");
+        userService.confirmSafePassword(id, safePassword);
+        result.setServiceResult(true);
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
 

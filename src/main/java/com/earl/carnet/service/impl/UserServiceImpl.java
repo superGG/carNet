@@ -24,6 +24,7 @@ import com.earl.carnet.dao.UserDao;
 import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.domain.sercurity.user.UserQuery;
+import com.earl.carnet.exception.ApplicationException;
 import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.UserService;
 import com.earl.carnet.service.VerifyCodeService;
@@ -209,10 +210,12 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     }
 
     @Override
-    public Boolean confirmSafePassword(Long id, String safePassword) {
+    public void confirmSafePassword(Long id, String safePassword) {
         User user = getDao().findOneById(id);
         String safePassword_Md5 = new SimpleHash("SHA-1", safePassword).toString();
-        return safePassword_Md5.equals(user.getSafePassword());
+        if(safePassword_Md5.equals(user.getSafePassword())){
+        	throw new ApplicationException("安全密码验证错误");
+        }		
     }
 
     @Override
