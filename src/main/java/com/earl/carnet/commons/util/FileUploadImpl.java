@@ -1,31 +1,34 @@
 package com.earl.carnet.commons.util;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import net.coobird.thumbnailator.Thumbnails;
+
 import org.apache.commons.io.FilenameUtils;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @Component("fileUpload")
-public class FileUploadImpl {
+public class FileUploadImpl
+{
 
 	/**
 	 * log4j实例对象.
 	 */
-	private static  Logger logger = Logger.getLogger(String.valueOf(FileUploadImpl.class));
+	private static Logger logger = Logger.getLogger(String
+			.valueOf(FileUploadImpl.class));
 
-//	@SuppressWarnings("unused")
+	// @SuppressWarnings("unused")
 	private String filePath = "C:/";
 
-
 	private String userfilePath;
-
 
 	@Value("#{public[basePath]}")
 	public void setFilePath(String filePath) {
@@ -54,18 +57,18 @@ public class FileUploadImpl {
 		System.out.println(newName);
 		return newName;
 	}
-//
-//	public List<String> uploadMulitUserFile(List<File> file,
-//											List<String> oldName) {
-//		List<String> filename = new ArrayList<String>();
-//		for (int i = 0; i < file.size(); i++) {
-//			String uploadFile = uploadFile(file.get(i), userfilePath,
-//					oldName.get(i));
-//			filename.add(uploadFile);
-//		}
-//		return filename;
-//	}
 
+	//
+	// public List<String> uploadMulitUserFile(List<File> file,
+	// List<String> oldName) {
+	// List<String> filename = new ArrayList<String>();
+	// for (int i = 0; i < file.size(); i++) {
+	// String uploadFile = uploadFile(file.get(i), userfilePath,
+	// oldName.get(i));
+	// filename.add(uploadFile);
+	// }
+	// return filename;
+	// }
 
 	/**
 	 * 上传用户头像.
@@ -82,33 +85,49 @@ public class FileUploadImpl {
 	 *
 	 * @author 宋.
 	 */
-	private String uploadFile(MultipartFile file, String filePath) {
+	private String uploadFile(MultipartFile modelFile, String filePath) {
 		logger.info("进入图片上传uploadFile方法");
 		String dir = getDir(filePath);
-		if (file.isEmpty())
+		if (modelFile.isEmpty())
 			throw new RuntimeException("上传的文件为空");
-		String newName = this.newName(file.getName());// 定义上传图片的文件名
-
-		File newfile = new File(filePath);
-		if(!newfile.exists()){
-			newfile.mkdirs();
-		}
-			FileOutputStream out = null;
+		String newName = this.newName(modelFile.getName());// 定义上传图片的文件名
+		
+		// thumbnailator
+		File destFile200 = new File(filePath, newName);
+		File file = new File(filePath, "temFile");
 		try {
-			out = new FileOutputStream(filePath+"//"+newName);
-			out.write(file.getBytes());
-			out.flush();
-			out.close();
+			modelFile.transferTo(file);
+			Thumbnails.of(file).size(200, 200).toFile(destFile200);
+
 		} catch (IOException e) {
-			logger.info("图片写入文件失败");
 			e.printStackTrace();
-			return null;
+		} finally {
+			logger.info("原图片大小:" + file.length());
+			file.delete();
+			logger.info("压缩图片大小200:" + destFile200.length());
 		}
 		logger.info("上传图片地址：" + dir + newName);
-		logger.info("退出图片上传uploadFile方法");
 		return dir + newName;
-	}
 
+		// File newfile = new File(filePath);
+		// if(!newfile.exists()){
+		// newfile.mkdirs();
+		// }
+		// FileOutputStream out = null;
+		// try {
+		// out = new FileOutputStream(filePath+"//"+newName);
+		// out.write(file.getBytes());
+		// out.flush();
+		// out.close();
+		// } catch (IOException e) {
+		// logger.info("图片写入文件失败");
+		// e.printStackTrace();
+		// return null;
+		// }
+		// logger.info("上传图片地址：" + dir + newName);
+		// logger.info("退出图片上传uploadFile方法");
+		// return dir + newName;
+	}
 
 	/**
 	 * 自定义文件保存地址.
@@ -154,10 +173,11 @@ public class FileUploadImpl {
 	public Boolean deleFile(String path) {
 		Boolean result = true;
 
-//		String absolutePath1 = FileUploadImpl.class.getClassLoader().getResource("/").getPath();
+		// String absolutePath1 =
+		// FileUploadImpl.class.getClassLoader().getResource("/").getPath();
 		String absolutePath1 = filePath;
 		if (absolutePath1 != null) {
-			String absolutePath = absolutePath1  + path;
+			String absolutePath = absolutePath1 + path;
 			File file = new File(absolutePath);
 			result = deleFile(file);
 			logger.info("删除 结果：" + result);
@@ -170,7 +190,8 @@ public class FileUploadImpl {
 
 	/**
 	 * 删除文件.
-	 *@author 宋.
+	 *
+	 * @author 宋.
 	 * @return
 	 */
 	public Boolean deleFile(File file) {
