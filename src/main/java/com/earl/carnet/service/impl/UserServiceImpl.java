@@ -213,7 +213,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
     public void confirmSafePassword(Long id, String safePassword) {
         User user = getDao().findOneById(id);
         String safePassword_Md5 = new SimpleHash("SHA-1", safePassword).toString();
-        if(safePassword_Md5.equals(user.getSafePassword())){
+        logger.info(safePassword_Md5);
+        if(!safePassword_Md5.equals(user.getSafePassword())){
         	throw new ApplicationException("安全密码验证错误");
         }		
     }

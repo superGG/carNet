@@ -25,6 +25,8 @@ import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.OrderService;
 import com.earl.carnet.service.UserService;
+import com.earl.carnet.util.PayChargeUtil;
+import com.pingplusplus.model.Charge;
 
 @Service("OrderService")
 @Transactional
@@ -91,7 +93,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
     public List<Order> findAllOrder() {
         List<Order> orders = orderDao.findAll();
         // 检查更新订单状态
-        orders = updateOrderState(orders);
+        orders = updateOutOfDateOrderState(orders);
 //		List<Order> orderList = addUserName(orders);
         return orders;
     }
@@ -102,7 +104,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         order.setUserId(id);
         List<Order> orders = orderDao.searchAccurate(order);
         // 检查更新订单状态
-        orders = updateOrderState(orders);
+        orders = updateOutOfDateOrderState(orders);
         List<Order> orderList = addUserName(orders, id);
         return orderList;
     }
@@ -125,11 +127,22 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         }
         return orderList;
     }
+    
+	@Override
+	public Charge payForOrders(Long ordersId, String channel) {
+		Order orderPo = orderDao.findOneById(ordersId);
+		Double price = orderPo.getAmounts() * 100;
+		Charge charge = PayChargeUtil.charge(orderPo.getId(),
+				price.longValue(), channel, orderPo.getStationName(),
+				orderPo.getUserName());
+		return charge;
+	}
+
 
     /**
      * 检查更新所有订单状态
      */
-    private List<Order> updateOrderState(List<Order> orders) {
+    private List<Order> updateOutOfDateOrderState(List<Order> orders) {
         List<Order> orderList = new ArrayList<Order>();
         Date nowDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -137,7 +150,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         for (Order order : orders) {
             try {
                 Date orderDate = sdf.parse(order.getAgreementTime());
-                if (orderDate.getTime() < nowDate.getTime() && order.getState()!=PAST) {
+                if (order.getState()!=PAST &&orderDate.getTime() < nowDate.getTime()) {
                     logger.info("------------------------该订单已过期"
                             + order.getId());
                     order.setState(PAST);
@@ -160,5 +173,18 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         }
         return model;
     }
+
+	@Override
+	public void realPayOrders(Long orderId) {
+		// TODO Auto-generated method stub
+		updateOrderState(orderId, PAYED);
+		
+	}
+	
+	private void updateOrderState(Long orderId,Integer status){
+		Order order = orderDao.findOneById(orderId);
+		order.setState(status);
+		orderDao.updateByPrimaryKeySelective(order);
+	}
 
 }

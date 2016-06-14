@@ -31,4 +31,7 @@ logging:
     level:
        org.springframework.web: DEBUG
        com.earl.carnet: DEBUG
-
+#设置文件上传大小限制
+multipart:
+    maxFileSize: 50Mb
+    maxRequestSize: 50Mb
