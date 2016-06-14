@@ -60,6 +60,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         logger.info("进入service层的saveOrder方法");
         String URL = "localhost:8080";
         order.setState(UNPAY);
+        order = confirmOrder(order);
         Long orderId = orderDao.insertBackLongId(order);
         String OrderUrl = URL + "/order/getOrderById=" + orderId.toString();
         logger.info("-------------------------------------二维码内容：" + OrderUrl);
@@ -148,6 +149,16 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
             orderList.add(order);
         }
         return orderList;
+    }
+
+    /**
+     * 确认订单 单价*数量 = 总价
+     */
+    private Order confirmOrder(Order model) {
+        if (model.getPrice() * model.getNumber() != model.getAmounts()) {
+            model.setAmounts(model.getPrice() * model.getNumber());
+        }
+        return model;
     }
 
 }

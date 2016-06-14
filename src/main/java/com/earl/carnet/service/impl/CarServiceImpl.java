@@ -338,7 +338,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
             if (model.getOil() < model_data.getOil()
                     && model.getOil() < model_data.getOilBox() * 0.2
                     && model_data.getCurrentCar()) { // 当前油量<数据库油量 并且 数据库油量剩余不足20%
-                if (model.getOil() % 5 < model_data.getOil() % 5
+                if (model.getOil() % model_data.getOilBox() * 0.2 < model_data.getOil() % 5
                         || (model.getOil() < model_data.getOilBox() * 0.2 && model
                         .getOil() > model_data.getOilBox() * 0.15)) { // 避免多次发送信息，每降低5个单位量的油量就通知车主一次
                     User user = userService.findOne(model_data.getUserId());
@@ -387,6 +387,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
         message.setUserId(userId);
         message.setContent(tmpMessage);
         message.setTitle(title);
+        message.setType(tcpMessage.getMessagetype());
         messageService.insertBackId(message);
         jpushForUser.sendPush_Alias(userId.toString(), tcpMessage.getMessage(),
                 TITLE, tmpMessage);
