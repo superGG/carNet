@@ -4,9 +4,11 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.earl.carnet.interceptor.Ip2Interceptor;
@@ -18,8 +20,24 @@ import com.earl.carnet.interceptor.ValidationInterceptor;
 public class MvcConfiguration extends WebMvcConfigurerAdapter {
     private static Logger logger = LoggerFactory.getLogger(MvcConfiguration.class);
 
+    String userfilePath = null;
+    
+    String qrcodefilePath = null;
+    
     @Resource
     ValidationInterceptor validationInterceptor;
+    
+    @Value("#{public[basePath]}" + "#{public.userfilePath}")
+	public void setUserFilePath(String filePath) {
+		logger.debug("userfilePath=" + filePath);
+		this.userfilePath = filePath;
+	}
+    
+    @Value("#{public[basePath]}" + "#{public.qrcodefilePath}")
+   	public void setQRCodeFilePath(String filePath) {
+    	logger.debug("userfilePath=" + filePath);
+   		this.qrcodefilePath = filePath;
+   	}
 
     //	 @Bean
 //	 public RequestMappingHandlerMapping requestMappingHandlerMapping() {
@@ -48,7 +66,12 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
         registry.addInterceptor(validationInterceptor).addPathPatterns("/**");
     }
 
-
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/image/**").addResourceLocations("file:"+userfilePath);
+        registry.addResourceHandler("/QRCodeImg/**").addResourceLocations("file:"+qrcodefilePath);
+        super.addResourceHandlers(registry);
+    }
 
 //    @Override
 //    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {

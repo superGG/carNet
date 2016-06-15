@@ -28,7 +28,6 @@
 		<version.jackson>2.4.4</version.jackson>
 		<cucumber.version>1.2.4</cucumber.version>
 	</properties>
-
 	<dependencies>
 	<!-- ping ++ -->
 			<dependency>

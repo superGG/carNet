@@ -74,6 +74,24 @@ public class FileUploadImpl {
 	 * @return
 	 */
 	public String uploadUserFile(MultipartFile userfile) {
+		System.out.println("|");
+		System.out.println("|");
+		System.out.println("|");
+		System.out.println("|");
+		System.out.println("|");
+		System.out.println("|");
+		System.out.println("|");
+		System.out.println("|");
+		System.out.println("|");
+		System.out.println("|");
+		System.out.println("|");
+		System.out.println("|");
+		System.out.println("|");
+		String dodo2 = this.getClass().getResource("").toString();
+		System.out.println(dodo2);
+		
+//		String dodo =this.getClass().getResource("classpath*:static").getPath();
+		
 		return uploadFile(userfile, userfilePath);
 	}
 
