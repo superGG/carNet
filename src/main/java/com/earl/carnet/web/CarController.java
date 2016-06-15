@@ -236,6 +236,7 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "更新汽车信息", notes = "update car message", httpMethod = "POST", response = String.class)
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "车辆id", required = false, dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "userId", value = "用户id", required = false, dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "mark", value = "品牌标志", required = false, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "brand", value = "品牌", required = false, dataType = "string", paramType = "query"),
