@@ -3,6 +3,7 @@ package com.earl.carnet.service;
 import com.earl.carnet.commons.service.BaseService;
 import com.earl.carnet.domain.carnet.order.Order;
 import com.google.zxing.WriterException;
+import com.pingplusplus.model.Charge;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -30,4 +31,8 @@ public interface OrderService extends BaseService<Order, Order> {
      * @return
      */
     List<Order> getUserOrder(Long id);
+
+	Charge payForOrders(Long ordersId, String channel);
+
+	void realPayOrders(Long valueOf);
 }

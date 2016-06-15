@@ -1,16 +1,17 @@
 package com.earl.carnet.web;
 
-import com.earl.carnet.commons.vo.ResultMessage;
-import com.earl.carnet.domain.carnet.order.Order;
-import com.earl.carnet.domain.sercurity.user.User;
-import com.earl.carnet.exception.DomainSecurityException;
-import com.earl.carnet.service.OrderService;
-import com.earl.carnet.service.UserService;
-import com.google.zxing.WriterException;
-import com.wordnik.swagger.annotations.ApiImplicitParam;
-import com.wordnik.swagger.annotations.ApiImplicitParams;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.domain.carnet.order.Order;
+import com.earl.carnet.domain.sercurity.user.User;
+import com.earl.carnet.exception.DomainSecurityException;
+import com.earl.carnet.service.OrderService;
+import com.earl.carnet.service.UserService;
+import com.pingplusplus.model.Charge;
+import com.pingplusplus.model.Event;
+import com.pingplusplus.model.Webhooks;
+import com.wordnik.swagger.annotations.ApiImplicitParam;
+import com.wordnik.swagger.annotations.ApiImplicitParams;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = "/order")
@@ -176,6 +183,51 @@ public class OrderController extends BaseController {
     }
 
     /**
+	 * 真实支付订单，修改订单状态为未发货.
+	 * @author 黄祥谦.
+     * @throws Exception 
+	 * @throws IOException 
+	 */
+    @RequestMapping(value = "/realPayOrders", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> realPayOrders(HttpServletRequest request,HttpServletResponse response) throws Exception {
+        request.setCharacterEncoding("UTF8");
+        //获取头部所有信息
+        @SuppressWarnings("rawtypes")
+		Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = (String) headerNames.nextElement();
+            String value = request.getHeader(key);
+            System.out.println(key+" "+value);
+        }
+        // 获得 http body 内容
+        BufferedReader reader = request.getReader();
+        StringBuilder buffer = new StringBuilder();
+        String string;
+        while ((string = reader.readLine()) != null) {
+            buffer.append(string);
+        }
+        reader.close();
+        // 解析异步通知数据
+        Event event = Webhooks.eventParse(buffer.toString());
+        if ("charge.succeeded".equals(event.getType())) {
+           response.setStatus(200);
+        } else if ("refund.succeeded".equals(event.getType())) {
+            response.setStatus(200);
+        } else {
+            response.setStatus(500);
+        }
+        Map<String, Object> object = event.getData();
+        @SuppressWarnings("unchecked")
+		Map<String, Object> object2 = (Map<String, Object>) object.get("object");
+        String object3 = (String) object2.get("order_no");
+        System.out.println("order_no:"+object3);
+        orderService.realPayOrders(Long.valueOf(object3));
+		ResultMessage result = new ResultMessage();
+		result.setResultInfo("支付成功");
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+    
+    /**
      * 删除订单.
      *
      * @return
@@ -194,6 +246,21 @@ public class OrderController extends BaseController {
         result.setServiceResult(true);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+    
+	/**
+	 * 支付订单费用.
+	 * @author 黄祥谦.
+	 */
+    @Valid
+    @RequestMapping(value = "/payOrder", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResultMessage> payForOrdersWithAlipay(  @NotNull(message = "订单id") Long orderId,  @NotNull(message = "支付渠道不能为空") String channel){
+		Charge charge = orderService.payForOrders(orderId, channel);
+		ResultMessage result = new ResultMessage();
+		result.getResultParm().put("charge", charge);
+		result.setResultInfo("删除订单成功");
+        result.setServiceResult(true);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 
 }

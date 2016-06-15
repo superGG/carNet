@@ -28,8 +28,14 @@
 		<version.jackson>2.4.4</version.jackson>
 		<cucumber.version>1.2.4</cucumber.version>
 	</properties>
-
 	<dependencies>
+	<!-- ping ++ -->
+			<dependency>
+			<groupId>Pingplusplus</groupId>
+			<artifactId>pingpp-java</artifactId>
+			<version>2.1.1</version>
+			<type>jar</type>
+		</dependency>
 	<!-- jpush 极光推送 -->
 		<dependency>
 		<groupId>cn.jpush.api</groupId>

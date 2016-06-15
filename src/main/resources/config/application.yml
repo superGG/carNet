@@ -1,6 +1,6 @@
 # Server settings
 server:
-  port: 8080
+  port: 8084
  # address: localhost
 #  context-path: /carnet
 #  error:
@@ -12,7 +12,7 @@ jdbc:
     databaseName: carnet
     serverName: 127.0.0.1
     username: root
-    password: root
+    password: Ninico2015
     cachePrepStmts: true
     prepStmtsSize: 250
     prepStmtsCacheSqlLimit: 2048
@@ -31,4 +31,7 @@ logging:
     level:
        org.springframework.web: DEBUG
        com.earl.carnet: DEBUG
-
+#设置文件上传大小限制
+multipart:
+    maxFileSize: 50Mb
+    maxRequestSize: 50Mb

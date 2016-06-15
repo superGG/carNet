@@ -8,6 +8,7 @@ import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Hashtable;
 
@@ -76,11 +77,10 @@ public class QRCodeUtil {
      */
     private static void insertImage(BufferedImage source, String imgPath,
                                     boolean needCompress) throws Exception {
-        File file = new File(imgPath);
-        if (!file.exists()) {
-            return;
-        }
-        Image src = ImageIO.read(new File(imgPath));
+    	System.out.println(imgPath);
+    	InputStream file = QRCodeUtil.class.getResourceAsStream("/static/img/earl.jpg");
+        
+        Image src = ImageIO.read(file);
         int width = src.getWidth(null);
         int height = src.getHeight(null);
         if (needCompress) { // 压缩LOGO
@@ -176,6 +176,7 @@ public class QRCodeUtil {
      */
     public static BufferedImage encode(String content, String imgPath,
                                        OutputStream output, boolean needCompress) throws Exception {
+
         BufferedImage image = QRCodeUtil.createImage(content, imgPath,
                 needCompress);
         ImageIO.write(image, FORMAT_NAME, output);

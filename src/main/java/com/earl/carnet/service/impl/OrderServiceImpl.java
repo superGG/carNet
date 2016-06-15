@@ -2,6 +2,7 @@ package com.earl.carnet.service.impl;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,8 @@ import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.OrderService;
 import com.earl.carnet.service.UserService;
+import com.earl.carnet.util.PayChargeUtil;
+import com.pingplusplus.model.Charge;
 
 @Service("OrderService")
 @Transactional
@@ -39,7 +43,13 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
     /**
      * 二维码保存地址。
      */
-    private String codefilePath;
+    private String qrcodefilePath;
+    
+    @Value("#{public[basePath]}" + "#{public.qrcodefilePath}")
+   	public void setQRCodeFilePath(String filePath) {
+    	logger.debug("userfilePath=" + filePath);
+   		this.qrcodefilePath = filePath;
+   	}
 
     private Integer UNPAY = 1; // 订单状态：未支付
 
@@ -65,24 +75,37 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         String OrderUrl = URL + "/order/getOrderById=" + orderId.toString();
         logger.info("-------------------------------------二维码内容：" + OrderUrl);
 
-        String rootPath = request.getSession().getServletContext()
-                .getRealPath("/");
-        logger.info("-------------- rootPath" + rootPath);
+        System.out.println("|");
+        System.out.println("|");
+        System.out.println("|");
+        System.out.println("|");
+        String contentPath = this.getClass().getClassLoader().getResource("./static").toString();
+        System.out.println(contentPath);
+        FileOutputStream out = null;
         try {
-            String path = rootPath + "QRCodeImg"; // 二维码保存路径
-            File filePath = new File(path);
+        	logger.debug(qrcodefilePath);
+            File filePath = new File(qrcodefilePath);
             if (!filePath.exists()) {
                 logger.info("不存在QRCodeImg文件，自动创建");
                 filePath.mkdirs();
             }
-            FileOutputStream out = new FileOutputStream(filePath + "//"
+            out = new FileOutputStream(filePath + "//"
                     + orderId + ".png");
-            QRCodeUtil.encode(OrderUrl, rootPath + "img\\earl.jpg", out, true);
-            out.flush();
-            out.close();
+            QRCodeUtil.encode(OrderUrl, contentPath + "\\img\\earl.jpg", out, true);
         } catch (Exception e) {
             e.printStackTrace();
             throw new DomainSecurityException("生成二维码失败");
+        } finally{
+        	if(out != null){
+        	    try {
+					out.flush();
+					out.close(); 	
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                		
+        	}
         }
         return orderId;
     }
@@ -91,7 +114,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
     public List<Order> findAllOrder() {
         List<Order> orders = orderDao.findAll();
         // 检查更新订单状态
-        orders = updateOrderState(orders);
+        orders = updateOutOfDateOrderState(orders);
 //		List<Order> orderList = addUserName(orders);
         return orders;
     }
@@ -102,7 +125,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         order.setUserId(id);
         List<Order> orders = orderDao.searchAccurate(order);
         // 检查更新订单状态
-        orders = updateOrderState(orders);
+        orders = updateOutOfDateOrderState(orders);
         List<Order> orderList = addUserName(orders, id);
         return orderList;
     }
@@ -125,11 +148,22 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         }
         return orderList;
     }
+    
+	@Override
+	public Charge payForOrders(Long ordersId, String channel) {
+		Order orderPo = orderDao.findOneById(ordersId);
+		Double price = orderPo.getAmounts() * 100;
+		Charge charge = PayChargeUtil.charge(orderPo.getId(),
+				price.longValue(), channel, orderPo.getStationName(),
+				orderPo.getUserName());
+		return charge;
+	}
+
 
     /**
      * 检查更新所有订单状态
      */
-    private List<Order> updateOrderState(List<Order> orders) {
+    private List<Order> updateOutOfDateOrderState(List<Order> orders) {
         List<Order> orderList = new ArrayList<Order>();
         Date nowDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -137,7 +171,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         for (Order order : orders) {
             try {
                 Date orderDate = sdf.parse(order.getAgreementTime());
-                if (orderDate.getTime() < nowDate.getTime() && order.getState()!=PAST) {
+                if (order.getState()!=PAST &&orderDate.getTime() < nowDate.getTime()) {
                     logger.info("------------------------该订单已过期"
                             + order.getId());
                     order.setState(PAST);
@@ -160,5 +194,18 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         }
         return model;
     }
+
+	@Override
+	public void realPayOrders(Long orderId) {
+		// TODO Auto-generated method stub
+		updateOrderState(orderId, PAYED);
+		
+	}
+	
+	private void updateOrderState(Long orderId,Integer status){
+		Order order = orderDao.findOneById(orderId);
+		order.setState(status);
+		orderDao.updateByPrimaryKeySelective(order);
+	}
 
 }
