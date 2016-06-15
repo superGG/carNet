@@ -323,8 +323,10 @@ public class UserController extends BaseController {
             Long id) {
         result = new ResultMessage();
         if (userService.updateImg(userfile, id)) {
+            User user = userService.findOne(id);
             result.setResultInfo("更新用户头像成功");
             result.setServiceResult(true);
+            result.getResultParm().put("user",user);
         } else {
             result.setResultInfo("更新用户头像失败");
             result.setServiceResult(false);

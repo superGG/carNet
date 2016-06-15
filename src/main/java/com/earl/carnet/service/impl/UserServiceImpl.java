@@ -102,7 +102,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
             System.out.println(uploadUserFile);
 
             User user = userDao.findOneById(id);
-            if (!user.getUserImg().equals("img/userImg.jpg")) {
+            if (!user.getUserImg().equals("img/earl.jpg")) {
                 Boolean result = fileUpload.deleFile(user.getUserImg()); // 删除原来的头像图片
                 if (result) { // 删除成功
                     user.setUserImg(uploadUserFile);
