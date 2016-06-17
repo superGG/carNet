@@ -26,6 +26,8 @@ public class Message extends AbstractAuditingEntity<Long> implements Serializabl
 
     private Integer type;//消息类型 1为普通消息，2为警告消息，3为危险消息
 
+    private String createTime;//消息时间
+
     @AutoID
     public Long getId() {
         return super.getId();
@@ -76,6 +78,14 @@ public class Message extends AbstractAuditingEntity<Long> implements Serializabl
         this.state = state;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -85,6 +95,7 @@ public class Message extends AbstractAuditingEntity<Long> implements Serializabl
                 ", state=" + state +
                 ", title='" + title + '\'' +
                 ", type=" + type +
+                ", createTime='" + createTime + '\'' +
                 '}';
     }
 }

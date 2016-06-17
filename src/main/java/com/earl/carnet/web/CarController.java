@@ -121,7 +121,7 @@ public class CarController extends BaseController {
      */
     @Valid
     @RequestMapping(value = "/tmpCar/vin={vin}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "根据车架号获取汽车", notes = "get car by vin", httpMethod = "GET", response = String.class)
+    @ApiOperation(value = "根据车架号获取临时车辆信息", notes = "get car by vin", httpMethod = "GET", response = String.class)
     public ResultMessage getTmpCarByVin(
             @NotNull(message = "vin不能为空")
             @ApiParam(required = true, name = "vin", value = "车架号")
@@ -195,7 +195,7 @@ public class CarController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/saveTem_Car", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "添加一个新汽车", notes = "add a new tem_car", httpMethod = "POST", response = String.class)
+    @ApiOperation(value = "添加一个新的临时车辆", notes = "add a new tem_car", httpMethod = "POST", response = String.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "mark", value = "品牌标志", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "brand", value = "品牌", required = true, dataType = "string", paramType = "query"),
@@ -236,6 +236,7 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "更新汽车信息", notes = "update car message", httpMethod = "POST", response = String.class)
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "车辆id", required = false, dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "userId", value = "用户id", required = false, dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "mark", value = "品牌标志", required = false, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "brand", value = "品牌", required = false, dataType = "string", paramType = "query"),
@@ -260,7 +261,7 @@ public class CarController extends BaseController {
             @ApiImplicitParam(name = "lon", value = "经度", required = false, dataType = "double", paramType = "query"),
             @ApiImplicitParam(name = "lat", value = "纬度", required = false, dataType = "double", paramType = "query")
     })
-    public ResponseEntity<?> update(
+    public ResponseEntity<ResultMessage> update(
             @ApiParam(required = false, name = "car", value = "车辆实体,不要理这个字段！！！")
             Car car) {
         if (car.getId() == null) throw new SecurityException("id不能为空");
@@ -268,6 +269,7 @@ public class CarController extends BaseController {
         result = new ResultMessage();
         if (carService.update(car) != 0) {
             result.getResultParm().put("car", carService.findOne(car.getId()));
+            result.setResultInfo("更新成功");
         } else {
             result.setServiceResult(false);
             result.setResultInfo("更新失败");
@@ -380,7 +382,7 @@ public class CarController extends BaseController {
     @Valid
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据id删除汽车", notes = "delete car by id", httpMethod = "POST", response = String.class)
-    public ResponseEntity<?> delete(
+    public ResponseEntity<ResultMessage> delete(
             @NotNull(message = "id不能为空")
             @ApiParam(required = true, name = "id", value = "车辆id")
             Long id) {

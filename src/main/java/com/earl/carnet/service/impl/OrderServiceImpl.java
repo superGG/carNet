@@ -66,7 +66,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
     }
 
     @Override
-    public Long saveOrder(Order order, HttpServletRequest request) {
+    public Long saveOrder(Order order) {
         logger.info("进入service层的saveOrder方法");
         String URL = "localhost:8080";
         order.setState(UNPAY);

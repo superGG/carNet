@@ -127,10 +127,10 @@ public class OrderController extends BaseController {
     })
     public ResultMessage saveOrder(
             @ApiParam(required = false, name = "order", value = "订单实体,这个字段不要理！！！")
-            Order order, HttpServletRequest request) {
+            Order order) {
         log.info("进入controller层添加订单saveOrder方法");
         result = new ResultMessage();
-        Long orderId = orderService.saveOrder(order,request);
+        Long orderId = orderService.saveOrder(order);
         System.out.println("-----------------------" + orderId);
         if (orderId != 0) {
             Order new_order = orderService.findOne(orderId);

@@ -17,7 +17,7 @@ public interface OrderService extends BaseService<Order, Order> {
      * @param order
      * @return
      */
-    Long saveOrder(Order order, HttpServletRequest request);
+    Long saveOrder(Order order);
 
     /**
      * 获取所有订单.
