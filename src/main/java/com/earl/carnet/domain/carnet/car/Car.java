@@ -53,24 +53,12 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
 
     private Boolean SRS; //安全气囊系统
     
-    private Boolean alarmMessage ;//是否发送警报信息
-    
-    private Boolean propertyMessage ;//是否发送行性能信息
-    
-    private Boolean stateMessage ;//是否发送车状态信息
 
     private Boolean currentCar;//是否当前车辆
 
     private Double lon;//经度
 
     private Double lat;//纬度
-
-
-    public Car(Boolean alarmMessage, Boolean propertyMessage,Boolean stateMessage){
-        this.alarmMessage = alarmMessage;
-        this.propertyMessage = propertyMessage;
-        this.stateMessage = stateMessage;
-    }
 
     public Car(){
 
@@ -248,29 +236,6 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
         this.carAlarm = carAlarm;
     }
 
-    public Boolean getAlarmMessage() {
-        return alarmMessage;
-    }
-
-    public void setAlarmMessage(Boolean alarmMessage) {
-        this.alarmMessage = alarmMessage;
-    }
-
-    public Boolean getPropertyMessage() {
-        return propertyMessage;
-    }
-
-    public void setPropertyMessage(Boolean propertyMessage) {
-        this.propertyMessage = propertyMessage;
-    }
-
-    public Boolean getStateMessage() {
-        return stateMessage;
-    }
-
-    public void setStateMessage(Boolean stateMessage) {
-        this.stateMessage = stateMessage;
-    }
 
     public Boolean getCurrentCar() {
         return currentCar;
@@ -302,9 +267,6 @@ public class Car extends AbstractAuditingEntity<Long> implements Serializable {
                 ", carState=" + carState +
                 ", carAlarm=" + carAlarm +
                 ", SRS=" + SRS +
-                ", alarmMessage=" + alarmMessage +
-                ", propertyMessage=" + propertyMessage +
-                ", stateMessage=" + stateMessage +
                 ", currentCar=" + currentCar +
                 ", lon=" + lon +
                 ", lat=" + lat +

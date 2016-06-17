@@ -31,7 +31,7 @@ import com.earl.carnet.service.VerifyCodeService;
 
 @Service("userService")
 @Transactional
-public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
+public class UserServiceImpl extends BaseServiceImpl<User, User>
         implements UserService {
 
     private static Logger logger = Logger.getLogger(UserServiceImpl.class);
@@ -158,6 +158,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserQuery>
             user.setId((long) userId);
             user.setUsername("用户" + userId);
             user.setUserImg("img/earl.jpg");
+            user.setAlarmMessage(true);
+            user.setPropertyMessage(true);
+            user.setStateMessage(true);
             int save = updateByPrimaryKeySelective(user);
             if (save != 0) {
                 result = true;

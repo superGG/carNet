@@ -20,7 +20,17 @@ public class TcpMessage {
     private Integer messagetype;
 
     private String message;
-    
+
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public Integer getMessagetype() {
 		return messagetype;
 	}

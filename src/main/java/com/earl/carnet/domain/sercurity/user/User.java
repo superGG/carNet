@@ -33,6 +33,12 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     private String relatedPhone;//绑定亲人号码
 
+    private Boolean alarmMessage ;//是否发送警报信息
+
+    private Boolean propertyMessage ;//是否发送行性能信息
+
+    private Boolean stateMessage ;//是否发送车状态信息
+
     private static final long serialVersionUID = 1L;
 
     @AutoID
@@ -110,6 +116,30 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         this.relatedPhone = relatedPhone;
     }
 
+    public Boolean getAlarmMessage() {
+        return alarmMessage;
+    }
+
+    public void setAlarmMessage(Boolean alarmMessage) {
+        this.alarmMessage = alarmMessage;
+    }
+
+    public Boolean getPropertyMessage() {
+        return propertyMessage;
+    }
+
+    public void setPropertyMessage(Boolean propertyMessage) {
+        this.propertyMessage = propertyMessage;
+    }
+
+    public Boolean getStateMessage() {
+        return stateMessage;
+    }
+
+    public void setStateMessage(Boolean stateMessage) {
+        this.stateMessage = stateMessage;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -122,6 +152,9 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
                 ", userImg='" + userImg + '\'' +
                 ", safePassword='" + safePassword + '\'' +
                 ", relatedPhone='" + relatedPhone + '\'' +
+                ", alarmMessage=" + alarmMessage +
+                ", propertyMessage=" + propertyMessage +
+                ", stateMessage=" + stateMessage +
                 '}';
     }
 }

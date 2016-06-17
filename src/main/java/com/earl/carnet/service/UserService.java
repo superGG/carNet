@@ -10,7 +10,7 @@ import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.domain.sercurity.user.UserQuery;
 
-public interface UserService extends BaseService<User, UserQuery> {
+public interface UserService extends BaseService<User, User> {
 	
 	User findOneByUsername(String username);
 
