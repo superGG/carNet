@@ -11,6 +11,8 @@ import net.sf.ehcache.Element;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.codec.CodecException;
+import org.apache.shiro.crypto.UnknownAlgorithmException;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -158,9 +160,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
             user.setId((long) userId);
             user.setUsername("用户" + userId);
             user.setUserImg("img/earl.jpg");
-            user.setAlarmMessage(true);
-            user.setPropertyMessage(true);
-            user.setStateMessage(true);
             int save = updateByPrimaryKeySelective(user);
             if (save != 0) {
                 result = true;
@@ -191,10 +190,18 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
         if (tmpuser != null) {
             throw new DomainSecurityException("该账号已经被注册");
         } else {
-            String password_Md5 = new SimpleHash("SHA-1", password).toString();
-            user.setPassword(password_Md5);
-            user.setUserImg("/img/earl.jpg");
-            userDao.insert(user);
+            try {
+                String password_Md5 = new SimpleHash("SHA-1", password).toString();
+                user.setPassword(password_Md5);
+                user.setUserImg("/img/earl.jpg");
+                user.setAlarmMessage(true);
+                user.setPropertyMessage(true);
+                user.setStateMessage(true);
+                userDao.insert(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new DomainSecurityException("注册失败");
+            }
         }
         logger.info("退出用户注册registerAccount方法");
     }

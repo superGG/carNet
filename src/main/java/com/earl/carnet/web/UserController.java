@@ -3,7 +3,6 @@ package com.earl.carnet.web;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.earl.carnet.domain.carnet.car.Car;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.validator.constraints.Length;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.domain.carnet.car.Car;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.security.shiro.ShiroPrincipal;
 import com.earl.carnet.service.UserService;
