@@ -36,6 +36,6 @@ multipart:
     maxFileSize: 50Mb
     maxRequestSize: 50Mb
 
-#本系统自定义属性
+#本系统自定义属性(是否启用权限控制系统)
 security:
     enable: false
