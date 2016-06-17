@@ -57,6 +57,13 @@ public class ShiroConfiguration implements EnvironmentAware {
     @Resource
     public ShiroFilterFactoryBean shiroFilter(PrivilegeDao privilegeDao) {
     	logger.debug("构造shiroFilter实体");
+    	logger.debug("配置权限系统");
+		if (propertyResolver.getProperty("enable") == null) {
+			logger.error("未指定是否启用权限控制,请配置secutiry.enable属性");
+			Arrays.toString(env.getActiveProfiles());
+			throw new ApplicationContextException(
+					"Security System is not configured correctly");
+		}
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setLoginUrl("/login.html");
         shiroFilter.setSuccessUrl("/index");
@@ -78,13 +85,7 @@ public class ShiroConfiguration implements EnvironmentAware {
             aa.setStaticSecurityManagerEnabled(true);
             PathMatchingFilterChainResolver filterChainResolver = (PathMatchingFilterChainResolver) aa.getFilterChainResolver();
             
-        	logger.debug("配置权限系统");
-    		if (propertyResolver.getProperty("enable") == null) {
-    			logger.error("未指定是否启用权限控制,请配置secutiry.enable属性");
-    			Arrays.toString(env.getActiveProfiles());
-    			throw new ApplicationContextException(
-    					"Security System is not configured correctly");
-    		}
+        	
             if(propertyResolver.getProperty("enable", Boolean.class)){
                 for (Privilege privilege : privilegeList) {
                     String privilegeCode = privilege.getPrivilegeCode();
