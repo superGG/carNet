@@ -36,6 +36,7 @@ public class VerifyCodeController extends BaseController{
 
 		result = new ResultMessage();
 		result.setServiceResult(get);
+		result.setResultInfo("获取成功");
 //		result.getResultParm().put("verifyCode",verifyCodeService.findAll());
 //		result.getResultParm().put("sessionId",session.getId());
 //		result.getResultParm().put("verifyCode",session.getAttribute("verifyCode"));
@@ -52,6 +53,7 @@ public class VerifyCodeController extends BaseController{
 
 		result = new ResultMessage();
 		result.setServiceResult(get);
+//		result.set
 //		result.getResultParm().put("verifyCode",verifyCodeService.findAll());
 //		result.getResultParm().put("sessionId",session.getId());
 //		result.getResultParm().put("verifyCode",session.getAttribute("verifyCode"));
