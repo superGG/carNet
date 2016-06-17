@@ -4,11 +4,12 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
+
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.codec.CodecException;
-import org.apache.shiro.crypto.UnknownAlgorithmException;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,9 +30,6 @@ import com.earl.carnet.exception.ApplicationException;
 import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.UserService;
 import com.earl.carnet.service.VerifyCodeService;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
 
 @Service("userService")
 @Transactional

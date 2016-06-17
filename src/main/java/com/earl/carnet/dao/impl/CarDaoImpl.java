@@ -1,14 +1,13 @@
 package com.earl.carnet.dao.impl;
 
-import org.beetl.sql.core.SQLManager;
+import java.util.List;
+
 import org.beetl.sql.core.SQLReady;
 import org.springframework.stereotype.Repository;
 
 import com.earl.carnet.commons.dao.impl.BaseDaoImpl;
 import com.earl.carnet.dao.CarDao;
 import com.earl.carnet.domain.carnet.car.Car;
-
-import java.util.List;
 
 @Repository("carDao")
 public class CarDaoImpl extends BaseDaoImpl<Car> implements CarDao {

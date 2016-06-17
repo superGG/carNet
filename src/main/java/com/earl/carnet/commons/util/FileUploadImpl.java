@@ -9,11 +9,9 @@ import java.util.logging.Logger;
 import net.coobird.thumbnailator.Thumbnails;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @Component("fileUpload")
 public class FileUploadImpl
@@ -105,7 +103,7 @@ public class FileUploadImpl
 	 */
 	private String uploadFile(MultipartFile modelFile, String filePath) {
 		logger.info("进入图片上传uploadFile方法");
-		String dir = getDir(filePath);
+//		String dir = getDir(filePath);
 		if (modelFile.isEmpty())
 			throw new RuntimeException("上传的文件为空");
 		String newName = this.newName(modelFile.getName());// 定义上传图片的文件名
@@ -154,11 +152,11 @@ public class FileUploadImpl
 	 * @param filePath2
 	 * @return
 	 */
-	private String getDir(String filePath2) {
-		String substring2 = filePath2.substring(filePath2.lastIndexOf(".."),
-				filePath2.length());
-		return substring2;
-	}
+//	private String getDir(String filePath2) {
+//		String substring2 = filePath2.substring(filePath2.lastIndexOf(".."),
+//				filePath2.length());
+//		return substring2;
+//	}
 
 	/**
 	 * 根据json格式的文件路径删除多文件.

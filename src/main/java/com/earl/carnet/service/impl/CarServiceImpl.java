@@ -1,5 +1,21 @@
 package com.earl.carnet.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.service.BaseServiceImpl;
 import com.earl.carnet.commons.util.EhCacheHelper;
@@ -16,15 +32,6 @@ import com.earl.carnet.service.UserService;
 import com.earl.carnet.util.AddressHelper;
 import com.earl.carnet.util.JPushForCar;
 import com.earl.carnet.util.JPushForUser;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 
 @Service("carService")
@@ -37,7 +44,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
     private TcpMessage tcpMessage = new TcpMessage();
 
     // 项目标题
-    private final String TITLE = "车联网";
+//    private final String TITLE = "车联网";
 
     // 空提醒类型
     private final Integer NOTHING = 0;

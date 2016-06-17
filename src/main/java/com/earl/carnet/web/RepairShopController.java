@@ -2,7 +2,9 @@ package com.earl.carnet.web;
 
 import java.util.List;
 
-import com.earl.carnet.domain.carnet.order.Order;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,6 @@ import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.RepairShopService;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping(value = "/repairShop")
