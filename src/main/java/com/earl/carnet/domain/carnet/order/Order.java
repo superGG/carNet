@@ -1,11 +1,9 @@
 package com.earl.carnet.domain.carnet.order;
 
 import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Table;
 
 import org.beetl.sql.core.annotatoin.AutoID;
+import org.beetl.sql.core.annotatoin.Table;
 
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * Created by Administrator on 2016/4/4.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)//jackson 控制，放回字段为null,将被过滤
-@Table(name = "odrder")
+@Table(name = "order")
 public class Order extends AbstractAuditingEntity<Long> implements Serializable{
 
 

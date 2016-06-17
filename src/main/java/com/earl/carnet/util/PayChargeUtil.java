@@ -30,7 +30,7 @@ public class PayChargeUtil {
 	/**
 	 * pingpp 管理平台对应的应用 ID
 	 */
-	public static final String appId = "app_e9a5m9rnPWz50arv";
+	public static final String appId = "app_fT8aTCzvnr1OLyT0";
 	
 	static{
 		Pingpp.apiKey = "sk_test_CWj5mHjTy5qH5qL800PunP8K";

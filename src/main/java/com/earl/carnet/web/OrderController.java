@@ -2,7 +2,6 @@ package com.earl.carnet.web;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -257,7 +256,7 @@ public class OrderController extends BaseController {
 		Charge charge = orderService.payForOrders(orderId, channel);
 		ResultMessage result = new ResultMessage();
 		result.getResultParm().put("charge", charge);
-		result.setResultInfo("删除订单成功");
+		result.setResultInfo("下单成功");
         result.setServiceResult(true);
         return new ResponseEntity<>(result, HttpStatus.OK);
 	}

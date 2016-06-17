@@ -1,10 +1,11 @@
 package com.earl.carnet.domain.carnet.Park;
 
+import java.io.Serializable;
+
+import org.beetl.sql.core.annotatoin.Table;
+
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import javax.persistence.Table;
-import java.io.Serializable;
 
 /**
  * 停车场实体类.

@@ -40,7 +40,7 @@ public class DataBaseConfiguration implements EnvironmentAware {//这里继承�
 				&& propertyResolver.getProperty("databaseName") == null) {
 			log.error("Your database conncetion pool configuration is incorrct ! The application "
 					+ "cannot start . Please check your jdbc");
-			Arrays.toString(env.getActiveProfiles());
+			log.warn(Arrays.toString(env.getActiveProfiles()));
 			throw new ApplicationContextException(
 					"DataBase connection pool is not configured correctly");
 		}

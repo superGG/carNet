@@ -4,10 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.earl.carnet.domain.carnet.car.Car;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -23,13 +19,19 @@ import com.earl.carnet.commons.service.BaseServiceImpl;
 import com.earl.carnet.commons.util.EhCacheHelper;
 import com.earl.carnet.commons.util.FileUploadImpl;
 import com.earl.carnet.dao.UserDao;
+import com.earl.carnet.dao.UserRoleDao;
+import com.earl.carnet.domain.carnet.car.Car;
 import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.domain.sercurity.user.UserQuery;
+import com.earl.carnet.domain.sercurity.userrole.UserRole;
 import com.earl.carnet.exception.ApplicationException;
 import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.UserService;
 import com.earl.carnet.service.VerifyCodeService;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 
 @Service("userService")
 @Transactional
@@ -42,6 +44,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
 
     @Resource
     private UserDao userDao;
+    
+    @Resource
+    private UserRoleDao userroleDao;
 
     @Resource
     private VerifyCodeService verifyCodeService;
@@ -197,7 +202,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
                 user.setAlarmMessage(true);
                 user.setPropertyMessage(true);
                 user.setStateMessage(true);
-                userDao.insert(user);
+                int id = userDao.insertBackId(user);
+                UserRole userrole = new UserRole();
+                userrole.setUserId(Long.valueOf(id));
+                userrole.setRoleId(1L);//角色标号为1 ，基本用户权限
+                userroleDao.insert(userrole);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new DomainSecurityException("注册失败");

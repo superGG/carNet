@@ -1,11 +1,12 @@
 package com.earl.carnet.domain.carnet.Message;
 
+import java.io.Serializable;
+
+import org.beetl.sql.core.annotatoin.AutoID;
+import org.beetl.sql.core.annotatoin.Table;
+
 import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.beetl.sql.core.annotatoin.AutoID;
-
-import javax.persistence.Table;
-import java.io.Serializable;
 
 /**
  * 消息实体类.

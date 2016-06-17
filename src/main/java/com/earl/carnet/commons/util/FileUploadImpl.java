@@ -124,8 +124,8 @@ public class FileUploadImpl
 			file.delete();
 			logger.info("压缩图片大小200:" + destFile200.length());
 		}
-		logger.info("上传图片地址：" + dir + newName);
-		return dir + newName;
+		logger.info("上传图片地址：" + "/image/" + newName);
+		return "/image/" + newName;
 
 		// File newfile = new File(filePath);
 		// if(!newfile.exists()){
