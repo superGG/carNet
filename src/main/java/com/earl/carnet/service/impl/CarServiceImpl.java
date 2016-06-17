@@ -1,16 +1,5 @@
 package com.earl.carnet.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.commons.service.BaseServiceImpl;
 import com.earl.carnet.commons.util.EhCacheHelper;
@@ -27,9 +16,15 @@ import com.earl.carnet.service.UserService;
 import com.earl.carnet.util.AddressHelper;
 import com.earl.carnet.util.JPushForCar;
 import com.earl.carnet.util.JPushForUser;
-
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @Service("carService")
@@ -398,8 +393,8 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
         Car car = new Car();
         car.setUserId(userId);
         List<Car> carList = getDao().searchQuery(car);
-        carList.sort((car1,car2)->{
-        	return car2.getCurrentCar().compareTo(car1.getCurrentCar());
+        carList.sort((car1, car2) -> {
+            return car2.getCurrentCar().compareTo(car1.getCurrentCar());
         });
         return carList;
     }
@@ -534,14 +529,17 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
         if (user.getRelatedPhone() != null) {
             String address = AddressHelper.getAddress(model.getLat(),
                     model.getLon());// 获取用处当前地址
-            String message = "【车联网紧急通知】 您好，用户" + user.getUsername() + "在大约"
+            SimpleDateFormat style = new SimpleDateFormat("HH-mm-ss");
+            String now_data = style.format(new Date());
+            String message = "【车联网紧急通知】 您好，用户" + user.getUsername() + "在" + now_data + "，大约"
                     + address + "附近," + " 驾驶着车牌号为：" + model.getPlateNumber()
-                    + " 的车辆多处发生故障，疑似发生事故，请及时联系车主确保安全。";
+                    + " 的车辆疑似发生事故，请及时联系车主确保安全。";
             try {
                 int send = SmsbaoHelper.send(user.getRelatedPhone(), message);
                 if (send != 0) {
                     throw new DomainSecurityException("发送失败");
                 }
+                logger.info("发送短息至" + user.getRelatedPhone() + "成功");
             } catch (Exception e) {
                 e.printStackTrace();
             }
