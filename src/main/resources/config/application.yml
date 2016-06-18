@@ -38,4 +38,4 @@ multipart:
 
 #本系统自定义属性(是否启用权限控制系统)
 security:
-    enable: true
+    enable: false
