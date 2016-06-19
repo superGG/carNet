@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
+
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -27,9 +30,6 @@ import com.earl.carnet.exception.ApplicationException;
 import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.UserService;
 import com.earl.carnet.service.VerifyCodeService;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
 
 @Service("userService")
 @Transactional
@@ -163,9 +163,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
             user.setId((long) userId);
             user.setUsername("用户" + userId);
             user.setUserImg("img/earl.jpg");
-            user.setAlarmMessage(true);
-            user.setPropertyMessage(true);
-            user.setStateMessage(true);
             int save = updateByPrimaryKeySelective(user);
             if (save != 0) {
                 result = true;
@@ -196,15 +193,22 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
         if (tmpuser != null) {
             throw new DomainSecurityException("该账号已经被注册");
         } else {
-            String password_Md5 = new SimpleHash("SHA-1", password).toString();
-            user.setPassword(password_Md5);
-            user.setUserImg("/img/earl.jpg");
-            int id = userDao.insertBackId(user);
-            UserRole userrole = new UserRole();
-            userrole.setUserId(Long.valueOf(id));
-            userrole.setRoleId(1L);//角色标号为1 ，基本用户权限
-            userroleDao.insert(userrole);
-            
+            try {
+                String password_Md5 = new SimpleHash("SHA-1", password).toString();
+                user.setPassword(password_Md5);
+                user.setUserImg("/img/earl.jpg");
+                user.setAlarmMessage(true);
+                user.setPropertyMessage(true);
+                user.setStateMessage(true);
+                int id = userDao.insertBackId(user);
+                UserRole userrole = new UserRole();
+                userrole.setUserId(Long.valueOf(id));
+                userrole.setRoleId(1L);//角色标号为1 ，基本用户权限
+                userroleDao.insert(userrole);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new DomainSecurityException("注册失败");
+            }
         }
         logger.info("退出用户注册registerAccount方法");
     }

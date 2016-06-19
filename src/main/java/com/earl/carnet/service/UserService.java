@@ -2,13 +2,12 @@ package com.earl.carnet.service;
 
 import java.util.List;
 
-import com.earl.carnet.domain.carnet.car.Car;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.earl.carnet.commons.service.BaseService;
+import com.earl.carnet.domain.carnet.car.Car;
 import com.earl.carnet.domain.sercurity.role.Role;
 import com.earl.carnet.domain.sercurity.user.User;
-import com.earl.carnet.domain.sercurity.user.UserQuery;
 
 public interface UserService extends BaseService<User, User> {
 	

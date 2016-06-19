@@ -1,11 +1,10 @@
 package com.earl.carnet.dao;
 
 
+import java.util.List;
+
 import com.earl.carnet.commons.dao.BaseDao;
 import com.earl.carnet.domain.carnet.Park.Park;
-import com.earl.carnet.domain.carnet.RepairShop.RepairShop;
-
-import java.util.List;
 
 public interface ParkDao extends BaseDao<Park> {
 
