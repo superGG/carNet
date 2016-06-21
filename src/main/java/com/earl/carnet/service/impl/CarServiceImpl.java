@@ -347,10 +347,10 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
                     String content = null;
                     if (model_data.getPlateNumber() != null) {
                         content = "尊敬的" + user.getUsername() + ": 您好，您的车牌号为"
-                                + model_data.getPlateNumber() + " 的车辆温度过高，请注意行驶。";
+                                + model_data.getPlateNumber() + " 的车辆当前温度为" + model.getTemperature() + "摄氏度。温度过高，请注意行驶。";
                     } else {
                         content = "尊敬的" + user.getUsername() + ": 您好，您的车架号为"
-                                + model_data.getVin() + " 的车辆温度过高，请注意行驶。";
+                                + model_data.getVin() + " 的车辆当前温度为" + model.getTemperature() + "摄氏度。温度过高，请注意行驶。";
                     }
                     logger.info("-----content:" + content);
                     Car_Cache(model_data, "temperature");
@@ -408,7 +408,8 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
      */
     private void monitorMileage(Car model, Car model_data) {
         if (model.getMileage() != model_data.getMileage()) {//幂等处理
-            if ((model.getMileage() % 15000 < model_data.getMileage() % 15000)
+            if (model.getMileage() > model_data.getMileage()
+                    && (model.getMileage() % 15000 < model_data.getMileage() % 15000)
                     && model_data.getCurrentCar()) {
                 User user = userService.findOne(model_data.getUserId());
                 String content = "尊敬的" + user.getUsername()
@@ -429,6 +430,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
 
     /**
      * 向用户发送信息.
+     *
      * @param model
      * @param tcpMessage
      */
