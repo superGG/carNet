@@ -71,12 +71,14 @@ public class ShiroConfiguration implements EnvironmentAware {
         Map<String, String> filterChainDefinitionMapping = new HashMap<String, String>();
 
         List<Privilege> privilegeList = privilegeDao.findAll();
-
+        
+        if(propertyResolver.getProperty("enable", Boolean.class)){
         filterChainDefinitionMapping.put("/api/doLogin", "anon");
         filterChainDefinitionMapping.put("/", "anon");
-        filterChainDefinitionMapping.put("/home", "authc,roles[guest]");
+        filterChainDefinitionMapping.put("/index.html", "authc,roles[guest]");
         filterChainDefinitionMapping.put("/admin", "authc,roles[admin]");
-
+        }
+        
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMapping);
         shiroFilter.setSecurityManager(securityManager());
         try {
