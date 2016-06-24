@@ -594,7 +594,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
         if (user.getRelatedPhone() != null) {
             String address = AddressHelper.getAddress(model.getLat(),
                     model.getLon());// 获取用处当前地址
-            SimpleDateFormat style = new SimpleDateFormat("HH-mm-ss");
+            SimpleDateFormat style = new SimpleDateFormat("HH:mm:ss");
             String now_data = style.format(new Date());
             String message = "【车联网紧急通知】 您好，用户" + user.getUsername() + "在" + now_data + "，大约"
                     + address + "附近," + " 驾驶着车牌号为：" + model.getPlateNumber()
