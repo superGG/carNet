@@ -11,7 +11,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.earl.carnet.interceptor.Ip2Interceptor;
 import com.earl.carnet.interceptor.IpInterceptor;
 import com.earl.carnet.interceptor.ValidationInterceptor;
 
@@ -62,7 +61,6 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new IpInterceptor()).addPathPatterns("/**");
-        registry.addInterceptor(new Ip2Interceptor()).addPathPatterns("/**");
         registry.addInterceptor(validationInterceptor).addPathPatterns("/**");
     }
 

@@ -37,9 +37,6 @@ public class VerifyCodeController extends BaseController{
 		result = new ResultMessage();
 		result.setServiceResult(get);
 		result.setResultInfo("获取成功");
-//		result.getResultParm().put("verifyCode",verifyCodeService.findAll());
-//		result.getResultParm().put("sessionId",session.getId());
-//		result.getResultParm().put("verifyCode",session.getAttribute("verifyCode"));
 		return result;
 	}
 
@@ -65,7 +62,7 @@ public class VerifyCodeController extends BaseController{
 	 */
 	@RequestMapping(value = "/test", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "test", notes = "test  ",httpMethod="GET",response=String.class)
-	public ResultMessage test(){
+	public ResultMessage test(MyVo dodo){
 		Boolean get = verifyCodeService.test();
 
 		result = new ResultMessage();

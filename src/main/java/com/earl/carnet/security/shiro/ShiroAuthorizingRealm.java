@@ -29,11 +29,13 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.earl.carnet.dao.UserDao;
 import com.earl.carnet.domain.sercurity.user.User;
@@ -51,7 +53,10 @@ public class ShiroAuthorizingRealm extends AuthorizingRealm {
 	
 	@Resource
 	UserDao userDao;
-	
+
+	 @Value("${public.hashIterations}")
+	 private int hashIterations;
+
 	/**
 	 * 构造函数，设置安全的初始化信息
 	 */
@@ -59,9 +64,10 @@ public class ShiroAuthorizingRealm extends AuthorizingRealm {
 		super();
 		setAuthenticationTokenClass(UsernamePasswordToken.class);
 
-//		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");//加密方式
-//		matcher.setHashIterations(1);//加密次数
-//		setCredentialsMatcher(matcher);
+		//TODO 需要改成重试机制,缓存管理注入需要考虑
+		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");//加密方式
+		matcher.setHashIterations(hashIterations);//加密次数
+		setCredentialsMatcher(matcher);
 //		setCredentialsMatcher(credentialsMatcher);
 	}
 

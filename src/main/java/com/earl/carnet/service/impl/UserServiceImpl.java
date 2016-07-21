@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,6 +53,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
     @Resource(name = "fileUpload")
     FileUploadImpl fileUpload;
 
+    @Value("${public.hashIterations}")
+    private int hashIterations;
+    
     @Override
     protected BaseDao<User> getDao() {
         // TODO 未测试.
@@ -70,10 +74,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
         logger.info("进入修改密码changePassword方法");
         Boolean result = false;
         User user = getDao().findOneById(Id);
-        String oldPassword_Md5 = new SimpleHash("SHA-1", oldPassword).toString();
+        String oldPassword_Md5 = new SimpleHash("SHA-1", oldPassword,null,hashIterations).toString();
         String password = user.getPassword();
         if (password.equals(oldPassword_Md5)) {
-            String newPassword_Md5 = new SimpleHash("SHA-1", newPassword).toString();
+            String newPassword_Md5 = new SimpleHash("SHA-1", newPassword,null,hashIterations).toString();
             user.setPassword(newPassword_Md5);
             userDao.updateByPrimaryKeySelective(user);
             result = true;
@@ -267,19 +271,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
         User user = userDao.findOneByLoginId(loginid);
         return userDao.getCurrentCar(user.getId());
     }
-
-
-//    @Override
-//    public void addRelatedPhone(String id, String relatedPhone, String verifyCode) {
-//        if (confirmVerifyCode(relatedPhone, verifyCode)) {
-//            User user_new = new User();
-//            user_new.setId(Long.parseLong(id));
-//            user_new.setRelatedPhone(relatedPhone);
-//            getDao().updateByPrimaryKeySelective(user_new);
-//        } else {
-//            throw new SecurityException("验证码错误");
-//        }
-//    }
 
     /**
      * 确认用户输入认证码是否正确.

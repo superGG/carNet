@@ -1,5 +1,8 @@
 package com.earl.carnet.interceptor;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,16 +21,37 @@ public class IpInterceptor implements HandlerInterceptor {
 	private final Logger logger = LoggerFactory.getLogger(IpInterceptor.class);
 	
 	@Override
-	public void afterCompletion(HttpServletRequest arg0,
-			HttpServletResponse arg1, Object arg2, Exception arg3)
+	public void afterCompletion(HttpServletRequest request,
+			HttpServletResponse response, Object arg2, Exception arg3)
 			throws Exception {
 //		logger.info("aftercompletion ip---拦截器");
+		
+		Map<String, String[]> parameterMap = request.getParameterMap();
+
+		for (Entry<String, String[]> entry : parameterMap.entrySet()) {
+			String[] value = entry.getValue();
+			if(value.length == 1 ){
+
+				logger.info(entry.getKey() + " : " + entry.getValue()[0]);
+			
+			}else{
+				StringBuilder tmpBuilder = new StringBuilder();
+				for (String string : value) {
+				
+					tmpBuilder.append(entry.getKey()+"-"+string+";");
+				
+				}
+				
+				logger.info(entry.getKey() + " : " +tmpBuilder.toString());
+			}
+			
+		}
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest req, HttpServletResponse resp,
 			Object arg2, ModelAndView arg3) throws Exception {
-		logger.info("退出ip---拦截器");
+			logger.info("退出ip---拦截器");
 	}
 
 	@Override
@@ -54,6 +78,10 @@ public class IpInterceptor implements HandlerInterceptor {
 				+ request.getCharacterEncoding()+"|" + request.getContentType()+"|"
 				+ request.getAuthType()+"|" + request.getPathTranslated()+"|"
 				+ request.getRemoteUser()) ;
+		
+		//TODO 用异步方式添加系统日志进入日志表
+		
+		
 		return true;
 	}
 }

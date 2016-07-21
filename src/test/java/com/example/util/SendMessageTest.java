@@ -1,7 +1,11 @@
 package com.example.util;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 //import com.earl.carnet.util.SendMessage;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -33,6 +37,20 @@ public class SendMessageTest {
 
         System.out.println("lon:" + addr.get("lon"));
         System.out.println("lat:" + addr.get("lat"));
+    }
+    
+    @Test
+    public void testset(){
+    	Set<String> dodo = new HashSet<String>();
+    	dodo.add("dodo");
+    	dodo.add("dodo1");
+    	dodo.add("dodo2");
+    	dodo.add("dodo3");
+    	dodo.add("dodo4");
+    	
+    	for (String object : dodo) {
+			System.out.println(object);
+		}
     }
 
 }

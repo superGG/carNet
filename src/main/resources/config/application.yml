@@ -12,7 +12,7 @@ jdbc:
     databaseName: carnet
     serverName: 127.0.0.1
     username: root
-    password: root
+    password: Ninico2015
     cachePrepStmts: true
     prepStmtsSize: 250
     prepStmtsCacheSqlLimit: 2048
