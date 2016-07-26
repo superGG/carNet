@@ -8,7 +8,7 @@ server:
 # DATASOURCE
 jdbc:
     dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-    url: jdbc:mysql://localhost:3306/carnet?useUnicode=true&amp;charaterEncoding=utf-8
+    url: jdbc:mysql://123.206.59.168:3306/carnet?useUnicode=true&amp;charaterEncoding=utf-8
     databaseName: carnet
     serverName: 127.0.0.1
     username: root
@@ -17,13 +17,27 @@ jdbc:
     prepStmtsSize: 250
     prepStmtsCacheSqlLimit: 2048
     userServerPrepStmts: true
+	
+	
 # SPRING PROFILES
-spring:       
+spring:
+    datasource:
+         primary.url: jdbc:mysql://123.206.59.168:3306/carnet?useUnicode=true&amp;charaterEncoding=utf-8
+         primary.username: root
+         primary.password: Ninico2015
+         primary.driver-class-name: com.mysql.jdbc.Driver
+#配置二号数据源
+         #secondary.url: jdbc:mysql://123.206.59.168:3306/carnet?useUnicode=true&amp;charaterEncoding=utf-8
+         #secondary.username: root
+         #secondary.password: Ninico2015
+         #secondary.driver-class-name: com.mysql.jdbc.Driver
     # HTTP ENCODING
     http:
         encoding.charset: UTF-8
         encoding.enable: true
         encoding.force: true
+    cache:
+        ehcache.config=classpath:ehcache/ehcache-login.xml
 # LOGGING
 logging:
     file: carnet.log

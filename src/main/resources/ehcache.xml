@@ -13,15 +13,6 @@
     diskExpiryThreadIntervalSeconds：磁盘失效线程运行时间间隔，默认是120秒。
     diskSpoolBufferSizeMB：这个参数设置DiskStore（磁盘缓存）的缓存区大小。默认是30MB。每个Cache都应该有自己的一个缓冲区。-->
 
-    <!-- 密码缓存 300秒，5分钟-->
-    <cache name="passwordRetryCache"
-           maxEntriesLocalHeap="20000"
-           eternal="false"
-           timeToIdleSeconds="300"
-           timeToLiveSeconds="0"
-           overflowToDisk="false"
-           statistics="false">
-    </cache>
     <!--ip缓存-->
     <cache name="iplocal"
            maxEntriesLocalHeap="20000"

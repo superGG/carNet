@@ -18,6 +18,7 @@ package com.earl.carnet.security.shiro;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.apache.log4j.LogManager;
@@ -54,23 +55,36 @@ public class ShiroAuthorizingRealm extends AuthorizingRealm {
 	@Resource
 	UserDao userDao;
 
-	 @Value("${public.hashIterations}")
+	 @Value("#{public[hashIterations]}")
 	 private int hashIterations;
 
+//	 @Resource
+//	 RetryLimitCredentialsMatcher matcher;
+	 
 	/**
 	 * 构造函数，设置安全的初始化信息
 	 */
-	public ShiroAuthorizingRealm() {
+	public ShiroAuthorizingRealm() {//进入构造函数时候，以上需要实体为被注入
 		super();
+//		setAuthenticationTokenClass(UsernamePasswordToken.class);
+//
+//		//TODO 需要改成重试机制,缓存管理注入需要考虑
+//		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");//加密方式
+//		matcher.setHashIterations(hashIterations);
+//		setCredentialsMatcher(matcher);
+	}
+	
+	@PostConstruct
+	public void init2(){
 		setAuthenticationTokenClass(UsernamePasswordToken.class);
-
+		
 		//TODO 需要改成重试机制,缓存管理注入需要考虑
 		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");//加密方式
-		matcher.setHashIterations(hashIterations);//加密次数
+		matcher.setHashIterations(hashIterations);
 		setCredentialsMatcher(matcher);
-//		setCredentialsMatcher(credentialsMatcher);
+		
 	}
-
+	
 	/**
 	 * 根据认证方式（如表单）获取用户名称、密码
 	 */

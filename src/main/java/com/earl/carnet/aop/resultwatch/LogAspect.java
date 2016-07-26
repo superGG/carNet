@@ -20,7 +20,13 @@ public class LogAspect {
 	@Pointcut("execution(* com.earl.carnet.web.*Controller.*(..))")
 	public void logManager() throws Throwable {
 	}
-
+	/**
+	 * 下面是基于注解的aop实现
+	 */
+//	@Pointcut(value = "@annotation(com.smallchill.core.annotation.Before)")
+//	private void cutBefore() {
+//
+//	}
 	// @Pointcut("execution(* com.mysoft.manager.impl.TxtFileManager.*(..))")
 	public void txtFileManager() {
 	}
@@ -74,7 +80,7 @@ public class LogAspect {
 		long time = System.currentTimeMillis() - start;
 		StringBuilder builder = new StringBuilder();
 		builder.append("MethodSignature:").append(name).append("\n").append("Args:")
-				.append(args).append("\n").append("毫秒:").append(time).append("秒:")
+				.append(args[0]).append("\n").append("毫秒:").append(time).append("秒:")
 				.append(time / 1000).append("\n").append("result:").append(toShow);
 		logger.info(builder.toString());
 		return result;

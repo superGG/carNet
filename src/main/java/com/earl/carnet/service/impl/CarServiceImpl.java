@@ -9,10 +9,10 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
-
 import org.apache.log4j.Logger;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +33,12 @@ import com.earl.carnet.util.AddressHelper;
 import com.earl.carnet.util.JPushForCar;
 import com.earl.carnet.util.JPushForUser;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
+
 
 @Service("carService")
+@CacheConfig(cacheNames = "car")
 @Transactional
 public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarService {
 
@@ -457,6 +461,7 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
     }
 
     @Override
+//    @Cacheable(cacheNames={"currentCar"},keyGenerator = "keyGenderator")
     public List<Car> getAllCarByUser(Long userId) {
         Car car = new Car();
         car.setUserId(userId);
@@ -612,11 +617,16 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
     }
 
     @Override
+//    @CacheEvict(key = "#p0.userId") //设置缓冲失效
+//    @CacheEvict(cacheNames={"currentCar"}, keyGenerator = "keyGenderator") //设置缓冲失效
     public Boolean updateUserCurrentCar(Car car) {
         return carDao.updateUserCurrentCar(car);
     }
 
+
     @Override
+//  @Cacheable(key = "#p0")//抵用第一个参数作为key
+//    @Cacheable(cacheNames={"currentCar"}, keyGenerator = "keyGenderator")//自定义缓存键
     public List<Car> getCurrentCarByUser(Long userId) {
         List<Car> catList = carDao.getCurrentCarByUser(userId);
         return catList;

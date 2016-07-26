@@ -62,7 +62,7 @@ public class ParkController extends BaseController {
         result = new ResultMessage();
         List<Park> shopList = parkService.getAroundPark(lat, lon);
         result.getResultParm().put("park", shopList);
-        if (shopList.size() == 0) throw new DomainSecurityException("周围10公里都没有加盟停车场");
+        if (shopList.isEmpty()) throw new DomainSecurityException("周围10公里都没有加盟停车场");
         return result;
     }
 

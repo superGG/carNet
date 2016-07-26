@@ -1,5 +1,7 @@
 package com.earl.carnet.web;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,16 +59,16 @@ public class VerifyCodeController extends BaseController{
 		return result;
 	}
 
-	/**
-	 * GET /test -> test
-	 */
+//	/**
+//	 * GET /test -> test
+//	 */
 	@RequestMapping(value = "/test", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "test", notes = "test  ",httpMethod="GET",response=String.class)
-	public ResultMessage test(MyVo dodo){
-		Boolean get = verifyCodeService.test();
+	public ResultMessage test(@Valid MyVo dodo11){
+//		Boolean get = verifyCodeService.test();
 
 		result = new ResultMessage();
-		result.setServiceResult(get);
+//		result.setServiceResult(get);
 		return result;
 	}
 

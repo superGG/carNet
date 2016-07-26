@@ -53,7 +53,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
     @Resource(name = "fileUpload")
     FileUploadImpl fileUpload;
 
-    @Value("${public.hashIterations}")
+    @Value("#{public[hashIterations]}")
     private int hashIterations;
     
     @Override
@@ -134,7 +134,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
     public void doLogin(String username, String password) {
         // TODO 未测试.
         logger.info("进入doLogin方法");
-        String password_Md5 = new SimpleHash("SHA-1", password).toString();
+        String password_Md5 =new SimpleHash("SHA-1", password,null,hashIterations).toString();
         logger.info("password_Md5:" + password_Md5);
         SecurityUtils.getSubject().login(new UsernamePasswordToken(username, password_Md5));
         logger.info("退出doLogin方法");
@@ -158,7 +158,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
 
         logger.info("对用户密码进行加密");
         String oldPassword = user.getPassword();
-        String newPassword = new SimpleHash("SHA-1", oldPassword).toString();
+        String newPassword = new SimpleHash("SHA-1", oldPassword,null,hashIterations).toString();
         user.setPassword(newPassword);
 
         int userId = userDao.insertBackId(user);
@@ -198,7 +198,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
             throw new DomainSecurityException("该账号已经被注册");
         } else {
             try {
-                String password_Md5 = new SimpleHash("SHA-1", password).toString();
+                String password_Md5 = new SimpleHash("SHA-1", password,null,hashIterations).toString();
                 user.setPassword(password_Md5);
                 user.setUserImg("/img/earl.jpg");
                 user.setAlarmMessage(true);
@@ -233,7 +233,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
     @Override
     public void confirmSafePassword(Long id, String safePassword) {
         User user = getDao().findOneById(id);
-        String safePassword_Md5 = new SimpleHash("SHA-1", safePassword).toString();
+        String safePassword_Md5 = new SimpleHash("SHA-1", safePassword,null,hashIterations).toString();
         logger.info(safePassword_Md5);
         if(!safePassword_Md5.equals(user.getSafePassword())){
         	throw new ApplicationException("安全密码验证错误");
@@ -246,10 +246,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
         Boolean result = false;
         User user = getDao().findOneById(id);
         if (user.getSafePassword() != null) {
-            String oldPassword_Md5 = new SimpleHash("SHA-1", oldSafePassword).toString();
+            String oldPassword_Md5 = new SimpleHash("SHA-1", oldSafePassword,null,hashIterations).toString();
             String password = user.getSafePassword();
             if (password.equals(oldPassword_Md5)) {
-                String newPassword_Md5 = new SimpleHash("SHA-1", newSafePassword).toString();
+                String newPassword_Md5 = new SimpleHash("SHA-1", newSafePassword,null,hashIterations).toString();
                 user.setSafePassword(newPassword_Md5);
                 userDao.updateByPrimaryKeySelective(user);
                 result = true;
@@ -257,7 +257,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
                 throw new DomainSecurityException("旧安全密码错误");
             }
         } else {  //当初次更新安全密码时
-            String newPassword_Md5 = new SimpleHash("SHA-1", newSafePassword).toString();
+            String newPassword_Md5 = new SimpleHash("SHA-1", newSafePassword,null,hashIterations).toString();
             user.setSafePassword(newPassword_Md5);
             userDao.updateByPrimaryKeySelective(user);
             result = true;

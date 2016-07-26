@@ -15,9 +15,11 @@ public class CarDaoImpl extends BaseDaoImpl<Car> implements CarDao {
 
     @Override
     public List<Car> getCurrentCarByUser(Long userId) {
-        String sql = "select * from car c where c.userId = ? and currentCar = true";
-        SQLReady sqlReady = new SQLReady(sql,userId);
-        List<Car> carList = sqlManager.execute(sqlReady, Car.class);
+    	
+    	Car tmpCar = new Car();
+    	tmpCar.setUserId(userId);
+    	tmpCar.setCurrentCar(true);
+        List<Car> carList = searchAccurate(tmpCar);
         return carList;
     }
 

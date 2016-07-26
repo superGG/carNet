@@ -43,6 +43,12 @@ public class VerifyCodeControllerTest {
         result = verifyCodeController.getVerifyCode(phone);
         logger.info("执行获取验证码方法getAllCarByUser 结果：" + result.getResultInfo());
     }
+    @Test
+    //获取验证码测试方法
+    public void getCodeTest() {
+    	int[] aa = new int [4];aa[0] = 1;int [] aab = {1,2,3,4};
+    	logger.info("执行获取验证码方法getAllCarByUser 结果：" + result.getResultInfo());
+    }
 
 
 }

@@ -9,7 +9,7 @@ import java.net.URL;
  * Created by 宋. on 2016/5/13.
  */
 public class EhCacheHelper {
-
+//TODO 交给Spring 管理
     private static final CacheManager CACHE = build_CacheManage();
 
     /**

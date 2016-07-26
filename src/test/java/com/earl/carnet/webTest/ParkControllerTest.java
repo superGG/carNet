@@ -5,6 +5,11 @@ import com.earl.carnet.commons.vo.ResultMessage;
 import com.earl.carnet.domain.carnet.Park.Park;
 import com.earl.carnet.web.ParkController;
 import com.earl.carnet.web.VerifyCodeController;
+
+import net.sf.ehcache.CacheException;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.config.Configuration;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -78,6 +83,21 @@ public class ParkControllerTest {
         result = parkController.delete(parkId).getBody();
         logger.info("执行删除停车场方法 delete 结果：" + result.getResultInfo());
     }
+    
+    //TODO 这里有线程知识，在同一个线程中，对象锁可以重入,重新进入
+    public static void mytest(){
+    	synchronized (ParkController.class){
+    		System.out.println("djdjdjdjdjd1111");
+    	newInstance();
 
+    	}
 
-}
+    	}
+    private static String newInstance() throws CacheException {
+        synchronized (ParkController.class) {System.out.println("djdjdjdjdjd");
+            return "结果：";
+        }
+    }
+    public static void main(String[] dodo){
+    	mytest();
+    	}}

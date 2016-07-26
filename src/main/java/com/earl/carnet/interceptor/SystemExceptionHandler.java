@@ -15,6 +15,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -62,6 +64,14 @@ public class SystemExceptionHandler implements HandlerExceptionResolver {
                 logger.debug(constraintViolation.getLeafBean()); // 作用的bean对象
             });
             resultMessage.setResultInfo(builder.toString());
+        } else if (ex instanceof BindException) {
+        	StringBuilder builder = new StringBuilder();
+        	for (FieldError fieldError: ((BindException) ex).getFieldErrors()) {
+				builder .append(fieldError.toString());
+			}
+        	resultMessage.setResultInfo(builder.toString());
+        	resultMessage.setServiceResult(false);
+        	logger.info("resultMessage =>" + resultMessage.toJson());
         } else if (ex instanceof IncorrectCredentialsException) {
             resultMessage.setResultInfo("用户名密码不正确");
             resultMessage.setServiceResult(false);

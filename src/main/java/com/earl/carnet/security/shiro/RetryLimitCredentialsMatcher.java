@@ -2,6 +2,8 @@ package com.earl.carnet.security.shiro;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.annotation.Resource;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -23,12 +25,23 @@ public class RetryLimitCredentialsMatcher extends HashedCredentialsMatcher {
 	// 集群中可能会导致出现验证多过5次的现象，因为AtomicInteger只能保证单节点并发
 	private Cache<String, AtomicInteger> passwordRetryCache;
 
+	@Resource
+	public CacheManager cacheManager;
+	
 	public RetryLimitCredentialsMatcher(CacheManager cacheManager) {
 
 		passwordRetryCache = cacheManager.getCache("passwordRetryCache");
-
+		this.setHashAlgorithmName("SHA-1");
 	}
+	
+//	@PostConstruct
+//	public void init(){
+//		passwordRetryCache = cacheManager.getCache("passwordRetryCache");
+//		this.setHashAlgorithmName("SHA-1");
+//		
+//	}
 
+	
 	@Override
 	public boolean doCredentialsMatch(AuthenticationToken token,
 			AuthenticationInfo info) {

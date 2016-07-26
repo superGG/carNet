@@ -20,16 +20,6 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
 
     private static Cache VerifyCode_CACHE = EhCacheHelper.getCacheManage().getCache("verifyCode");
 
-//	@Resource
-//	VerifyCodeDao verifyCodeDao;
-
-//	private ResultMessage result = null;
-
-//	@Override
-//	protected BaseDao<VerifyCode> getDao() {
-//		return verifyCodeDao;
-//	}
-
     @Override
     public Boolean getVerifyCode(String phoneNumber) {
         Boolean get_result = false;

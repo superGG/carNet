@@ -6,7 +6,10 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +36,15 @@ public class DataBaseConfiguration implements EnvironmentAware {//这里继承�
 		this.propertyResolver = new RelaxedPropertyResolver(env, "jdbc.");
 	}
 
+	 @Bean(name = "primaryDataSource")
+	 @Qualifier("primaryDataSource")
+	 @ConfigurationProperties(prefix="spring.datasource.primary")
+	 public DataSource primaryDataSource() {
+	       return DataSourceBuilder.create().build();
+	 }
+
+	
+	
 	@Bean(destroyMethod = "shutdown")//指定bean的销毁方法，shutdown
 	public DataSource dataSource() {
 		log.debug("build DataSource");

@@ -4,9 +4,11 @@ import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.cache.annotation.EnableCaching;
 
 
 @SpringBootApplication//等价于@Configuration,@EnableAutoConfiguration,@ComponentScan
+@EnableCaching
 public class Application {
 
 	private static Logger logger = Logger.getLogger(Application.class);
