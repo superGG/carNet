@@ -12,7 +12,21 @@ public class Column {
 	private boolean readOnly;
 	private boolean autoIncrement;
 	private int nullable;
+	private int displaySize;
+	private String schemaName;
+	private int scale;
+	private String catalogName;
+	private String remarks;
+	private String defValue;
 	
+	public void checkAndModify() {
+		// TODO Auto-generated method stub
+		if(this.columnTypeName.toLowerCase().indexOf("varchar")!= -1){
+			if(this.precision > 255){
+				this.columnTypeName = "TEXT"; //TODO 需要完善
+			}
+		}
+	}
 	public String getColumnName() {
 		return columnName;
 	}
@@ -75,12 +89,50 @@ public class Column {
 	public int getNullable() {
 		return nullable;
 	}
+	public int getDisplaySize() {
+		return displaySize;
+	}
+	public void setDisplaySize(int displaySize) {
+		this.displaySize = displaySize;
+	}
+	public String getSchemaName() {
+		return schemaName;
+	}
+	public void setSchemaName(String schemaName) {
+		this.schemaName = schemaName;
+	}
+	public int getScale() {
+		return scale;
+	}
+	public void setScale(int scale) {
+		this.scale = scale;
+	}
+	public String getCatalogName() {
+		return catalogName;
+	}
+	public void setCatalogName(String catalogName) {
+		this.catalogName = catalogName;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	public String getDefValue() {
+		return defValue;
+	}
+	public void setDefValue(String defValue) {
+		this.defValue = defValue;
+	}
 	@Override
 	public String toString() {
 		return "Column [columnName=" + columnName + ", columnLabel=" + columnLabel + ", columnType=" + columnType
 				+ ", columnTypeName=" + columnTypeName + ", columnClassName=" + columnClassName + ", precision="
 				+ precision + ", caseSensitive=" + caseSensitive + ", readOnly=" + readOnly + ", autoIncrement="
-				+ autoIncrement + ", nullable=" + nullable + "]";
+				+ autoIncrement + ", nullable=" + nullable + ", displaySize=" + displaySize + ", schemaName="
+				+ schemaName + ", scale=" + scale + ", catalogName=" + catalogName + ", remarks=" + remarks
+				+ ", defValue=" + defValue + "]";
 	}
 	
 }

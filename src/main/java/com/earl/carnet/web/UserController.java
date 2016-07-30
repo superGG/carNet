@@ -40,8 +40,6 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
-    private ResultMessage result = null;
-
     /**
      * GET /users -> get all the users
      */
@@ -49,7 +47,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "得到所有用户信息", notes = "find All User", httpMethod = "GET", response = User.class, responseContainer = "List")
     public ResponseEntity<ResultMessage> getAll() {
         log.debug("REST request to get all Users");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.setServiceResult(true);
         result.getResultParm().put("user", userService.findAll());
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
@@ -65,7 +63,7 @@ public class UserController extends BaseController {
             @PathVariable
             String username) {
         log.info("REST request to get User : {}", username);
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         User user = userService.findOneByUsername(username);
         if (user != null) {
             result.setServiceResult(true);
@@ -90,7 +88,7 @@ public class UserController extends BaseController {
             @PathVariable
             Long id) {
         log.info("REST request to get User : {}", id);
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         User user = userService.findOne(id);
         if (user != null) {
             result.setServiceResult(true);
@@ -123,7 +121,7 @@ public class UserController extends BaseController {
             @ApiParam(required = false, name = "user", value = "这个字段不要理！！！！")
             @RequestParam(name = "userDto", required = false)
             User userDto) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         User user = userService.findOneByUsername(userDto.getUsername());
         if (user != null) {
             return ResponseEntity.badRequest()
@@ -153,7 +151,7 @@ public class UserController extends BaseController {
     public ResponseEntity<?> update(
             @ApiParam(required = false, name = "user", value = "这个字段不要理！！！！")
             User user) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         if (userService.updateByPrimaryKeySelective(user) != 0) {
             result.setServiceResult(true);
             result.setResultInfo("更新成功");
@@ -200,7 +198,7 @@ public class UserController extends BaseController {
             @RequestParam(name = "newPassword", required = true)
             @Length(min = 5, max = 32)
             String newPassword) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.setServiceResult(userService.changePassword(id, oldPassword, newPassword));
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
@@ -223,7 +221,7 @@ public class UserController extends BaseController {
             @RequestParam(name = "newSafePassword", required = true)
             @Length(min = 5, max = 32)
             String newSafePassword) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.setServiceResult(userService.changeSafePassword(id, oldSafePassword, newSafePassword));
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
@@ -250,7 +248,7 @@ public class UserController extends BaseController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         userService.changeRelatedPhone(id, newPhone, verifyCode);
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.setResultInfo("修改亲人号码成功");
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
@@ -321,7 +319,7 @@ public class UserController extends BaseController {
             @NotNull(message = "用户id不能为空")
             @ApiParam(required = true, name = "id", value = "用户id")
             Long id) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         if (userService.updateImg(userfile, id)) {
             User user = userService.findOne(id);
             result.setResultInfo("更新用户头像成功");
@@ -369,7 +367,7 @@ public class UserController extends BaseController {
     public ResponseEntity<ResultMessage> confirmSafePassword(
             @NotNull(message="用户id不能为空")
             Long id, String safePassword) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         userService.confirmSafePassword(id, safePassword);
         result.setResultInfo("安全验证成功");
         result.setServiceResult(true);

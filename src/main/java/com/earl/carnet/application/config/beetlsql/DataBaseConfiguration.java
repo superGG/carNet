@@ -36,12 +36,12 @@ public class DataBaseConfiguration implements EnvironmentAware {//这里继承�
 		this.propertyResolver = new RelaxedPropertyResolver(env, "jdbc.");
 	}
 
-	 @Bean(name = "primaryDataSource")
-	 @Qualifier("primaryDataSource")
-	 @ConfigurationProperties(prefix="spring.datasource.primary")
-	 public DataSource primaryDataSource() {
-	       return DataSourceBuilder.create().build();
-	 }
+//	 @Bean(name = "primaryDataSource")
+//	 @Qualifier("primaryDataSource")
+//	 @ConfigurationProperties(prefix="spring.datasource.primary")
+//	 public DataSource primaryDataSource() {
+//	       return DataSourceBuilder.create().build();
+//	 }
 
 	
 	

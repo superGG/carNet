@@ -30,8 +30,6 @@ public class MessageController extends BaseController{
 	@Autowired
 	private MessageService messageService;
 
-	private ResultMessage result = null;
-
 	/**
 	 * GET /message -> get all the message
 	 */
@@ -39,7 +37,7 @@ public class MessageController extends BaseController{
 	@ApiOperation(value = "得到所有消息", notes = "find All message",httpMethod="GET",response=Brand.class,responseContainer = "List")
 	public ResultMessage getAll() {
 		log.debug("REST request to get all message");
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 		result.getResultParm().put("message",messageService.findAll());
 		return result;
 	}
@@ -54,7 +52,7 @@ public class MessageController extends BaseController{
 		Message message = messageService.findOne(id);
 		message.setState(true);
 		messageService.updateByPrimaryKeySelective(message);
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 		result.getResultParm().put("message",message);
 		return result;
 	}
@@ -72,7 +70,7 @@ public class MessageController extends BaseController{
 		message.setUserId(userId);
 		message.setState(false);
 		List<Message> messageList = messageService.searchQuery(message);
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 		result.getResultParm().put("message",messageList);
 		result.getResultParm().put("count",messageList.size());
 		return result;
@@ -90,7 +88,7 @@ public class MessageController extends BaseController{
 		Message message = new Message();
 		message.setUserId(userId);
 		List<Message> messageList = messageService.searchAccurate(message);
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 		result.getResultParm().put("message",messageList);
 		result.getResultParm().put("count",messageList.size());
 		return result;
@@ -106,7 +104,7 @@ public class MessageController extends BaseController{
 			@PathVariable Long userId) {
 		log.debug(" get user's all message");
 		Boolean update = messageService.updateUserAll(userId);
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 		result.setServiceResult(update);
 		return result;
 	}
@@ -120,7 +118,7 @@ public class MessageController extends BaseController{
 		log.debug("save message");
 		if (message.getUserId() == null) return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		int id = messageService.insertBackId(message);
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 		result.getResultParm().put("message",messageService.findOne(id));
 		return new ResponseEntity<ResultMessage>(result,HttpStatus.OK);
 	}
@@ -136,6 +134,7 @@ public class MessageController extends BaseController{
 	public ResponseEntity<ResultMessage> delete(
 			@ApiParam(required = true, name = "id", value = "消息id")
 			Long id) {
+		ResultMessage result;
 		if (id == null) {
 			result = new ResultMessage();
 			result.setResultInfo("id为空");

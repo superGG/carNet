@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,6 @@ public class OrderController extends BaseController {
     @Autowired
     private UserService userService;
 
-    private ResultMessage result = null;
-
     /**
      * GET /order -> get all the order
      */
@@ -59,7 +58,7 @@ public class OrderController extends BaseController {
     public ResultMessage getAll() {
         log.debug("REST request to get all Order");
         List<Order> orderList = orderService.findAllOrder();
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.getResultParm().put("order", orderList);
         return result;
     }
@@ -80,7 +79,7 @@ public class OrderController extends BaseController {
         User user = userService.findOne(order.getUserId());
         order.setUserName("");
         if (user.getRealName() != null) order.setUserName(user.getRealName());
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.getResultParm().put("order", order);
         return result;
     }
@@ -98,7 +97,7 @@ public class OrderController extends BaseController {
             Long id) {
         log.debug("REST request to get order by userId");
         List<Order> orderList = orderService.getUserOrder(id);
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.getResultParm().put("order", orderList);
         return result;
     }
@@ -129,7 +128,7 @@ public class OrderController extends BaseController {
             @ApiParam(required = false, name = "order", value = "订单实体,这个字段不要理！！！")
             Order order) {
         log.info("进入controller层添加订单saveOrder方法");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         Long orderId = orderService.saveOrder(order);
         System.out.println("-----------------------" + orderId);
         if (orderId != 0) {
@@ -171,7 +170,7 @@ public class OrderController extends BaseController {
             Order order) {
         log.info("进入controller层添加订单update方法");
         if (order.getId() == null) throw new DomainSecurityException("所更新的订单id不能为空");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         if (orderService.updateByPrimaryKeySelective(order) != 0) {
             result.setServiceResult(true);
         } else {
@@ -239,7 +238,7 @@ public class OrderController extends BaseController {
             @NotNull(message = "id不能为空")
             Long id) {
         log.info("进入controller层添加订单delete方法");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         orderService.delete(id);
         result.setResultInfo("删除订单成功");
         result.setServiceResult(true);

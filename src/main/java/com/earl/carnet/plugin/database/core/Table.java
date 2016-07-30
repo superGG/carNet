@@ -2,7 +2,6 @@ package com.earl.carnet.plugin.database.core;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.io.Writer;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -15,6 +14,8 @@ import java.util.List;
 import org.slf4j.Logger;
 
 public class Table implements IBeSql{
+
+	private static Logger logger = getLogger(Table.class);
 	
 	private String name;
 	
@@ -28,22 +29,36 @@ public class Table implements IBeSql{
 
 	private List<ForeinKey> forginKey = new ArrayList<ForeinKey>();
 	
-	private static Logger logger = getLogger(Table.class);
 	
 	private Connection connection;
 
+	private String tableSql;
+	
 	private DatabaseMetaData metaData;
 	
 	private ResultSet tableData; //表数据
 	
-	private Writer writer;
 	
-	public Table(ResultSet tSet,Connection connection, DatabaseMetaData metaData,Writer writer) throws SQLException {
+	public String getTableSql() {
+		return tableSql;
+	}
+
+	public void setTableSql(String tableSql) {
+		this.tableSql = tableSql;
+	}
+
+	public ResultSet getTableData() {
+		return tableData;
+	}
+
+	public void setTableData(ResultSet tableData) {
+		this.tableData = tableData;
+	}
+
+	public Table(ResultSet tSet,Connection connection, DatabaseMetaData metaData) throws SQLException {
 		// TODO Auto-generated constructor stub
 		this.connection = connection;
 		this.metaData = metaData;
-		this.writer = writer;
-		
 		
 		this.catalog = tSet.getString(1);
 		this.name = tSet.getString(3);
@@ -72,6 +87,12 @@ public class Table implements IBeSql{
 		while (foreinKey.next()) {
 			
 			ForeinKey tmpForeinKey = new ForeinKey();
+			tmpForeinKey.setPkName(foreinKey.getString("PK_NAME"));
+			tmpForeinKey.setFkColumnName(foreinKey.getString("FKCOLUMN_NAME"));
+			tmpForeinKey.setPkTableName(foreinKey.getString("PKTABLE_NAME"));
+			tmpForeinKey.setFkTableName(foreinKey.getString("FKTABLE_NAME"));
+			tmpForeinKey.setPkColumnName(foreinKey.getString("PKCOLUMN_NAME"));
+			tmpForeinKey.setKeySeq(foreinKey.getString("KEY_SEQ"));
 			
 			logger.info("主键名:" + foreinKey.getString("PK_NAME") + ",外键名:" + foreinKey.getString("FKCOLUMN_NAME")
 					+ ",主键表名:" + foreinKey.getString("PKTABLE_NAME") + ",外键表名:" + foreinKey.getString("FKTABLE_NAME")
@@ -79,16 +100,21 @@ public class Table implements IBeSql{
 			// 主键名:PRIMARY_KEY_95,外键名:SYS_RES_ID,主键表名:SYS_RESOURCE,外键表名:SYS_ROLE_RES,外键列名:ID,外键序号:1
 			// 主键名:PRIMARY_KEY_A,外键名:SYS_ROLE_ID,主键表名:SYS_ROLE,外键表名:SYS_ROLE_RES,外键列名:ID,外键序号:1
 		}
-	
-		
 	}
 	
 	public void initColumn(ResultSet rsSet) throws SQLException{
+		  ResultSet rs = metaData.getColumns(null, null, this.name, "%");
 	ResultSetMetaData rsData = rsSet.getMetaData();
 		
+		rsData.getColumnCount();
+	
 		for (int i = 1; i <= rsData.getColumnCount(); i++) {
-			
+			rs.next();
 			Column column = new Column();
+			column.setCatalogName(rsData.getCatalogName(i));
+			column.setScale(rsData.getScale(i));
+			column.setSchemaName(rsData.getSchemaName(i));
+			column.setDisplaySize(rsData.getColumnDisplaySize(i));
 			column.setCaseSensitive( rsData.isCaseSensitive(i));
 			column.setColumnClassName(rsData.getColumnClassName(i));
 			column.setColumnLabel(rsData.getColumnLabel(i));
@@ -99,12 +125,12 @@ public class Table implements IBeSql{
 			column.setReadOnly(rsData.isReadOnly(i));
 			column.setAutoIncrement(rsData.isAutoIncrement(i));//字段是否自增
 			column.setNullable(rsData.isNullable(i));//改字段是否为空
+			column.setRemarks(rs.getString("REMARKS"));//列描述  
+			column.setDefValue(rs.getString("COLUMN_DEF"));//默认值  
+			column.checkAndModify(); //数据库类型出现偏差，自动修正
 			columns.add(column);//将这个列添加入表结构中
 			
-//			logger.info(column.toString());
-			// ==列的信息:获取SQL语句的列名:LIMITLEVER(LIMITLEVER,5,java.lang.Short)
-			// 列宽5 大小写敏感true isReadOnly:false
-			
+			logger.info(column.toString());
 		}
 		
 		logger.info(gendTableSql());
@@ -160,56 +186,17 @@ public class Table implements IBeSql{
 	}
 
 	@Override
-	public String gendTableSql(){
-		StringBuilder tmpBuilder  = new StringBuilder();
-		tmpBuilder.append("CREATE TABLE ").append(this.name).append("(\n");
-		for (Iterator<Column> iterator = columns.iterator(); iterator.hasNext();) {
-			Column column = iterator.next();
-			tmpBuilder.append('`').append(column.getColumnName()).append('`').append(' ').append(column.getColumnTypeName());
-				tmpBuilder.append(',');
-			tmpBuilder.append("\n");
+	public String gendTableSql() throws SQLException{
+		String sql = "show create table "+ name;
+		ResultSet executeQuery = connection.createStatement().executeQuery(sql);
+		String tableSql = null;
+		while(executeQuery.next()){
+			String tableName = executeQuery.getString("Table");
+			tableSql = executeQuery.getString("Create Table");
+			System.out.println(tableSql);
 		}
-		tmpBuilder.append("PRIMARYKEY (");
-		for (PrimaryKey primaryKey : primaryKeys) {
-			//TODO 添加主键展示
-			tmpBuilder.append(primaryKey.getColumnName());
-		}
-		
-		
-		tmpBuilder.append(")\n");
-		tmpBuilder.append(')');
-		tmpBuilder.append("ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-		return tmpBuilder.toString();
-	}
-
-	public void fetchData(ResultSet rsSet) throws SQLException {
-		// TODO Auto-generated method stub
-		ResultSetMetaData resultMeta = rsSet.getMetaData();
-		int columnCount = resultMeta.getColumnCount();
-
-		while (rsSet.next()) {
-			StringBuilder builder = new StringBuilder("INSERT INTO ");
-			builder.append(name).append(" VALUE(");
-			
-				for (int i = 1; i <= columnCount; i++) {
-					if(i == 1){
-						builder.append('\'').append(rsSet.getString(1)).append('\'');
-					}else{
-						String string = rsSet.getString(i);
-						if(string != null){
-							string = "'"+string+"'";
-						}else{
-							string = "null";
-						}
-						builder.append(',').append(string);
-					}
-				// insert into table_name
-				// value(String,String,String,String,String,String);
-			}
-			
-			builder.append(");");
-			logger.info(builder.toString());
-		}
+		this.tableSql= tableSql+";\n";
+		return tableSql;
 	}
 
 	public ResultSet prepareData() throws SQLException {
@@ -222,11 +209,9 @@ public class Table implements IBeSql{
 	public void initTable() throws SQLException{
 		initPrimaryKey();
 		initForeinKey();
-		
 		this.tableData = prepareData();
 		
 		initColumn(tableData);
-		fetchData(tableData);
 	}
 	
 	

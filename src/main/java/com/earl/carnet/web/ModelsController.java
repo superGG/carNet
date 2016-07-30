@@ -25,8 +25,6 @@ public class ModelsController extends BaseController{
 	@Autowired
 	private ModelsService modelsService;
 
-	private ResultMessage result = null;
-
 	/**
 	 * GET /users -> get all the models
 	 */
@@ -34,7 +32,7 @@ public class ModelsController extends BaseController{
 	@ApiOperation(value = "得到所有用户信息", notes = "find All Models", httpMethod = "GET", response = Models.class,responseContainer = "List")
 	public ResultMessage getAll() {
 		log.debug("REST request to get all Models");
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 		result.getResultParm().put("models", modelsService.findAll());
 		return result;
 	}
@@ -49,7 +47,7 @@ public class ModelsController extends BaseController{
 			@ApiParam(required = true, name = "brandId", value = "品牌id")
 			@PathVariable
 			Long brandId) {
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 		result.getResultParm().put("models",modelsService.findModelsByBrand(brandId));
 		return result;
 	}

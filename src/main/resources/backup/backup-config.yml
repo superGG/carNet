@@ -1,0 +1,16 @@
+# Server settings
+myConfig:
+  server: 8084
+
+driverClassName: com.mysql.jdbc.Driver
+#增量备份需要的上一个数据库文件
+appendFilePath: D:/aa.txt 
+url: jdbc:mysql://localhost:3306/vc_camp?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=round&transformedBitIsBoolean=true
+username: root
+password : root
+ # address: localhost
+#  context-path: /carnet
+#  error:
+#    path: /erro
+# DATASOURCE
+

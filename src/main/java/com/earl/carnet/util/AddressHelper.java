@@ -36,7 +36,7 @@ public class AddressHelper {
      * @return
      */
     public static String getAddress(double latitude, double longitude) {
-        String addr = "";
+        String addr = "";	
 
         String url = String.format("http://api.map.baidu.com/geocoder/v2/?ak="
                 + key

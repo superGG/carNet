@@ -23,8 +23,6 @@ public class BrandController extends BaseController{
 	@Autowired
 	private BrandService brandService;
 
-	private ResultMessage result = null;
-
 	/**
 	 * GET /brand -> get all the brand
 	 */
@@ -32,7 +30,7 @@ public class BrandController extends BaseController{
 	@ApiOperation(value = "得到所有品牌信息", notes = "find All brand",httpMethod="GET",response=Brand.class,responseContainer = "List")
 	public ResultMessage getAll() {
 		log.debug("REST request to get all Brand");
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 		result.getResultParm().put("brand",brandService.findAll());
 		return result;
 	}

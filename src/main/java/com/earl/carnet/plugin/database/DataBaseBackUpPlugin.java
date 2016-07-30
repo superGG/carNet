@@ -2,16 +2,23 @@ package com.earl.carnet.plugin.database;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import org.slf4j.Logger;
 
 import com.earl.carnet.plugin.IPlugin;
+import com.earl.carnet.plugin.database.columntype.ColumnRuleFactory;
+import com.earl.carnet.plugin.database.config.DefaultConfig;
+import com.earl.carnet.plugin.database.config.YmlConfigReader;
+import com.earl.carnet.plugin.database.connection.DbConnectionFactory;
 import com.earl.carnet.plugin.database.core.Table;
+import com.earl.carnet.plugin.database.stroge.NavicatStroge;
 
 public class DataBaseBackUpPlugin implements IPlugin {
 
@@ -19,43 +26,10 @@ public class DataBaseBackUpPlugin implements IPlugin {
 	
 	public static Connection connection;
 
-	public static DatabaseMetaData metaData;
-
-	public static Connection getConnection() throws Exception {
-		if (connection == null) {
-			try {
-				Class.forName("com.mysql.jdbc.Driver");
-//				String url = "jdbc:mysql://localhost:3306/carnet?useUnicode=true&amp;charaterEncoding=utf-8";
-//				String user = "root";
-//				String pass = "root";
-				
-				String url = "jdbc:mysql://localhost:3306/vc_camp?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=round&transformedBitIsBoolean=true";
-				String user = "root";
-				String pass = "root";
-				connection = DriverManager.getConnection(url, user, pass);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			return connection;
-		} else {
-			return connection;
-		}
-	}
+	public static DatabaseMetaData metaData ;
 	
-	public static DatabaseMetaData getDatabaseMetaData() throws SQLException, Exception{
-		if(metaData == null){
-			return getConnection().getMetaData();
-		}
-		return metaData;
-	}
-	
-	//启动数据库备份插件
-	@Override
-	public void start() throws Exception{
-		// TODO Auto-generated method stub
-		DatabaseMetaData metaData = getDatabaseMetaData();
+	public void baseDBInfo() throws SQLException{
+		
 		logger.info("数据库产品名: " + metaData.getDatabaseProductName());
 		logger.info("数据库是否支持事务: " + metaData.supportsTransactions());
 		logger.info("数据库产品的版本号:" + metaData.getDatabaseProductVersion());
@@ -100,6 +74,25 @@ public class DataBaseBackUpPlugin implements IPlugin {
 		logger.info("---------------------------------");
 		logger.info("---------------------------------");
 
+	}
+	
+	// +"\n_表的解释性注释:"+tSet.getString("REMARKS")+"_类型的类别:"+tSet.getString("TYPE_CAT")
+	// +"\n_类型模式:"+tSet.getString("TYPE_SCHEM")+"_类型名称:"+tSet.getString("TYPE_NAME")
+	// +"\n_有类型表的指定'identifier'列的名称:"+tSet.getString("SELF_REFERENCING_COL_NAME")
+	// +"\n_指定在 SELF_REFERENCING_COL_NAME
+	// 中创建值的方式:"+tSet.getString("REF_GENERATION")
+
+	
+	//启动数据库备份插件
+	@Override
+	public void start() throws Exception{
+		// TODO Auto-generated method stub
+	
+		initConnection();
+		
+		baseDBInfo();
+		
+		Class.forName(ColumnRuleFactory.class.getName());
 		
 		logger.info("###### 获取当前数据库所支持的SQL数据类型");
 		ResultSet tableType = metaData.getTypeInfo();
@@ -126,26 +119,44 @@ public class DataBaseBackUpPlugin implements IPlugin {
 		
 		logger.info("###### 获取表的信息");
 		ResultSet tSet = metaData.getTables(null, "%", "%", new String[] { "TABLE", "VIEW" }); //TODO 多线程构造表数据
-
+		
+		//TODO 增量备份策略扩展
+		File file = new File("D:/aa"+new Date().getTime()+".sql");
+		if(!file.exists()){
+			boolean createNewFile = file.createNewFile();
+		}
+		FileWriter writer = new FileWriter(file,true);
+		
 		while (tSet.next()) {
 			logger.info(tSet.getRow() + "_表类别:" + tSet.getString("TABLE_CAT") + "_表模式:" + tSet.getString("TABLE_SCHEM")
 					+ "_表名称:" + tSet.getString("TABLE_NAME") + "_表类型:" + tSet.getString("TABLE_TYPE")
-			// +"\n_表的解释性注释:"+tSet.getString("REMARKS")+"_类型的类别:"+tSet.getString("TYPE_CAT")
-			// +"\n_类型模式:"+tSet.getString("TYPE_SCHEM")+"_类型名称:"+tSet.getString("TYPE_NAME")
-			// +"\n_有类型表的指定'identifier'列的名称:"+tSet.getString("SELF_REFERENCING_COL_NAME")
-			// +"\n_指定在 SELF_REFERENCING_COL_NAME
-			// 中创建值的方式:"+tSet.getString("REF_GENERATION")
 			);
 			// 2_表类别:MANOR_表模式:PUBLIC_表名称:SYS_RESOURCE_表类型:TABLE
 			
-			Table table = new Table(tSet, connection,metaData,null); //构建表对象
+			Table table = new Table(tSet, connection,metaData); //构建表对象
 			//下面构建表结构
 			table.initTable();
+			
+			NavicatStroge navicatStroge = new NavicatStroge(writer, table);
+			navicatStroge.doStroge();
 
 		}
+		writer.flush();
+		writer.close();
 		tSet.close();
 		connection.close();
 		
+	}
+
+	private void initConnection() {
+		DefaultConfig config = new YmlConfigReader().readResource("backup/backup-config.yml");
+		connection = new DbConnectionFactory(config).getConnection();
+		try {
+			metaData = connection.getMetaData();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
 	}
 
 	//执行插件业务

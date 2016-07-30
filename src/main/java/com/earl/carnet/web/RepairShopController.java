@@ -35,8 +35,6 @@ public class RepairShopController extends BaseController {
     @Autowired
     private RepairShopService repairShopService;
 
-    private ResultMessage result = null;
-
     /**
      * GET /brand -> get all the repairShop
      */
@@ -44,7 +42,7 @@ public class RepairShopController extends BaseController {
     @ApiOperation(value = "得到所有维修店信息", notes = "find All repairShop", httpMethod = "GET", response = RepairShop.class, responseContainer = "List")
     public ResultMessage getAll() {
         log.debug("REST request to get all repairShop");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.getResultParm().put("repairShop", repairShopService.findAll());
         return result;
     }
@@ -59,7 +57,7 @@ public class RepairShopController extends BaseController {
             @NotNull(message = "lat不能为空")
             @ApiParam(required = true, name = "lat", value = "经度坐标")
             Double lat) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         List<RepairShop> shopList = repairShopService.getAroundShop(lat, lon);
         result.getResultParm().put("repairshop", shopList);
         if (shopList.size() == 0) throw new DomainSecurityException("周围10公里都没有加盟维修店");
@@ -79,7 +77,7 @@ public class RepairShopController extends BaseController {
             Long id) {
         log.debug("REST request to get all Shop");
         RepairShop shop = repairShopService.findOne(id);
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         if (shop != null) {
             result.getResultParm().put("shop", shop);
         } else {
@@ -96,7 +94,7 @@ public class RepairShopController extends BaseController {
     public ResponseEntity<ResultMessage> save(RepairShop repairShop) {
         log.debug("save shop");
         int id = repairShopService.insertBackId(repairShop);
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.getResultParm().put("repairShop", repairShopService.findOne(id));
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
@@ -114,7 +112,7 @@ public class RepairShopController extends BaseController {
             @ApiParam(required = true, name = "id", value = "维修店id")
             @NotNull(message = "id不能为空")
             Long id) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         if (id == null) {
             result.setResultInfo("id为空");
             result.setServiceResult(false);

@@ -25,8 +25,6 @@ public class VerifyCodeController extends BaseController{
 	@Autowired
 	private VerifyCodeService verifyCodeService;
 
-	private ResultMessage result = null;
-
 	/**
 	 * GET /verifyCode -> get the verifyCode
 	 */
@@ -36,7 +34,7 @@ public class VerifyCodeController extends BaseController{
 		log.info("进入controller层的getVerifyCode方法");
 		Boolean get = verifyCodeService.getVerifyCode(phoneNumber);
 
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 		result.setServiceResult(get);
 		result.setResultInfo("获取成功");
 		return result;
@@ -50,7 +48,7 @@ public class VerifyCodeController extends BaseController{
 	public ResultMessage comfigVerifyCode( @PathVariable String verifyCode , @PathVariable String phoneNumber){
 		Boolean get = verifyCodeService.comfigVerifyCode(verifyCode,phoneNumber);
 
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 		result.setServiceResult(get);
 //		result.set
 //		result.getResultParm().put("verifyCode",verifyCodeService.findAll());
@@ -67,7 +65,7 @@ public class VerifyCodeController extends BaseController{
 	public ResultMessage test(@Valid MyVo dodo11){
 //		Boolean get = verifyCodeService.test();
 
-		result = new ResultMessage();
+		ResultMessage result = new ResultMessage();
 //		result.setServiceResult(get);
 		return result;
 	}

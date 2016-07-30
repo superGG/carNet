@@ -72,8 +72,13 @@ public class LogAspect {
 				toShow = show.toJson();
 			}
 		}
-
+		
 		Signature name = join.getSignature();
+		
+		if(name.toString().indexOf("BaseController") != -1){
+			return result;
+		}
+		
 		// String name =
 		// MethodSignature.class.cast(join.getSignature()).getMethod().getName();
 		Object[] args = join.getArgs();

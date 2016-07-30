@@ -48,6 +48,11 @@ public class ValidationInterceptor implements HandlerInterceptor{
      
     private List<HandlerMethodArgumentResolver> argumentResolvers;
     
+    
+//    @NotEmpty 用在集合类上面
+//    @NotBlank 用在String上面
+//    @NotNull    用在基本类型上
+    
     @Resource(name="validator")
     private Validator validator;
     

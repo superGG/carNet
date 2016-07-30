@@ -35,8 +35,6 @@ public class CarController extends BaseController {
     @Autowired
     private CarService carService;
 
-    private ResultMessage result = null;
-
     /**
      * GET /car -> get all the car
      */
@@ -44,7 +42,7 @@ public class CarController extends BaseController {
     @ApiOperation(value = "得到所有车辆信息", notes = "find All car", httpMethod = "GET", response = Car.class, responseContainer = "List")
     public ResultMessage getAll() {
         log.debug("REST request to get all Car");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.setResultInfo("获取成功");
         result.getResultParm().put("car", carService.findAll());
         return result;
@@ -62,7 +60,7 @@ public class CarController extends BaseController {
             @PathVariable
             Long id) {
         log.debug("REST request to get one  Car");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.setResultInfo("获取成功");
         result.getResultParm().put("car", carService.findOne(id));
         return result;
@@ -81,7 +79,7 @@ public class CarController extends BaseController {
             Long userId) {
         log.debug("REST request to get all  Car");
         List<Car> carList = carService.getAllCarByUser(userId);
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         if (carList.size() != 0) {
             result.setResultInfo("获取成功");
             result.getResultParm().put("car", carList);
@@ -104,8 +102,8 @@ public class CarController extends BaseController {
             Long userId) {
         log.debug("get  user current car");
         List<Car> carList = carService.getCurrentCarByUser(userId);
-        result = new ResultMessage();
-        if (carList.size() != 0) {
+        ResultMessage result = new ResultMessage();
+        if (!carList.isEmpty()) {
             result.setResultInfo("获取成功");
             result.getResultParm().put("car", carList.get(0));
         } else {
@@ -129,7 +127,7 @@ public class CarController extends BaseController {
             String vin) {
         log.debug("REST request to get one  Car");
         Car car = carService.getTmpCarByVin(vin);
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         if (car != null) {
             result.setResultInfo("获取成功");
             result.getResultParm().put("car", car);
@@ -153,7 +151,7 @@ public class CarController extends BaseController {
             String vin) {
         log.debug("REST request to get one  Car");
         Car car = carService.getCarByVin(vin);
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.setResultInfo("获取成功");
         result.getResultParm().put("car", car);
         return result;
@@ -174,7 +172,7 @@ public class CarController extends BaseController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         log.info("进入controller层添加汽车saveOrder方法");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         //设置默认值
         int id = carService.saveCar(car);
         if (id != 0) {
@@ -222,7 +220,7 @@ public class CarController extends BaseController {
         if (tem_car.getVin() == null || tem_car.getVin().equals("")) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         carService.insertTem_Car(tem_car);
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
@@ -266,7 +264,7 @@ public class CarController extends BaseController {
             Car car) {
         if (car.getId() == null) throw new SecurityException("id不能为空");
         log.info("进入controller层更新汽车update方法");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         if (carService.update(car) != 0) {
             result.getResultParm().put("car", carService.findOne(car.getId()));
             result.setResultInfo("更新成功");
@@ -292,7 +290,7 @@ public class CarController extends BaseController {
             @ApiParam(required = true, name = "userId", value = "用户id")
             @NotNull(message = "用户id不能为空")
             Long userId) throws Exception {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         Car car = new Car();
         car.setId(id);
         car.setUserId(userId);
@@ -315,7 +313,7 @@ public class CarController extends BaseController {
     @ApiOperation(value = "根据车架号更新车辆信息（用于车载系统更新车辆信息）", notes = "update car message by vin", httpMethod = "POST", response = String.class)
     public ResponseEntity<?> updateCarByVin(Car car) throws Exception {
         if (car.getVin() == null) throw new SecurityException("vin不能为空");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         Boolean update = carService.updateCarByVin(car);
         if (update) {
             result.setResultInfo("更新成功");
@@ -339,7 +337,7 @@ public class CarController extends BaseController {
             @NotNull(message = "id不能为空")
             @ApiParam(required = true, name = "id", value = "车辆id")
             Long id) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         Boolean update = carService.updateCarState(id);
         if (update) {
             result.setResultInfo("更新成功");
@@ -362,7 +360,7 @@ public class CarController extends BaseController {
             @NotNull(message = "id不能为空")
             @ApiParam(required = true, name = "id", value = "车辆id")
             Long id) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         Boolean update = carService.updateCarAlarm(id);
         if (update) {
             result.setResultInfo("更新成功");
@@ -387,7 +385,7 @@ public class CarController extends BaseController {
             @ApiParam(required = true, name = "id", value = "车辆id")
             Long id) {
         log.info("进入controller层添加汽车delete方法");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         carService.deleteCar(id);
         result.setResultInfo("删除汽车成功");
         result.setServiceResult(true);

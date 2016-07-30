@@ -35,8 +35,6 @@ public class ParkController extends BaseController {
     @Autowired
     private ParkService parkService;
 
-    private ResultMessage result = null;
-
     /**
      * GET /park -> get all the park
      */
@@ -44,7 +42,7 @@ public class ParkController extends BaseController {
     @ApiOperation(value = "得到所有停车场信息", notes = "find All park", httpMethod = "GET", response = Park.class, responseContainer = "List")
     public ResultMessage getAll() {
         log.debug("REST request to get all park");
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.getResultParm().put("park", parkService.findAll());
         return result;
     }
@@ -59,7 +57,7 @@ public class ParkController extends BaseController {
             @NotNull(message = "lat不能为空")
             @ApiParam(required = true, name = "lat", value = "经度坐标")
             Double lat) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         List<Park> shopList = parkService.getAroundPark(lat, lon);
         result.getResultParm().put("park", shopList);
         if (shopList.isEmpty()) throw new DomainSecurityException("周围10公里都没有加盟停车场");
@@ -79,7 +77,7 @@ public class ParkController extends BaseController {
             Long id) {
         log.debug("REST request to get all Shop");
         Park shop = parkService.findOne(id);
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         if (shop != null) {
             result.getResultParm().put("shop", shop);
         } else {
@@ -96,7 +94,7 @@ public class ParkController extends BaseController {
     public ResponseEntity<ResultMessage> save(Park park) {
         log.debug("save shop");
         int id = parkService.insertBackId(park);
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         result.getResultParm().put("park", parkService.findOne(id));
         return new ResponseEntity<ResultMessage>(result, HttpStatus.OK);
     }
@@ -114,7 +112,7 @@ public class ParkController extends BaseController {
             @ApiParam(required = true, name = "id", value = "停车场id")
             @NotNull(message = "id不能为空")
             Long id) {
-        result = new ResultMessage();
+        ResultMessage result = new ResultMessage();
         if (id == null) {
             result.setResultInfo("id为空");
             result.setServiceResult(false);
