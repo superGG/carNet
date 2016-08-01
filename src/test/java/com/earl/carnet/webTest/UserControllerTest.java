@@ -1,34 +1,31 @@
 package com.earl.carnet.webTest;
 
-import com.earl.carnet.Application;
-import com.earl.carnet.commons.vo.ResultMessage;
-import com.earl.carnet.domain.carnet.car.Car;
-import com.earl.carnet.domain.sercurity.user.User;
-import com.earl.carnet.web.CarController;
-import com.earl.carnet.web.UserController;
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.SpringApplicationContextLoader;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
+import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.web.UserController;
 
 /**
  * Created by Administrator on 2016/6/14.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
-@WebAppConfiguration
-@SpringApplicationConfiguration(classes = Application.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class UserControllerTest {
 
     private final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
 
+    @LocalServerPort
+    public int port;//注入当前随机端口
+    
     ResultMessage result = null;
 
     @Resource

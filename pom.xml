@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.earl.carnet</groupId>
 	<artifactId>CarNet</artifactId>
@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.3.3.RELEASE</version>
+		<version>1.4.0.RELEASE</version>
 	</parent>
 	<properties>
 		<start-class>com.earl.carnet.Application</start-class>
@@ -19,34 +19,34 @@
 		<!-- springMvc -->
 		<spring-jdbc.version>4.2.5.RELEASE</spring-jdbc.version>
 		<spring-tx.version>4.2.5.RELEASE</spring-tx.version>
-		<spring-web.version>4.2.5.RELEASE</spring-web.version>
-		<spring-webmvc>4.2.5.RELEASE</spring-webmvc>
+		<spring-web.version>4.3.2.RELEASE</spring-web.version>
+		<spring-webmvc>4.3.2.RELEASE</spring-webmvc>
 		<spring-data-japa.version>1.8.0.RELEASE</spring-data-japa.version>
-		<spring-test.version>4.2.5.RELEASE</spring-test.version>
+		<spring-test.version>4.3.2.RELEASE</spring-test.version>
 		<aspectjweaver.version>1.8.5</aspectjweaver.version>
 		<webmvc.version>2.2.2.RELEASE</webmvc.version>
 		<version.jackson>2.4.4</version.jackson>
 		<cucumber.version>1.2.4</cucumber.version>
 	</properties>
 	<dependencies>
-	<!-- ping ++ -->
-			<dependency>
+		<!-- ping ++ -->
+		<dependency>
 			<groupId>Pingplusplus</groupId>
 			<artifactId>pingpp-java</artifactId>
 			<version>2.1.1</version>
 			<type>jar</type>
 		</dependency>
-	<!-- jpush 极光推送 -->
+		<!-- jpush 极光推送 -->
 		<dependency>
-		<groupId>cn.jpush.api</groupId>
-		<artifactId>jpush-client</artifactId>
-		<version>3.2.9</version>
-		<exclusions>
-			<exclusion>
-				<artifactId>slf4j-log4j12</artifactId>
-				<groupId>org.slf4j</groupId>
-			</exclusion>
-		</exclusions>
+			<groupId>cn.jpush.api</groupId>
+			<artifactId>jpush-client</artifactId>
+			<version>3.2.9</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- cucumber -->
 		<dependency>
@@ -58,7 +58,7 @@
 			<groupId>info.cukes</groupId>
 			<artifactId>cucumber-java</artifactId>
 			<scope>test</scope>
-				<version>1.2.4</version>
+			<version>1.2.4</version>
 		</dependency>
 		<dependency>
 			<groupId>net.coobird</groupId>
@@ -69,7 +69,7 @@
 			<groupId>info.cukes</groupId>
 			<artifactId>cucumber-junit</artifactId>
 			<scope>test</scope>
-				<version>1.2.4</version>
+			<version>1.2.4</version>
 		</dependency>
 		<!--Swagger -->
 		<dependency>
@@ -155,10 +155,14 @@
 			<artifactId>aspectjweaver</artifactId>
 		</dependency>
 		<!-- Spring boot -->
-		<dependency>  
-   		 <groupId>org.springframework.boot</groupId>
-   		 <artifactId>spring-boot-starter-cache</artifactId>
-		</dependency>  
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -238,33 +242,25 @@
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+		</dependency>
 
 	</dependencies>
 	<build>
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>org.mybatis.generator</groupId>
-					<artifactId>mybatis-generator-maven-plugin</artifactId>
-					<version>1.3.2</version>
-					<configuration>
-						<configurationFile>src/main/resources/mybatis-generator-config.xml</configurationFile>
-						<verbose>true</verbose>
-						<overwrite>true</overwrite>
-					</configuration>
-					<executions>
-						<execution>
-							<id>Generate MyBatis Artifacts</id>
-							<goals>
-								<goal>generate</goal>
-							</goals>
-						</execution>
-					</executions>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.5.1</version>
 					<configuration>
 						<source>1.8</source>
 						<target>1.8</target>

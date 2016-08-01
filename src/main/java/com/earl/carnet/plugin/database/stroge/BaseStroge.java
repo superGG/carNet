@@ -22,10 +22,13 @@ public abstract class BaseStroge implements IStroge{
 	}
 	
 	public void doStroge(){
+		strogeTableHeader(tableHeader());
+		strogeDropTable(dropTable());
 		strogeTable(); //存储表结构
 		int size = table.getColumns().size();
 		List<Column> columns = table.getColumns();
 		tableData = table.getTableData();
+		strogeDataHeader(dataHeader());
 		List<String> valueList = new ArrayList<String>();
 		try {
 			while(tableData.next()){
@@ -57,6 +60,25 @@ public abstract class BaseStroge implements IStroge{
 		
 	}
 
+	private void strogeDropTable(String dropTable) {
+		// TODO Auto-generated method stub
+		try {
+			this.writer.append(dropTable);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void strogeTableHeader(String tableHeader){
+		try {
+			this.writer.append(tableHeader);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void strogeTable() {
 		// TODO Auto-generated method stub
@@ -67,6 +89,16 @@ public abstract class BaseStroge implements IStroge{
 			e.printStackTrace();
 		}
 		
+	}
+
+	@Override
+	public void strogeDataHeader(String dataHeader){
+		try {
+			this.writer.append(dataHeader);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

@@ -1,36 +1,34 @@
 package com.earl.carnet.webTest;
 
-import com.earl.carnet.Application;
-import com.earl.carnet.commons.vo.ResultMessage;
-import com.earl.carnet.domain.carnet.order.Order;
-import com.earl.carnet.web.OrderController;
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.SpringApplicationContextLoader;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.web.context.support.ContextExposingHttpServletRequest;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.domain.carnet.order.Order;
+import com.earl.carnet.web.OrderController;
 
 /**
  * Created by Administrator on 2016/6/14.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
-@WebAppConfiguration
-@SpringApplicationConfiguration(classes = Application.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class OrderControllerTest {
 
     private final Logger logger = LoggerFactory.getLogger(OrderControllerTest.class);
 
     ResultMessage result = null;
 
+    @LocalServerPort
+    public int port;
+    
     @Resource
     private OrderController orderController;
 

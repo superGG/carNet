@@ -88,8 +88,14 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
                 logger.info("不存在QRCodeImg文件，自动创建");
                 filePath.mkdirs();
             }
-            out = new FileOutputStream(filePath + "//"
+            File file = new File(filePath + "//"
                     + orderId + ".png");
+            if(file.exists()){
+            	
+            }else{
+            	file.createNewFile();
+            }
+            out = new FileOutputStream(file);
             QRCodeUtil.encode(OrderUrl, contentPath + "\\img\\earl.jpg", out, true);
         } catch (Exception e) {
             e.printStackTrace();

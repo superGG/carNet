@@ -18,27 +18,34 @@ public class XmlStroge extends BaseStroge implements IStroge{
 	}
 
 	@Override
-	public void strogeTable() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public String tableTemplate() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String dataTemplate(List<String> map) {
+	public String dataTemplate(List<String> valueList) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void strogeData(String data) {
+	public String dataHeader() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
+
+	@Override
+	public String tableHeader() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String dropTable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

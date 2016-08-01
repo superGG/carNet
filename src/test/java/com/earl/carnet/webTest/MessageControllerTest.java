@@ -1,31 +1,30 @@
 package com.earl.carnet.webTest;
 
-import com.earl.carnet.Application;
-import com.earl.carnet.commons.vo.ResultMessage;
-import com.earl.carnet.domain.carnet.Message.Message;
-import com.earl.carnet.web.MessageController;
-import com.earl.carnet.web.VerifyCodeController;
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.SpringApplicationContextLoader;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
+import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.domain.carnet.Message.Message;
+import com.earl.carnet.web.MessageController;
 
 /**
  * Created by Administrator on 2016/6/14.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
-@WebAppConfiguration
-@SpringApplicationConfiguration(classes = Application.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT) //随机端口测试
 public class MessageControllerTest {
 
+	@LocalServerPort// 通过这个注解,得到当前使用的随机端口
+	public int port; 
+	
     private final Logger logger = LoggerFactory.getLogger(MessageControllerTest.class);
 
     ResultMessage result = null;

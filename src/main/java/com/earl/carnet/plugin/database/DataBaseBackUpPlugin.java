@@ -127,6 +127,8 @@ public class DataBaseBackUpPlugin implements IPlugin {
 		}
 		FileWriter writer = new FileWriter(file,true);
 		
+		writer.append("SET FOREIGN_KEY_CHECKS=0;\n");
+		
 		while (tSet.next()) {
 			logger.info(tSet.getRow() + "_表类别:" + tSet.getString("TABLE_CAT") + "_表模式:" + tSet.getString("TABLE_SCHEM")
 					+ "_表名称:" + tSet.getString("TABLE_NAME") + "_表类型:" + tSet.getString("TABLE_TYPE")
@@ -138,6 +140,7 @@ public class DataBaseBackUpPlugin implements IPlugin {
 			table.initTable();
 			
 			NavicatStroge navicatStroge = new NavicatStroge(writer, table);
+			
 			navicatStroge.doStroge();
 
 		}
@@ -145,7 +148,7 @@ public class DataBaseBackUpPlugin implements IPlugin {
 		writer.close();
 		tSet.close();
 		connection.close();
-		
+		Thread.sleep(50000);
 	}
 
 	private void initConnection() {
@@ -155,7 +158,6 @@ public class DataBaseBackUpPlugin implements IPlugin {
 			metaData = connection.getMetaData();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
 		}
 	}
 

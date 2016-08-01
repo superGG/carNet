@@ -136,7 +136,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, User>
         logger.info("进入doLogin方法");
         String password_Md5 =new SimpleHash("SHA-1", password,null,hashIterations).toString();
         logger.info("password_Md5:" + password_Md5);
-        SecurityUtils.getSubject().login(new UsernamePasswordToken(username, password_Md5));
+        SecurityUtils.getSubject().login(new UsernamePasswordToken(username, password));
         logger.info("退出doLogin方法");
     }
 

@@ -1,31 +1,24 @@
 package com.earl.carnet.webTest;
 
-import com.earl.carnet.Application;
-import com.earl.carnet.commons.vo.ResultMessage;
-import com.earl.carnet.domain.carnet.car.Car;
-import com.earl.carnet.web.CarController;
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.SpringApplicationContextLoader;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
-import java.util.Map;
+import com.earl.carnet.commons.vo.ResultMessage;
+import com.earl.carnet.domain.carnet.car.Car;
+import com.earl.carnet.web.CarController;
 
 /**
  * Created by Administrator on 2016/6/14.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
-@WebAppConfiguration
-@SpringApplicationConfiguration(classes = Application.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class CarControllerTest {
 
     private final Logger logger = LoggerFactory.getLogger(CarControllerTest.class);

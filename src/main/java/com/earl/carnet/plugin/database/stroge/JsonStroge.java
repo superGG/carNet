@@ -12,35 +12,41 @@ import com.earl.carnet.plugin.database.core.Table;
  */
 public class JsonStroge extends BaseStroge implements IStroge{
 
-	
-	
 	public JsonStroge(Writer writer, Table table) {
 		super(writer, table);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void strogeTable() { //不需要接触Set
-		// TODO Auto-generated method stub
-		table.toString();
-	}
-
-	@Override
-	public String tableTemplate(){
-		
-		return null;
-	}
-
-	@Override
-	public String dataTemplate(List<String> map) {
+	public String tableTemplate() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void strogeData(String data) {
+	public String dataTemplate(List<String> valueList) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
+
+	@Override
+	public String dataHeader() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String tableHeader() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String dropTable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 	
 }
