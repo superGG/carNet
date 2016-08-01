@@ -29,6 +29,11 @@ import com.earl.carnet.domain.sercurity.user.User;
 import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.OrderService;
 import com.earl.carnet.service.UserService;
+import com.pingplusplus.exception.APIConnectionException;
+import com.pingplusplus.exception.APIException;
+import com.pingplusplus.exception.AuthenticationException;
+import com.pingplusplus.exception.ChannelException;
+import com.pingplusplus.exception.InvalidRequestException;
 import com.pingplusplus.model.Charge;
 import com.pingplusplus.model.Event;
 import com.pingplusplus.model.Webhooks;
@@ -248,10 +253,15 @@ public class OrderController extends BaseController {
 	/**
 	 * 支付订单费用.
 	 * @author 黄祥谦.
+	 * @throws ChannelException 
+	 * @throws APIException 
+	 * @throws APIConnectionException 
+	 * @throws InvalidRequestException 
+	 * @throws AuthenticationException 
 	 */
     @Valid
     @RequestMapping(value = "/payOrder", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResultMessage> payForOrdersWithAlipay(  @NotNull(message = "订单id") Long orderId,  @NotNull(message = "支付渠道不能为空") String channel){
+	public ResponseEntity<ResultMessage> payForOrdersWithAlipay(  @NotNull(message = "订单id") Long orderId,  @NotNull(message = "支付渠道不能为空") String channel) throws AuthenticationException, InvalidRequestException, APIConnectionException, APIException, ChannelException{
 		Charge charge = orderService.payForOrders(orderId, channel);
 		ResultMessage result = new ResultMessage();
 		result.getResultParm().put("charge", charge);

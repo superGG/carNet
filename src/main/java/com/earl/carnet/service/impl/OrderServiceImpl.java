@@ -27,6 +27,11 @@ import com.earl.carnet.exception.DomainSecurityException;
 import com.earl.carnet.service.OrderService;
 import com.earl.carnet.service.UserService;
 import com.earl.carnet.util.PayChargeUtil;
+import com.pingplusplus.exception.APIConnectionException;
+import com.pingplusplus.exception.APIException;
+import com.pingplusplus.exception.AuthenticationException;
+import com.pingplusplus.exception.ChannelException;
+import com.pingplusplus.exception.InvalidRequestException;
 import com.pingplusplus.model.Charge;
 
 @Service("OrderService")
@@ -82,14 +87,16 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
         System.out.println(contentPath);
         FileOutputStream out = null;
         try {
-        	logger.debug(qrcodefilePath);
+//        	logger.debug(qrcodefilePath);
+        	logger.info(qrcodefilePath);
             File filePath = new File(qrcodefilePath);
             if (!filePath.exists()) {
-                logger.info("不存在QRCodeImg文件，自动创建");
+                logger.info("不存在QRCodeImg文件，自动创建文件路径" + qrcodefilePath);
                 filePath.mkdirs();
             }
-            File file = new File(filePath + "//"
+            File file = new File(filePath + "/"
                     + orderId + ".png");
+            logger.info(file.getAbsolutePath());
             if(file.exists()){
             	
             }else{
@@ -155,12 +162,12 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
     }
     
 	@Override
-	public Charge payForOrders(Long ordersId, String channel) {
+	public Charge payForOrders(Long ordersId, String channel) throws AuthenticationException, InvalidRequestException, APIConnectionException, APIException, ChannelException {
 		Order orderPo = orderDao.findOneById(ordersId);
 		Double price = orderPo.getAmounts() * 100;
 		Charge charge = PayChargeUtil.charge(orderPo.getId(),
 				price.longValue(), channel, orderPo.getStationName(),
-				orderPo.getUserName());
+				orderPo.getUserName());//TODO 这里的username 为null,导致添加订单失败
 		return charge;
 	}
 

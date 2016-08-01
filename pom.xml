@@ -10,6 +10,17 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.4.0.RELEASE</version>
 	</parent>
+	
+	<repositories>
+	 <repository>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <id>central</id>
+        <name>bintray</name>
+        <url>http://jcenter.bintray.com</url>
+    </repository>
+	</repositories>
 	<properties>
 		<start-class>com.earl.carnet.Application</start-class>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -249,6 +260,7 @@
 		</dependency>
 
 	</dependencies>
+	
 	<build>
 		<pluginManagement>
 			<plugins>
