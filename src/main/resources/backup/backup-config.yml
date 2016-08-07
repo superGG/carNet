@@ -2,15 +2,28 @@
 myConfig:
   server: 8084
 
-driverClassName: com.mysql.jdbc.Driver
-#增量备份需要的上一个数据库文件
-appendFilePath: D:/aa.txt 
 url: jdbc:mysql://localhost:3306/vc_camp?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=round&transformedBitIsBoolean=true
 username: root
 password : root
+  
+driverClassName: com.mysql.jdbc.Driver
+#增量备份需要的上一个数据库文件
+appendFilePath: D:/aa.txt 
+
  # address: localhost
 #  context-path: /carnet
 #  error:
 #    path: /erro
 # DATASOURCE
 
+backUpStrategy: tableOnly # onlyTable,AllData,onlyPointTable,selectTable
+
+remoteUrl: http://www.earltech.cn:8080/index #远程备份路径
+
+backUpInterval: 1024 #备份定时
+
+targetDataBase: oracle #目标类型的备份
+
+booleanProcedure : true
+
+booleanFunction: false

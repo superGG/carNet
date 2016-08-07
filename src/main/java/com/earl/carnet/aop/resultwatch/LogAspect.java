@@ -61,7 +61,7 @@ public class LogAspect {
 		String toShow = null;
 
 		if(ResponseEntity.class.isInstance(result)){
-			Object resultParams = ((ResponseEntity) result).getBody();
+			Object resultParams = ((ResponseEntity<?>) result).getBody();
 			if (resultParams instanceof JsonEntry){
 				JsonEntry show = (JsonEntry)resultParams;
 				toShow = show.toJson();
@@ -84,8 +84,12 @@ public class LogAspect {
 		Object[] args = join.getArgs();
 		long time = System.currentTimeMillis() - start;
 		StringBuilder builder = new StringBuilder();
-		builder.append("MethodSignature:").append(name).append("\n").append("Args:")
-				.append(args[0]).append("\n").append("毫秒:").append(time).append("秒:")
+		builder.append("MethodSignature:").append(name).append("\n");
+		builder.append("Args:");
+		for(Object arg: args){
+			builder.append(arg.toString());
+		}
+		builder.append("\n").append("毫秒:").append(time).append("秒:")
 				.append(time / 1000).append("\n").append("result:").append(toShow);
 		logger.info(builder.toString());
 		return result;

@@ -21,9 +21,36 @@ public class DefaultConfig implements IConfig{
 	
 	public String appendFilePath;
 	
+	public String backUpStrategy;
+	
+	public String remoteUrl;
+	
+	public int backUpInterval;
 	
 	public DefaultConfig myConfig;
 	
+	public String targetDataBase;
+	
+	public Boolean booleanFunction;
+	
+	public Boolean booleanProcedure;
+	
+	public Boolean getBooleanProcedure() {
+		return booleanProcedure;
+	}
+
+	public void setBooleanProcedure(Boolean booleanProcedure) {
+		this.booleanProcedure = booleanProcedure;
+	}
+
+	public Boolean getBooleanFunction() {
+		return booleanFunction;
+	}
+
+	public void setBooleanFunction(Boolean booleanFunction) {
+		this.booleanFunction = booleanFunction;
+	}
+
 	public String getAppendFilePath() {
 		return appendFilePath;
 	}
@@ -103,7 +130,46 @@ public class DefaultConfig implements IConfig{
 	public void setServer(String server) {
 		this.server = server;
 	}
-	
-	
+
+	public String getBackUpStrategy() {
+		return backUpStrategy;
+	}
+
+	public void setBackUpStrategy(String backUpStrategy) {
+		this.backUpStrategy = backUpStrategy;
+	}
+
+	public String getRemoteUrl() {
+		return remoteUrl;
+	}
+
+	public void setRemoteUrl(String remoteUrl) {
+		this.remoteUrl = remoteUrl;
+	}
+
+	public int getBackUpInterval() {
+		return backUpInterval;
+	}
+
+	public void setBackUpInterval(int backUpInterval) {
+		this.backUpInterval = backUpInterval;
+	}
+
+	public String getTargetDataBase() {
+		return targetDataBase;
+	}
+
+	public void setTargetDataBase(String targetDataBase) {
+		this.targetDataBase = targetDataBase;
+	}
+
+	@Override
+	public String toString() {
+		return "DefaultConfig [additionBackUp=" + additionBackUp + ", genFilePath=" + genFilePath + ", rootFilePath="
+				+ rootFilePath + ", server=" + server + ", username=" + username + ", password=" + password
+				+ ", driverClassName=" + driverClassName + ", url=" + url + ", appendFilePath=" + appendFilePath
+				+ ", backUpStrategy=" + backUpStrategy + ", remoteUrl=" + remoteUrl + ", backUpInterval="
+				+ backUpInterval + ", myConfig=" + myConfig + ", targetDataBase=" + targetDataBase + "]";
+	}
 	
 }

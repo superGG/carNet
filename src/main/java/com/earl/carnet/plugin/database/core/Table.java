@@ -5,15 +5,21 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
 
+import com.earl.carnet.plugin.database.config.DefaultConfig;
+
 public class Table implements IBeSql{
+
+	private static final String ALL = "all";
+
+	private static final String DATA_ONLY = "dataOnly";
+
+	private static final String TABLE_ONLY = "tableOnly";
 
 	private static Logger logger = getLogger(Table.class);
 	
@@ -29,7 +35,6 @@ public class Table implements IBeSql{
 
 	private List<ForeinKey> forginKey = new ArrayList<ForeinKey>();
 	
-	
 	private Connection connection;
 
 	private String tableSql;
@@ -37,6 +42,8 @@ public class Table implements IBeSql{
 	private DatabaseMetaData metaData;
 	
 	private ResultSet tableData; //表数据
+
+	private String schem;
 	
 	
 	public String getTableSql() {
@@ -102,39 +109,42 @@ public class Table implements IBeSql{
 		}
 	}
 	
-	public void initColumn(ResultSet rsSet) throws SQLException{
+	public void initColumn() throws SQLException{
 		  ResultSet rs = metaData.getColumns(null, null, this.name, "%");
-	ResultSetMetaData rsData = rsSet.getMetaData();
-		
-		rsData.getColumnCount();
-	
-		for (int i = 1; i <= rsData.getColumnCount(); i++) {
-			rs.next();
-			Column column = new Column();
-			column.setCatalogName(rsData.getCatalogName(i));
-			column.setScale(rsData.getScale(i));
-			column.setSchemaName(rsData.getSchemaName(i));
-			column.setDisplaySize(rsData.getColumnDisplaySize(i));
-			column.setCaseSensitive( rsData.isCaseSensitive(i));
-			column.setColumnClassName(rsData.getColumnClassName(i));
-			column.setColumnLabel(rsData.getColumnLabel(i));
-			column.setColumnName(rsData.getColumnName(i));//sql 列名
-			column.setColumnTypeName(rsData.getColumnTypeName(i));
-			column.setColumnType(rsData.getColumnType(i));
-			column.setPrecision(rsData.getPrecision(i));
-			column.setReadOnly(rsData.isReadOnly(i));
-			column.setAutoIncrement(rsData.isAutoIncrement(i));//字段是否自增
-			column.setNullable(rsData.isNullable(i));//改字段是否为空
-			column.setRemarks(rs.getString("REMARKS"));//列描述  
+		  while(rs.next()){
+			  Column column = new Column();
+			column.setCatalogName(rs.getString("TABLE_CAT"));
+			column.setTableName(rs.getString("TABLE_NAME"));
+			column.setSchemaName(rs.getString("TABLE_SCHEM"));
+			column.setColumnClassName(rs.getString("TABLE_CAT"));
+			column.setColumnLabel(rs.getString("TABLE_CAT"));
+			column.setColumnName(rs.getString("COLUMN_NAME"));//sql 列名
+			column.setColumnTypeName(rs.getString("TABLE_CAT"));
+//			column.setPrecision(Integer.valueOf(rs.getString("COLUMN_SIZE")));
+			column.setAutoIncrement(Boolean.valueOf(rs.getString("IS_AUTOINCREMENT")));//字段是否自增
+			column.setNullable(Integer.valueOf(rs.getString("NULLABLE")));//改字段是否为空
+			column.setRemarks(rs.getString("REMARKS").replace("\r\n", "\\r\\n"));//列描述  
 			column.setDefValue(rs.getString("COLUMN_DEF"));//默认值  
 			column.checkAndModify(); //数据库类型出现偏差，自动修正
 			columns.add(column);//将这个列添加入表结构中
-			
-			logger.info(column.toString());
-		}
-		
-		logger.info(gendTableSql());
+			  logger.info(column.toString());
+		  }
+//		logger.info(gendTableSql());
 
+	}
+	
+	@Override
+	public String gendTableSql() throws SQLException{
+		String sql = "SHOW CREATE TABLE `"+ name+'`';
+		ResultSet executeQuery = connection.createStatement().executeQuery(sql);
+		String tableSql = null;
+		while(executeQuery.next()){
+			String tableName = executeQuery.getString("Table");
+			tableSql = executeQuery.getString("Create Table");
+			System.out.println(tableSql);
+		}
+		this.tableSql= tableSql+";\n";
+		return tableSql;
 	}
 	
 	public String getCatalog() {
@@ -185,35 +195,42 @@ public class Table implements IBeSql{
 		this.primaryKeys = primaryKeys;
 	}
 
-	@Override
-	public String gendTableSql() throws SQLException{
-		String sql = "show create table "+ name;
-		ResultSet executeQuery = connection.createStatement().executeQuery(sql);
-		String tableSql = null;
-		while(executeQuery.next()){
-			String tableName = executeQuery.getString("Table");
-			tableSql = executeQuery.getString("Create Table");
-			System.out.println(tableSql);
-		}
-		this.tableSql= tableSql+";\n";
-		return tableSql;
-	}
-
 	public ResultSet prepareData() throws SQLException {
-		// TODO Auto-generated method stub
 		//TableData and Struts 表数据与表结构
 		String sql = "select * from `" + this.name+"`";
 		return connection.createStatement().executeQuery(sql);
 	}
 	
-	public void initTable() throws SQLException{
-		initPrimaryKey();
-		initForeinKey();
+	public void initTable(DefaultConfig config) throws SQLException {
+		//指定表生成策略
+		if(TABLE_ONLY.equals(config.getBackUpStrategy())){
+			gendTableSql();
+			initPrimaryKey();
+			initForeinKey();
+		}else if(DATA_ONLY.equals(config.getBackUpStrategy())){
+			//TODO 初始化数据时候,指定初始化策略
+			initData();
+		}else if(ALL.equals(config.getBackUpStrategy())){
+			gendTableSql();
+			initPrimaryKey();
+			initForeinKey();
+			//TODO 初始化数据时候,指定初始化策略
+			initData();
+		}
+	}
+
+	public void initData() throws SQLException{
 		this.tableData = prepareData();
-		
-		initColumn(tableData);
 	}
 	
+	public void setSchem(String schem) {
+		// TODO Auto-generated method stub
+		this.schem = schem;
+	}
+
+	public String getSchem() {
+		return schem;
+	}
 	
 	
 }

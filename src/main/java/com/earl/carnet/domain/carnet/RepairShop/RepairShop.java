@@ -15,7 +15,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Table(name ="repairshop")
 public class RepairShop extends AbstractAuditingEntity<Long> implements Serializable {
 
-    private String name;//店名
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String name;//店名
 
     private String img;//店图
 

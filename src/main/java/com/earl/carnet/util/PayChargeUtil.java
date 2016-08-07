@@ -16,7 +16,6 @@ import com.pingplusplus.exception.APIException;
 import com.pingplusplus.exception.AuthenticationException;
 import com.pingplusplus.exception.ChannelException;
 import com.pingplusplus.exception.InvalidRequestException;
-import com.pingplusplus.exception.PingppException;
 import com.pingplusplus.model.Charge;
 
 
@@ -36,7 +35,7 @@ public class PayChargeUtil {
 	/**
 	 * pingpp 管理平台对应的应用 ID
 	 */
-	public static final String appId = "app_e9a5m9rnPWz50arv";
+	public static final String appId = "app_fT8aTCzvnr1OLyT0";
 	
 	static{
 		Pingpp.apiKey = "sk_test_CWj5mHjTy5qH5qL800PunP8K";
@@ -71,7 +70,7 @@ public class PayChargeUtil {
 	 * @throws AuthenticationException 
 	     */
 	    public static Charge charge(Long ordersId, Long totalPrice, String payWay, String goodsName, String describe) throws AuthenticationException, InvalidRequestException, APIConnectionException, APIException, ChannelException {
-	    	
+	    	logger.info("ordersId:"+ordersId+"/"+"totalPrice:"+totalPrice+"/payWay:"+payWay+"/goodsName:"+goodsName+"/describe:"+describe);
 	        Charge charge = null;
 	        Map<String, Object> chargeParams = new HashMap<String, Object>();
 	        chargeParams.put("amount", totalPrice);//required 订单总金额, 单位为对应币种的最小货币单位，例如：人民币为分（如订单总金额为 1 元，此处请填 100）。

@@ -7,29 +7,31 @@ import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 
 import com.earl.carnet.plugin.IPlugin;
-import com.earl.carnet.plugin.database.columntype.ColumnRuleFactory;
 import com.earl.carnet.plugin.database.config.DefaultConfig;
 import com.earl.carnet.plugin.database.config.YmlConfigReader;
 import com.earl.carnet.plugin.database.connection.DbConnectionFactory;
+import com.earl.carnet.plugin.database.core.Function;
 import com.earl.carnet.plugin.database.core.Table;
 import com.earl.carnet.plugin.database.stroge.NavicatStroge;
 
 public class DataBaseBackUpPlugin implements IPlugin {
 
 	private static Logger logger = getLogger(DataBaseBackUpPlugin.class);
-	
+
 	public static Connection connection;
 
-	public static DatabaseMetaData metaData ;
-	
-	public void baseDBInfo() throws SQLException{
-		
+	public static DatabaseMetaData metaData;
+
+	public void baseDBInfo() throws SQLException {
 		logger.info("数据库产品名: " + metaData.getDatabaseProductName());
 		logger.info("数据库是否支持事务: " + metaData.supportsTransactions());
 		logger.info("数据库产品的版本号:" + metaData.getDatabaseProductVersion());
@@ -73,27 +75,6 @@ public class DataBaseBackUpPlugin implements IPlugin {
 		logger.info("---------------------------------");
 		logger.info("---------------------------------");
 		logger.info("---------------------------------");
-
-	}
-	
-	// +"\n_表的解释性注释:"+tSet.getString("REMARKS")+"_类型的类别:"+tSet.getString("TYPE_CAT")
-	// +"\n_类型模式:"+tSet.getString("TYPE_SCHEM")+"_类型名称:"+tSet.getString("TYPE_NAME")
-	// +"\n_有类型表的指定'identifier'列的名称:"+tSet.getString("SELF_REFERENCING_COL_NAME")
-	// +"\n_指定在 SELF_REFERENCING_COL_NAME
-	// 中创建值的方式:"+tSet.getString("REF_GENERATION")
-
-	
-	//启动数据库备份插件
-	@Override
-	public void start() throws Exception{
-		// TODO Auto-generated method stub
-	
-		initConnection();
-		
-		baseDBInfo();
-		
-		Class.forName(ColumnRuleFactory.class.getName());
-		
 		logger.info("###### 获取当前数据库所支持的SQL数据类型");
 		ResultSet tableType = metaData.getTypeInfo();
 		while (tableType.next()) {
@@ -111,48 +92,144 @@ public class DataBaseBackUpPlugin implements IPlugin {
 			 * H2 类型名:SYSTEM TABLE 类型名:TABLE 类型名:TABLE LINK 类型名:VIEW
 			 */
 		}
-		
-		logger.info("---------------------------------");
-		logger.info("---------------------------------");
-		logger.info("---------------------------------");
-		logger.info("---------------------------------");
-		
-		logger.info("###### 获取表的信息");
-		ResultSet tSet = metaData.getTables(null, "%", "%", new String[] { "TABLE", "VIEW" }); //TODO 多线程构造表数据
-		
-		//TODO 增量备份策略扩展
-		File file = new File("D:/aa"+new Date().getTime()+".sql");
-		if(!file.exists()){
-			boolean createNewFile = file.createNewFile();
-		}
-		FileWriter writer = new FileWriter(file,true);
-		
-		writer.append("SET FOREIGN_KEY_CHECKS=0;\n");
-		
-		while (tSet.next()) {
-			logger.info(tSet.getRow() + "_表类别:" + tSet.getString("TABLE_CAT") + "_表模式:" + tSet.getString("TABLE_SCHEM")
-					+ "_表名称:" + tSet.getString("TABLE_NAME") + "_表类型:" + tSet.getString("TABLE_TYPE")
-			);
-			// 2_表类别:MANOR_表模式:PUBLIC_表名称:SYS_RESOURCE_表类型:TABLE
-			
-			Table table = new Table(tSet, connection,metaData); //构建表对象
-			//下面构建表结构
-			table.initTable();
-			
-			NavicatStroge navicatStroge = new NavicatStroge(writer, table);
-			
-			navicatStroge.doStroge();
 
-		}
-		writer.flush();
-		writer.close();
-		tSet.close();
-		connection.close();
-		Thread.sleep(50000);
+		logger.info("---------------------------------");
+		logger.info("---------------------------------");
+		logger.info("---------------------------------");
+		logger.info("---------------------------------");
+
 	}
 
-	private void initConnection() {
+	// +"\n_表的解释性注释:"+tSet.getString("REMARKS")+"_类型的类别:"+tSet.getString("TYPE_CAT")
+	// +"\n_类型模式:"+tSet.getString("TYPE_SCHEM")+"_类型名称:"+tSet.getString("TYPE_NAME")
+	// +"\n_有类型表的指定'identifier'列的名称:"+tSet.getString("SELF_REFERENCING_COL_NAME")
+	// +"\n_指定在 SELF_REFERENCING_COL_NAME
+	// 中创建值的方式:"+tSet.getString("REF_GENERATION")
+
+	// 启动数据库备份插件
+	@Override
+	public void start() throws Exception {
+
 		DefaultConfig config = new YmlConfigReader().readResource("backup/backup-config.yml");
+
+		initConnection(config);
+
+		baseDBInfo();
+		// TODO 增量备份策略扩展
+		File file = new File("D:/aa" + new Date().getTime() + ".sql");
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+
+		FileWriter writer = new FileWriter(file, true);
+
+		writer.append("SET FOREIGN_KEY_CHECKS=0;\n"); // 如果是增量备份，不涉及到表备份，则不需要这个东西
+
+		NavicatStroge navicatStroge = new NavicatStroge();
+		navicatStroge.setWriter(writer);
+
+		logger.info("###### 获取表的信息");
+		// SHOW FULL TABLES FROM `vc_camp` LIKE '%'
+		// 构造表结构
+		List<Table> arrayList = constructTables(metaData);
+
+		for (Table table2 : arrayList) {
+
+			table2.initTable(config);
+
+			navicatStroge.setTable(table2);
+
+			navicatStroge.doStroge(config);
+			
+		}
+		
+		if(config.getBooleanFunction()){
+			
+			List<Function> constructFunction = constructFunction(metaData);
+			
+			for (Function table2 : constructFunction) {
+
+				table2.genSql();
+				navicatStroge.setFunction(table2);
+				navicatStroge.strogeFunction();
+				
+			}
+		}
+		
+		navicatStroge.finishStroge();
+
+		connection.close();
+		Thread.sleep(100000);
+	}
+
+	private List<Table> constructTables(DatabaseMetaData metaData2) throws SQLException {
+		ResultSet singalTable = null;
+		List<Table> arrayList = new ArrayList<>();
+		try {
+			singalTable = metaData.getTables(null, "%", "%", new String[] { "TABLE", "VIEW" }); // TODO
+			while (singalTable.next()) {
+				// 下面构建表结构
+				Table table = new Table(singalTable, connection, metaData); // 构建表对象
+				table.setSchem(singalTable.getString("TABLE_SCHEM"));
+				table.setName(singalTable.getString("TABLE_NAME"));
+				table.setType(singalTable.getString("TABLE_TYPE"));
+				table.setCatalog(singalTable.getString("TABLE_CAT"));
+				table.initColumn(); // 初始化列信息
+				arrayList.add(table);
+				//TODO 多线程构造表数据
+				logger.info(singalTable.getRow() + "_表类别:" + singalTable.getString("TABLE_CAT") + "_表模式:"
+						+ singalTable.getString("TABLE_SCHEM") + "_表名称:" + singalTable.getString("TABLE_NAME") + "_表类型:"
+						+ singalTable.getString("TABLE_TYPE"));
+				// 2_表类别:MANOR_表模式:PUBLIC_表名称:SYS_RESOURCE_表类型:TABLE
+			}
+		} finally {
+			if (singalTable != null) {
+				singalTable.close();
+			}
+		}
+		return arrayList;
+	}
+
+	private List<Function> constructFunction(DatabaseMetaData metaData2) {
+		ResultSet singalTable = null;
+		List<Function> arrayList = new ArrayList<>();
+		try {
+		singalTable = metaData2.getFunctions(null, "%", "%");
+			ResultSetMetaData metaData3 = singalTable.getMetaData();
+			int columnCount = metaData3.getColumnCount();
+			for (int i = 1; i <= columnCount; i++) {
+				System.out.println(metaData3.getColumnName(i));
+			}
+			while (singalTable.next()) {
+				// 下面构建表结构
+				Function function = new Function(connection,metaData);
+//				function.setName(singalTable.get;
+				
+				function.setName(singalTable.getString("FUNCTION_NAME"));
+				function.setRemarks(singalTable.getString("REMARKS"));
+				function.setFunctionType(singalTable.getString("FUNCTION_TYPE"));
+				function.genSql();
+				arrayList.add(function);
+				// 多线程构造表数据
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (singalTable != null) {
+				try {
+					singalTable.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return arrayList;
+	}
+
+	private void initConnection(DefaultConfig config) {
+
 		connection = new DbConnectionFactory(config).getConnection();
 		try {
 			metaData = connection.getMetaData();
@@ -161,21 +238,21 @@ public class DataBaseBackUpPlugin implements IPlugin {
 		}
 	}
 
-	//执行插件业务
+	// 执行插件业务
 	@Override
 	public void service() {
 		// TODO Auto-generated method stub
 
 	}
 
-	//插件进入暂停状态
+	// 插件进入暂停状态
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
 
 	}
 
-	//停止插件
+	// 停止插件
 	@Override
 	public void stop() {
 		// TODO Auto-generated method stub

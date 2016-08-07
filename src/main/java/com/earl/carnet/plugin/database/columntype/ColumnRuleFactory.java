@@ -11,6 +11,7 @@ public class ColumnRuleFactory {
 		columnRule.put("datetime", new DateTimeRule());
 		columnRule.put("decimal", new DecimalRule());
 		columnRule.put("text", new TextRule());
+		columnRule.put("bit", new BitRule());
 	}
 	
 	

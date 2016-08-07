@@ -11,7 +11,12 @@ package com.earl.carnet.exception;
  *
  */
 public class DomainSecurityException extends RuntimeException{
-    public DomainSecurityException(String message){
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public DomainSecurityException(String message){
         super(message);
     }
 }

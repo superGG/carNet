@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Resource;
 
@@ -167,10 +168,10 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
 		Double price = orderPo.getAmounts() * 100;
 		Charge charge = PayChargeUtil.charge(orderPo.getId(),
 				price.longValue(), channel, orderPo.getStationName(),
-				orderPo.getUserName());//TODO 这里的username 为null,导致添加订单失败
+				""+new Random(System.currentTimeMillis()).nextInt(2048));
+//				orderPo.getUserName());//TODO 这里的username 为null,导致添加订单失败
 		return charge;
 	}
-
 
     /**
      * 检查更新所有订单状态

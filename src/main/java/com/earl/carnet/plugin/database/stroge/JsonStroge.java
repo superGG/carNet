@@ -47,6 +47,12 @@ public class JsonStroge extends BaseStroge implements IStroge{
 		return null;
 	}
 
+	@Override
+	public void strogeFunction() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 }

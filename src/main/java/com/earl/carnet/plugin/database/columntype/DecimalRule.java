@@ -2,7 +2,7 @@ package com.earl.carnet.plugin.database.columntype;
 
 import com.earl.carnet.plugin.database.core.Column;
 
-public class DecimalRule implements IColumnTypeRule {
+public class DecimalRule extends BaseRule implements IColumnTypeRule {
 
 	@Override
 	public String showColumnType(Column column) {
@@ -11,5 +11,4 @@ public class DecimalRule implements IColumnTypeRule {
 		stringBuilder.append('(').append(column.getPrecision()).append(',').append('0').append(')');
 		return stringBuilder.toString();
 	}
-
 }

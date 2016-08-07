@@ -22,6 +22,7 @@ public class DataBaseMetaData { //单例，得到元数据
 			
 			DataBaseBackUpPlugin dataBasePlugin= new DataBaseBackUpPlugin();
 			dataBasePlugin.start();
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

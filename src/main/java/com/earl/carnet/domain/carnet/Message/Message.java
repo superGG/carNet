@@ -16,7 +16,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Table(name ="message")
 public class Message extends AbstractAuditingEntity<Long> implements Serializable {
 
-    private Long userId;//用户id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Long userId;//用户id
 
     private String content;//消息内容
 

@@ -1,9 +1,7 @@
 package com.earl.carnet.plugin.database.stroge;
 
+import java.io.IOException;
 import java.util.List;
-
-import com.earl.carnet.plugin.database.core.Column;
-import com.earl.carnet.plugin.database.core.Table;
 
 /**
  * @author Administrator
@@ -21,6 +19,8 @@ public interface IStroge {
 	
 	void strogeData(String data);
 
+	void strogeFunction() throws IOException;
+
 	void strogeDataHeader(String dataHeader);
 
 	String tableTemplate();
@@ -32,6 +32,7 @@ public interface IStroge {
 	String tableHeader();
 
 	String dropTable();
+
 
 
 	

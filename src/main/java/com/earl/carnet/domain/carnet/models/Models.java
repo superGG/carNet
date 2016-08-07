@@ -16,7 +16,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Table(name = "models")
 public class Models extends AbstractAuditingEntity<Long> implements Serializable {
 
-    private Long brandId; //品牌id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Long brandId; //品牌id
 
     private String modelsName;//型号名称
 

@@ -18,7 +18,21 @@ public class Column {
 	private String catalogName;
 	private String remarks;
 	private String defValue;
+	private String catalog;
+	private String tableName;
 	
+	public String getCatalog() {
+		return catalog;
+	}
+	public void setCatalog(String catalog) {
+		this.catalog = catalog;
+	}
+	public String getTableName() {
+		return tableName;
+	}
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
 	public void checkAndModify() {
 		// TODO Auto-generated method stub
 		if(this.columnTypeName.toLowerCase().indexOf("varchar")!= -1){

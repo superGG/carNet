@@ -7,7 +7,12 @@ package com.earl.carnet.exception;
  */
 public class ApplicationException extends RuntimeException{
 
-    public ApplicationException(String message){
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public ApplicationException(String message){
         super(message);
     }
 

@@ -9,8 +9,6 @@ import com.earl.carnet.commons.domain.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wordnik.swagger.annotations.ApiModel;
 
-import javax.validation.constraints.NotNull;
-
 @ApiModel(value="SubModel")
 @JsonInclude(JsonInclude.Include.NON_NULL) //jackson 控制，放回字段为null,将被过滤
 @Table(name = "user")

@@ -11,8 +11,6 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -493,17 +491,13 @@ public class CarServiceImpl extends BaseServiceImpl<Car, Car> implements CarServ
         Boolean result = false;
         Car car = getDao().findOneById(id);
         TcpMessage tcpMessage = new TcpMessage();
-        if (car.getCarState()) {
+        Boolean carState = car.getCarState();
             tcpMessage.setMessagetype(1);// 1为改变状态，2为改变警报
-            tcpMessage.setMessage("false");
+            tcpMessage.setMessage(String.valueOf((!carState)));
+            car.setCarState(!carState);
+            getDao().updateByPrimaryKeySelective(car);
             jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.getMessage(), tcpMessage.toJson());
             result = true;
-        } else {
-            tcpMessage.setMessagetype(1);// 1为改变状态，2为改变警报
-            tcpMessage.setMessage("true");
-            jpushForCar.sendPush_Alias(car.getVin(), tcpMessage.getMessage(), tcpMessage.toJson());
-            result = true;
-        }
         return result;
     }
 

@@ -1,13 +1,9 @@
 package com.earl.carnet.plugin.database.stroge;
 
 import java.io.Writer;
-import java.util.Iterator;
 import java.util.List;
 
-import com.earl.carnet.plugin.database.columntype.ColumnRuleFactory;
-import com.earl.carnet.plugin.database.columntype.IColumnTypeRule;
-import com.earl.carnet.plugin.database.core.Column;
-import com.earl.carnet.plugin.database.core.PrimaryKey;
+import com.earl.carnet.plugin.database.core.Function;
 import com.earl.carnet.plugin.database.core.Table;
 
 /**
@@ -18,8 +14,14 @@ import com.earl.carnet.plugin.database.core.Table;
  */
 public class NavicatStroge extends BaseStroge implements IStroge {
 
+	private Function function;
+
 	public NavicatStroge(Writer writer, Table table) {
 		super(writer, table);
+		// TODO Auto-generated constructor stub
+	}
+
+	public NavicatStroge() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -82,5 +84,4 @@ public class NavicatStroge extends BaseStroge implements IStroge {
 		// TODO Auto-generated method stub
 		return table.getTableSql();
 	}
-
 }

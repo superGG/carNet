@@ -10,16 +10,16 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.4.0.RELEASE</version>
 	</parent>
-	
+
 	<repositories>
-	 <repository>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-        <id>central</id>
-        <name>bintray</name>
-        <url>http://jcenter.bintray.com</url>
-    </repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>bintray</name>
+			<url>http://jcenter.bintray.com</url>
+		</repository>
 	</repositories>
 	<properties>
 		<start-class>com.earl.carnet.Application</start-class>
@@ -28,8 +28,8 @@
 		<commons-io.version></commons-io.version>
 		<commons-lang3.version>3.4</commons-lang3.version>
 		<!-- springMvc -->
-		<spring-jdbc.version>4.2.5.RELEASE</spring-jdbc.version>
-		<spring-tx.version>4.2.5.RELEASE</spring-tx.version>
+		<spring-jdbc.version>4.3.2.RELEASE</spring-jdbc.version>
+		<spring-tx.version>4.3.2.RELEASE</spring-tx.version>
 		<spring-web.version>4.3.2.RELEASE</spring-web.version>
 		<spring-webmvc>4.3.2.RELEASE</spring-webmvc>
 		<spring-data-japa.version>1.8.0.RELEASE</spring-data-japa.version>
@@ -40,6 +40,19 @@
 		<cucumber.version>1.2.4</cucumber.version>
 	</properties>
 	<dependencies>
+<!--  jersey rest http cleint  -->
+<dependency>
+    <groupId>org.glassfish.jersey.media</groupId>
+    <artifactId>jersey-media-multipart</artifactId>
+    <version>2.23.1</version>
+</dependency>
+
+		<dependency>
+    <groupId>org.glassfish.jersey.core</groupId>
+    <artifactId>jersey-client</artifactId>
+    <version>2.23.1</version>
+</dependency>
+
 		<!-- ping ++ -->
 		<dependency>
 			<groupId>Pingplusplus</groupId>
@@ -260,7 +273,7 @@
 		</dependency>
 
 	</dependencies>
-	
+
 	<build>
 		<pluginManagement>
 			<plugins>
