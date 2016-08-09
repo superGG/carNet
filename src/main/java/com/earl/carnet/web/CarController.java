@@ -3,8 +3,8 @@ package com.earl.carnet.web;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/car={id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "得到单辆车信息", notes = "get one car", httpMethod = "GET", response = String.class)
     public ResultMessage getCar(
-            @NotNull(message = "id不能为空")
+    		@NotBlank(message = "id不能为空")
             @ApiParam(required = true, name = "id", value = "车辆id")
             @PathVariable
             Long id) {
@@ -73,7 +73,7 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/userId={userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取用户的所有汽车", notes = "get all car by user", httpMethod = "GET", response = String.class)
     public ResultMessage getAllCarByUser(
-            @NotNull(message = "userId不能为空")
+    		@NotBlank(message = "userId不能为空")
             @ApiParam(required = true, name = "userId", value = "用户id")
             @PathVariable
             Long userId) {
@@ -96,7 +96,7 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/currentCar={userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取用户的当前汽车", notes = "get  user current car", httpMethod = "GET", response = String.class)
     public ResultMessage getCurrentCarByUser(
-            @NotNull(message = "userId不能为空")
+    		@NotBlank(message = "userId不能为空")
             @ApiParam(required = true, name = "userId", value = "用户id")
             @PathVariable
             Long userId) {
@@ -120,7 +120,7 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/tmpCar/vin={vin}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据车架号获取临时车辆信息", notes = "get car by vin", httpMethod = "GET", response = String.class)
     public ResultMessage getTmpCarByVin(
-            @NotNull(message = "vin不能为空")
+    		@NotBlank(message = "vin不能为空")
             @ApiParam(required = true, name = "vin", value = "车架号")
             @PathVariable
             String vin) {
@@ -144,7 +144,7 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/vin={vin}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据车架号获取汽车", notes = "get car by vin", httpMethod = "GET", response = String.class)
     public ResultMessage getCarByVin(
-            @NotNull(message = "vin不能为空")
+    		@NotBlank(message = "vin不能为空")
             @ApiParam(required = true, name = "vin", value = "车架号")
             @PathVariable
             String vin) {
@@ -284,10 +284,10 @@ public class CarController extends BaseController {
     @ApiOperation(value = "更新用户当前车辆", notes = "update user current car", httpMethod = "POST", response = String.class)
     public ResponseEntity<?> updateCarByVin(
             @ApiParam(required = true, name = "id", value = "车辆id")
-            @NotNull(message = "车辆id不能为空")
+            @NotBlank(message = "车辆id不能为空")
             Long id,
             @ApiParam(required = true, name = "userId", value = "用户id")
-            @NotNull(message = "用户id不能为空")
+            @NotBlank(message = "用户id不能为空")
             Long userId) throws Exception {
         ResultMessage result = new ResultMessage();
         Car car = new Car();
@@ -333,7 +333,7 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/updateCarState", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "用户更新汽车状态", notes = "update car state by id", httpMethod = "POST", response = String.class)
     public ResponseEntity<?> updateCarState(
-            @NotNull(message = "id不能为空")
+    		@NotBlank(message = "id不能为空")
             @ApiParam(required = true, name = "id", value = "车辆id")
             Long id) {
         ResultMessage result = new ResultMessage();
@@ -352,11 +352,10 @@ public class CarController extends BaseController {
      *
      * @return
      */
-    @Valid
     @RequestMapping(value = "/updateCarAlarm", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "用户更新汽车警报状态", notes = "update car alarm by id", httpMethod = "POST", response = String.class)
     public ResponseEntity<?> updateCarAlarm(
-            @NotNull(message = "id不能为空")
+            @NotBlank(message = "id不能为空")
             @ApiParam(required = true, name = "id", value = "车辆id")
             Long id) {
         ResultMessage result = new ResultMessage();
@@ -380,7 +379,7 @@ public class CarController extends BaseController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据id删除汽车", notes = "delete car by id", httpMethod = "POST", response = String.class)
     public ResponseEntity<ResultMessage> delete(
-            @NotNull(message = "id不能为空")
+    		@NotBlank(message = "id不能为空")
             @ApiParam(required = true, name = "id", value = "车辆id")
             Long id) {
         log.info("进入controller层添加汽车delete方法");

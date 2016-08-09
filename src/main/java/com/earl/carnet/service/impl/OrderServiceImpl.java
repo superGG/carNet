@@ -114,7 +114,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
 					out.flush();
 					out.close(); 	
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
                 		
@@ -210,7 +209,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Order> implements
 
 	@Override
 	public void realPayOrders(Long orderId) {
-		// TODO Auto-generated method stub
 		updateOrderState(orderId, PAYED);
 		
 	}

@@ -279,7 +279,7 @@
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
 					<version>3.0.2</version>
 				</plugin>
 				<plugin>
@@ -296,6 +296,6 @@
 					<artifactId>spring-boot-maven-plugin</artifactId>
 				</plugin>
 			</plugins>
-		</pluginManagement>
+		</pluginManagement> 
 	</build>
 </project>
